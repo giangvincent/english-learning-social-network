@@ -24,7 +24,7 @@ export default new Router({
       component: () => import('./views/Auth.vue')
     },
     {
-      path: '/category/:name',
+      path: '/cat/:name',
       name: 'category-feed',
       component: () => import('./views/Category.vue')
     },

@@ -18,33 +18,15 @@
       <input class="hidden" type="checkbox" id="menu-toggle" />
 
       <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
-        <nav>
-          <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-            <li>
-              <a
-                class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                href="#"
-              >Shop</a>
-            </li>
-            <li>
-              <a
-                class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                href="#"
-              >About</a>
-            </li>
-          </ul>
-        </nav>
+        <desktop-nav></desktop-nav>
       </div>
 
       <div class="order-1 md:order-2">
-        <a
-          class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
-          href="index.html"
-        >ohitsgood</a>
+        <logo></logo>
       </div>
 
       <div class="order-2 md:order-3 flex items-center" id="nav-content">
-        <a class="inline-block no-underline hover:text-black" href="auth.html">
+        <router-link to="/auth" class="inline-block no-underline hover:text-black">
           <svg
             class="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
@@ -57,15 +39,62 @@
               d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z"
             />
           </svg>
-        </a>
+        </router-link>
       </div>
     </div>
     <!-- End topbar lvl0 -->
     <div class="w-full mx-auto flex text-center font-bold">
-      <a href="#" class="w-1/3 py-3 border-b-2 border-gray-900">Từ vựng</a>
-      <a href="#" class="w-1/3 py-3">Video</a>
-      <a href="#" class="w-1/3 py-3">Bài viết</a>
+      <a
+        class="w-1/3 py-3"
+        :class="{'border-b-2 border-gray-900': currentTab === 'vocabulary'}"
+        @click="navigate('vocabulary')"
+      >Từ vựng</a>
+      <a
+        class="w-1/3 py-3"
+        :class="{'border-b-2 border-gray-900': currentTab === 'listen'}"
+        @click="navigate('listen')"
+      >Nghe</a>
+      <a
+        class="w-1/3 py-3"
+        :class="{'border-b-2 border-gray-900': currentTab === 'article'}"
+        @click="navigate('article')"
+      >Bài viết</a>
     </div>
     <!-- END topbar lvl1 -->
   </nav>
 </template>
+<script>
+import { mapState, mapMutations } from "vuex";
+import Logo from "./Logo";
+import DesktopNav from "./Navigator/DesktopTopNav";
+export default {
+  name: "main-navigatior",
+  components: {
+    Logo,
+    DesktopNav,
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState({
+      currentTab: (state) => state.currentTab,
+    }),
+  },
+  mounted() {
+    if (
+      typeof this.$route.params.name !== "undefined" &&
+      this.$route.params.name !== this.currentTab
+    ) {
+      this.CHANGE_TAB(this.$route.params.name);
+    }
+  },
+  methods: {
+    ...mapMutations(["CHANGE_TAB"]),
+    navigate(goto) {
+      this.CHANGE_TAB(goto);
+      this.$router.push("/cat/" + goto);
+    },
+  },
+};
+</script>
