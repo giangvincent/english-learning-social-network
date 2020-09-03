@@ -1,9 +1,9 @@
 <template>
   <nav id="header" class="bg-white w-full z-20 top-0 fixed shadow">
     <div
-      class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-4 py-2"
+      class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
     >
-      <label for="menu-toggle" class="cursor-pointer md:hidden block">
+      <label for="menu-toggle" class="cursor-pointer md:hidden block py-2">
         <svg
           class="fill-current text-gray-900"
           xmlns="http://www.w3.org/2000/svg"
@@ -17,16 +17,16 @@
       </label>
       <input class="hidden" type="checkbox" id="menu-toggle" />
 
-      <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
+      <div class="hidden md:flex md:items-center w-full order-3 md:order-1 md:w-1/3">
         <desktop-nav></desktop-nav>
       </div>
 
-      <div class="order-1 md:order-2">
+      <div class="order-1 md:order-2 md:w-1/3 flex justify-center py-2">
         <logo></logo>
       </div>
 
-      <div class="order-2 md:order-3 flex items-center" id="nav-content">
-        <router-link to="/auth" class="inline-block no-underline hover:text-black">
+      <div class="order-2 md:order-3 flex md:w-1/3 flex-wrap justify-end">
+        <router-link to="/auth/login" class="inline-block no-underline hover:text-black">
           <svg
             class="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@
       </div>
     </div>
     <!-- End topbar lvl0 -->
-    <div class="w-full mx-auto flex text-center font-bold">
+    <div class="w-full mx-auto flex text-center font-bold block md:hidden">
       <a
         class="w-1/3 py-3"
         :class="{'border-b-2 border-gray-900': currentTab === 'vocabulary'}"
@@ -93,7 +93,7 @@ export default {
     ...mapMutations(["CHANGE_TAB"]),
     navigate(goto) {
       this.CHANGE_TAB(goto);
-      this.$router.push("/cat/" + goto);
+      this.$router.push("/" + goto);
     },
   },
 };

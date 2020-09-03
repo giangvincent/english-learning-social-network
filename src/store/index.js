@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        currentTab: "vocabulary"
+        currentTab: "home",
+        currentPage: ""
     },
     mutations: mutations,
     actions: {

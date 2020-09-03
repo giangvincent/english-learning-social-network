@@ -14,17 +14,18 @@ export default new Router({
       component: Home
     },
     {
-      path: '/user/:id',
+      path: '/u/:id',
       name: 'user-page',
-      component: () => import('./views/User.vue')
+      component: () => import('./views/User.vue'),
+
     },
     {
-      path: '/auth',
+      path: '/auth/:page',
       name: 'authenticate',
       component: () => import('./views/Auth.vue')
     },
     {
-      path: '/cat/:name',
+      path: '/:name',
       name: 'category-feed',
       component: () => import('./views/Category.vue')
     },
