@@ -222,3 +222,43 @@
     <!-- Basic tools -->
   </div>
 </template>
+
+<script>
+var canvas;
+function setAttr(name, value, ob) {
+  ob.toObject = (function (toObject) {
+    return function () {
+      return fabric.util.object.extend(toObject.call(this), {
+        [name]: value,
+      });
+    };
+  })(ob.toObject);
+}
+
+function setActiveStyle(styleName, value, object) {
+  object = object || canvas.getActiveObject();
+  console.log(object);
+  if (!object) return;
+
+  if (object.setSelectionStyles && object.isEditing) {
+    var style = {};
+    style[styleName] = value;
+    object.setSelectionStyles(style);
+    object.setCoords();
+  } else {
+    object.set(styleName, value);
+  }
+
+  object.setCoords();
+  canvas.requestRenderAll();
+}
+
+function setActiveProp(name, value) {
+  var object = canvas.getActiveObject();
+  console.log(object);
+  if (!object) return;
+  object.set(name, value).setCoords();
+  canvas.renderAll();
+}
+export default {};
+</script>
