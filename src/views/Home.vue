@@ -2,6 +2,7 @@
   <div>
     <main-navigation></main-navigation>
     <main-feed :itemArray="items"></main-feed>
+    <to-creator></to-creator>
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import { mapState, mapMutations } from "vuex";
 import MainNavigation from "@/components/MainNavigation.vue";
 import MainFeed from "@/components/Feed/Main.vue";
+import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
 export default {
   name: "home",
   components: {
     MainNavigation,
     MainFeed,
+    ToCreator,
   },
   data() {
     return {

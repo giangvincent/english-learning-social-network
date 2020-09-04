@@ -3,9 +3,9 @@
     <!--Nav-->
     <nav id="header" class="bg-white w-full shadow">
       <div
-        class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-4 py-2"
+        class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
       >
-        <label for="menu-toggle" class="cursor-pointer md:hidden block">
+        <label for="menu-toggle" class="cursor-pointer py-2" @click="$router.go(-1)">
           <svg
             class="color-black fill-current w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -22,15 +22,12 @@
           </svg>
         </label>
 
-        <div class="order-1 md:order-2">
-          <a
-            class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
-            href="index.html"
-          >ohitsgood</a>
+        <div class="order-1 md:order-2 md:w-1/3 flex justify-center py-2">
+          <logo></logo>
         </div>
       </div>
     </nav>
-    <div class="sm:rounded sm:rounded-t-lg shadow max-w-sm md:px-6 lg:px-8">
+    <div class="sm:rounded shadow max-w-lg mx-auto mt-10">
       <div class="w-full mx-auto flex text-center font-bold">
         <a href class="w-1/3 py-3 border-b-2 border-gray-900">Từ vựng</a>
         <a href class="w-1/3 py-3">Video</a>
@@ -156,5 +153,10 @@
 </template>
 
 <script>
-export default {};
+import logo from "@/components/Logo.vue";
+export default {
+  components: {
+    logo,
+  },
+};
 </script>

@@ -24,11 +24,7 @@ export default new Router({
       name: 'authenticate',
       component: () => import('./views/Auth.vue')
     },
-    {
-      path: '/:name',
-      name: 'category-feed',
-      component: () => import('./views/Category.vue')
-    },
+
     {
       path: '/tag/:name',
       name: 'tag-feed',
@@ -38,6 +34,11 @@ export default new Router({
       path: '/creator',
       name: 'creator-tool',
       component: () => import('./views/Creator.vue')
-    }
+    },
+    {
+      path: '/:name',
+      name: 'category-feed',
+      component: () => import('./views/Category.vue')
+    },
   ]
 })

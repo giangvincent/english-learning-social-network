@@ -93,9 +93,16 @@ html {
 
 .btn-hover.gradient-black {
     background-image: linear-gradient(to right,
-
             #574b90,
             #9e579d,
             #303a52);
+    box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+}
+
+.btn-hover.gradient-blue {
+    background-image: linear-gradient(to right,
+            #574b90,
+            #303a52,
+            #9e579d);
     box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
 }
