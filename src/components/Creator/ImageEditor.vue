@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a href="editor.html">
+    <a @click="$router.go(-1)">
       <div
         class="bg-white top-0 container fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
       >
@@ -39,7 +39,7 @@
       </div>
     </a>
     <!--Finish or Discard image creator-->
-    <div class="bg-gray-400 h-screen w-full py-10"></div>
+    <div class="bg-gray-400 h-screen w-full py-10" ref="canvasContainer"></div>
     <!-- image container -->
 
     <div
@@ -224,6 +224,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from "vuex";
+
 var canvas;
 function setAttr(name, value, ob) {
   ob.toObject = (function (toObject) {
@@ -260,5 +262,207 @@ function setActiveProp(name, value) {
   object.set(name, value).setCoords();
   canvas.renderAll();
 }
-export default {};
+export default {
+  name: "editor",
+  components: {
+    BackToHome,
+    SlideReactTool,
+  },
+  data() {
+    return {
+      startCreate: false,
+      postTitle: "",
+      tags: [],
+      curTag: "",
+      showTextTool: false,
+      colorList: [
+        "#ff0000",
+        "#ffa500",
+        "#008000",
+        "#00ffff",
+        "#800080",
+        "#dcdcdc",
+        "#000000",
+      ],
+      canvas: null,
+      canvasSize: [675, 900],
+      canvasResultsJson: [],
+      imagesDataUrl: [],
+      activeObject: null,
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+      characterLimit: 240,
+    };
+  },
+  computed: {
+    ...mapState({
+      previewImage: (state) => state.editor.previewImage,
+    }),
+    limitTitle: function () {
+      return this.postTitle.substring(0, this.characterLimit);
+    },
+  },
+  watch: {
+    activeObject: function (newVal, oldVal) {
+      console.log(newVal);
+      if (newVal !== oldVal && newVal !== null && newVal.type === "textbox") {
+        this.showTextTool = true;
+      } else {
+        this.showTextTool = false;
+      }
+    },
+  },
+  mounted() {},
+  methods: {
+    ...mapMutations(["TOGGLE_SIDEBAR", "updatePreviewImage"]),
+    ...mapActions(["createContent"]),
+    initCanvas() {
+      canvas = new fabric.Canvas("createCanvas");
+      canvas.selectionColor = "rgba(0,0,0,0.2)";
+      canvas.selectionBorderColor = "gray";
+      canvas.selectionLineWidth = 1;
+      fabric.Object.prototype.objectCaching = false;
+      canvas.setDimensions({
+        width: this.canvasSize[0],
+        height: this.canvasSize[1],
+      });
+      canvas.backgroundColor = "#303a52";
+
+      var self = this;
+
+      fabric.Image.fromURL(this.previewImage, function (oImg) {
+        oImg.set({
+          width: oImg.width,
+          height: oImg.height,
+          selectable: false,
+          evented: false,
+          crossOrigin: "anonymous",
+        });
+
+        if (oImg.width >= self.canvasSize[0] && oImg.width >= oImg.height) {
+          oImg.scaleToWidth(self.canvasSize[0]);
+        }
+        if (oImg.height >= self.canvasSize[1] && oImg.height >= oImg.width) {
+          oImg.scaleToHeight(self.canvasSize[1]);
+        }
+        canvas.add(oImg);
+        // set the object to be centered to the Canvas
+        canvas.centerObject(oImg);
+        oImg.setCoords();
+        canvas.renderAll();
+      });
+
+      // create a rectangle with angle=45
+    },
+    changeTextColor(color) {
+      setActiveProp("fill", color);
+    },
+    createText() {
+      var textProp = {
+        fontSize: 40,
+        left: 50,
+        top: 50,
+        fontFamily: "helvetica",
+        angle: 0,
+        fill: "#f0f0f0",
+        scaleX: 1,
+        scaleY: 1,
+        fontWeight: "bold",
+        originX: "left",
+        padding: 20,
+        width: 100,
+        height: 100,
+        hasRotatingPoint: true,
+        centerTransform: true,
+        textAlign: "center",
+      };
+      var textbox = new fabric.Textbox("text", textProp);
+      canvas.add(textbox);
+      canvas.setActiveObject(textbox);
+      this.activeObject = canvas.getActiveObject();
+      this.showTextTool = true;
+    },
+    doneEditText() {
+      this.activeObject = null;
+      canvas.discardActiveObject();
+      this.showTextTool = false;
+      canvas.renderAll();
+    },
+    cancelEditText() {
+      var activeObjects = canvas.getActiveObjects();
+      canvas.discardActiveObject();
+      if (activeObjects.length) {
+        canvas.remove.apply(canvas, activeObjects);
+      }
+      this.activeObject = null;
+      this.showTextTool = false;
+      canvas.renderAll();
+    },
+    clickCanvasHandle() {
+      console.log("clickCanvasHandle");
+      this.activeObject = canvas.getActiveObject();
+    },
+    triggerPreviewImage() {
+      this.$refs.previewImage.click();
+    },
+    handlePreviewImage(event) {
+      var self = this;
+      console.log(event.target.files);
+      if (event.target.files && event.target.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          self.updatePreviewImage(e.target.result);
+          self.$set(self, "canvasSize", [
+            self.$refs.canvasContainer.clientWidth,
+            self.$refs.canvasContainer.clientHeight,
+          ]);
+          self.startCreate = true;
+          self.initCanvas();
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    },
+    deleteCanvas() {
+      canvas.clear();
+      this.startCreate = false;
+    },
+    createHashtag() {
+      if (this.curTag !== "") {
+        this.curTag = this.curTag.replace(/\s+/g, " ");
+        this.curTag = this.curTag
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join("");
+        this.curTag =
+          this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1);
+        this.tags.push(this.curTag);
+        this.curTag = "";
+      }
+    },
+    finishAndUpload() {
+      try {
+        var images = canvas.toDataURL({
+          format: "jpeg",
+        });
+        var self = this;
+        if (this.limitTitle !== "" && this.tags.length > 0) {
+          var data = {
+            images: [images],
+            title: this.limitTitle,
+            tags: this.tags,
+            cat_id: 1,
+          };
+          this.createContent(data).then((resp) => {
+            self.$router.push("/");
+          });
+        }
+      } catch ($e) {
+        // console.log($e);
+      }
+    },
+  },
+};
 </script>
