@@ -44,6 +44,7 @@
       <div class="mx-auto max-w-lg">
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Nội dung</span>
+          <div id="toolbar"></div>
           <div id="editor"></div>
         </div>
         <div class="py-1">
@@ -153,9 +154,9 @@
 
 <script>
 import logo from "@/components/Logo.vue";
-import Editor from "@toast-ui/editor";
-import "codemirror/lib/codemirror.css"; // Editor's Dependency Style
-import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
+
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
 export default {
   components: {
@@ -167,17 +168,42 @@ export default {
     };
   },
   mounted() {
-    this.editor = new Editor({
-      el: document.querySelector("#editor"),
-      height: "300px",
-      initialEditType: "markdown",
-      previewStyle: "wysiwyg"
+    var toolbarOptions = [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["clean"] // remove formatting button
+    ];
+
+    this.editor = new Quill("#editor", {
+      modules: {
+        toolbar: toolbarOptions
+      },
+      theme: "snow"
     });
-    // this.editor.getHtml();
+    var content =
+      '<h2>This is a Heading H2</h2><p><span class="ql-size-small">this is a small with </span><span class="ql-size-small" style="color: rgb(230, 0, 0);">COLOR TEXT</span></p><p class="ql-align-center"><span class="ql-size-large ql-font-monospace">This is a large Text with </span><span class="ql-size-large ql-font-monospace" style="background-color: rgb(255, 255, 102);">background</span></p>';
+    console.log(content);
+    const delta = this.editor.clipboard.convert(content);
+    console.log(delta);
+    this.editor.setContents(delta);
   },
   methods: {
     submitContent() {
-      let content = this.editor.getHtml();
+      let content = this.editor.root.innerHTML;
       console.log(content);
     }
   },
