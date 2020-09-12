@@ -15,9 +15,9 @@ class CreatePostAnswersTable extends Migration
     {
         Schema::create('post_answers', function (Blueprint $table) {
             $table->id();
-            $table->integer('post_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->text('answer_list')->default('[]');
+            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('user_id');
+            $table->text('answer_list');
             $table->string('result_list')->default('[]');
             $table->timestamps();
 

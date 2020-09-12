@@ -24,12 +24,12 @@ class CreatePostsTable extends Migration
 
             $table->longText('content');
             $table->longText('delta_content');
-            $table->text('medias')->default('[]');
-            $table->text('answer_list')->default('[]');
+            $table->text('medias');
+            $table->text('answer_list');
             $table->string('type');
 
-            $table->integer('author')->unsigned();
-            $table->integer('category')->unsigned();
+            $table->unsignedBigInteger('author');
+            $table->unsignedBigInteger('category');
 
             $table->integer('nums_pocket')->unsigned();
             $table->integer('nums_good')->unsigned();
