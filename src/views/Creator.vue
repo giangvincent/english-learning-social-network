@@ -31,22 +31,69 @@
         </div>
       </div>
     </nav>
-    <div class="sm:rounded shadow max-w-lg mx-auto mt-10">
-      <div class="w-full mx-auto flex text-center font-bold">
-        <a href class="w-1/3 py-3 border-b-2 border-gray-900">Từ vựng</a>
-        <a href class="w-1/3 py-3">Video</a>
-        <a href class="w-1/3 py-3">Bài viết</a>
-      </div>
-      <!-- END topbar lvl1 -->
-    </div>
-    <!-- User info -->
+
     <div class="my-6 md:px-6 lg:px-8 pb-20 mx-auto px-3">
       <div class="mx-auto max-w-lg">
         <div class="py-1">
+          <span class="px-1 text-sm text-gray-600">Danh mục</span>
+          <form-select
+            :selectData="categories"
+            @changeSelectData="changeCategory"
+          ></form-select>
+        </div>
+        <!-- pickup category -->
+        <div class="py-1">
+          <span class="px-1 text-sm text-gray-600">Loại bài viết</span>
+          <div class="sm:rounded shadow">
+            <div class="w-full mx-auto flex text-center font-bold">
+              <a href class="w-1/3 py-3 border-b-2 border-gray-900">Bài viết</a>
+              <a href class="w-1/3 py-3">Flash Cards</a>
+              <a href class="w-1/3 py-3">Câu đố</a>
+            </div>
+            <!-- END topbar lvl1 -->
+          </div>
+        </div>
+
+        <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Nội dung</span>
           <div id="toolbar"></div>
-          <div id="editor"></div>
+          <div
+            id="editor"
+            class="rounded-b-lg  border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+          ></div>
         </div>
+        <!-- text content editor -->
+        <div class="py-1">
+          <div
+            class="content-center flex items-center justify-between lex-wrap mt-3 px-1 text-gray-600 text-sm px-1 text-sm text-gray-600"
+          >
+            <span>Hình ảnh</span>
+            <a href="editor-image.html">
+              <button
+                type="button"
+                class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-blue"
+              >
+                <svg
+                  class="text-white w-5 inline"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                Chọn hình ảnh
+              </button>
+            </a>
+          </div>
+        </div>
+        <!-- Images holder -->
+
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Tag</span>
           <input
@@ -97,35 +144,7 @@
             </span>
           </div>
         </div>
-        <div class="py-1">
-          <div
-            class="content-center flex items-center justify-between lex-wrap mt-3 px-1 text-gray-600 text-sm px-1 text-sm text-gray-600"
-          >
-            <span>Hình ảnh</span>
-            <a href="editor-image.html">
-              <button
-                type="button"
-                class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-blue"
-              >
-                <svg
-                  class="text-white w-5 inline"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                Chọn hình ảnh
-              </button>
-            </a>
-          </div>
-        </div>
+        <!-- Ending Tag -->
 
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -154,17 +173,25 @@
 
 <script>
 import logo from "@/components/Logo.vue";
-
+import formSelect from "@/components/Form/Select.vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
 export default {
+  name: "creator",
   components: {
-    logo
+    logo,
+    formSelect
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      categories: [
+        { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
+        { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
+        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
+      ],
+      category: 0
     };
   },
   mounted() {
@@ -202,6 +229,10 @@ export default {
     this.editor.setContents(delta);
   },
   methods: {
+    changeCategory(index) {
+      console.log(index);
+      this.category = index;
+    },
     submitContent() {
       let content = this.editor.root.innerHTML;
       console.log(content);
