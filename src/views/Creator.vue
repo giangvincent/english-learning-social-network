@@ -1,149 +1,44 @@
 <template>
   <div>
-    <!--Nav-->
-    <nav id="header" class="bg-white w-full shadow">
-      <div
-        class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
-      >
-        <label
-          for="menu-toggle"
-          class="cursor-pointer py-2"
-          @click="$router.go(-1)"
-        >
-          <svg
-            class="color-black fill-current w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-        </label>
-
-        <div class="order-1 md:order-2 md:w-1/3 flex justify-center py-2">
-          <logo></logo>
-        </div>
-      </div>
-    </nav>
+    <simpleTopNav></simpleTopNav>
 
     <div class="my-6 md:px-6 lg:px-8 pb-20 mx-auto px-3">
       <div class="mx-auto max-w-lg">
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Danh mục</span>
-          <form-select
-            :selectData="categories"
-            @changeSelectData="changeCategory"
-          ></form-select>
+          <form-select :selectData="categories" @changeSelectData="changeCategory"></form-select>
         </div>
         <!-- pickup category -->
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Loại bài viết</span>
           <div class="sm:rounded shadow">
             <div class="w-full mx-auto flex text-center font-bold">
-              <a href class="w-1/3 py-3 border-b-2 border-gray-900">Bài viết</a>
-              <a href class="w-1/3 py-3">Flash Cards</a>
-              <a href class="w-1/3 py-3">Câu đố</a>
+              <div
+                @click="changePostType('article')"
+                class="w-1/3 py-3 cursor-pointer"
+                :class="{'border-b-2 border-gray-900': postType == 'article'}"
+              >Bài viết</div>
+              <div
+                @click="changePostType('flashCard')"
+                class="w-1/3 py-3 cursor-pointer"
+                :class="{'border-b-2 border-gray-900': postType == 'flashCard'}"
+              >Flash Cards</div>
+              <div
+                @click="changePostType('quiz')"
+                class="w-1/3 py-3 cursor-pointer"
+                :class="{'border-b-2 border-gray-900': postType == 'quiz'}"
+              >Câu đố</div>
             </div>
             <!-- END topbar lvl1 -->
           </div>
         </div>
+        <!-- Choose post type -->
 
-        <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Nội dung</span>
-          <div id="toolbar"></div>
-          <div
-            id="editor"
-            class="rounded-b-lg  border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-          ></div>
-        </div>
-        <!-- text content editor -->
-        <div class="py-1">
-          <div
-            class="content-center flex items-center justify-between lex-wrap mt-3 px-1 text-gray-600 text-sm px-1 text-sm text-gray-600"
-          >
-            <span>Hình ảnh</span>
-            <button
-              type="button"
-              class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-blue"
-              @click="previewImage()"
-            >
-              <svg
-                class="text-white w-5 inline"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              Chọn hình ảnh
-            </button>
-          </div>
-        </div>
-        <!-- Images holder -->
+        <article v-if="postType == 'article'"></article>
+        <flash-card v-if="postType == 'flashCard'"></flash-card>
+        <quiz v-if="postType == 'quiz'"></quiz>
 
-        <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Tag</span>
-          <input
-            placeholder
-            type="text"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-          />
-          <div class="py-3">
-            <span
-              class="bg-color-purple font-bold inline-block m-1 pr-8 px-2 py-1 relative rounded-full text-white text-xs"
-            >
-              Tag 1
-              <svg
-                class="absolute inline text-white w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                style="top: 3px; right: 1px"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </span>
-            <span
-              class="bg-color-purple font-bold inline-block m-1 pr-8 px-2 py-1 relative rounded-full text-white text-xs"
-            >
-              Tag 2
-              <svg
-                class="absolute inline text-white w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                style="top: 3px; right: 1px"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
-        <!-- Ending Tag -->
+        <tags></tags>
 
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -171,72 +66,48 @@
 </template>
 
 <script>
-import logo from "@/components/Logo.vue";
 import formSelect from "@/components/Form/Select.vue";
-import Quill from "quill";
-import "quill/dist/quill.snow.css";
+import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
+import tags from "@/components/Creator/Tag.vue";
+import Article from "@/components/Creator/Article.vue";
+import FlashCard from "@/components/Creator/FlashCard.vue";
+import Quiz from "@/components/Creator/Quiz.vue";
 
 export default {
   name: "creator",
   components: {
-    logo,
-    formSelect
+    simpleTopNav,
+    formSelect,
+    tags,
+    Article,
+    FlashCard,
+    Quiz,
   },
   data() {
     return {
-      editor: null,
+      postType: "article",
       categories: [
         { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
-        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
+        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 },
       ],
-      category: 0
+      category: 0,
     };
   },
-  mounted() {
-    var toolbarOptions = [
-      ["bold", "italic", "underline", "strike"], // toggled buttons
-      ["blockquote", "code-block"],
-
-      [{ header: 1 }, { header: 2 }], // custom button values
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-      [{ direction: "rtl" }], // text direction
-
-      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-      [{ font: [] }],
-      [{ align: [] }],
-
-      ["clean"] // remove formatting button
-    ];
-
-    this.editor = new Quill("#editor", {
-      modules: {
-        toolbar: toolbarOptions
-      },
-      theme: "snow"
-    });
-    var content =
-      '<h2>This is a Heading H2</h2><p><span class="ql-size-small">this is a small with </span><span class="ql-size-small" style="color: rgb(230, 0, 0);">COLOR TEXT</span></p><p class="ql-align-center"><span class="ql-size-large ql-font-monospace">This is a large Text with </span><span class="ql-size-large ql-font-monospace" style="background-color: rgb(255, 255, 102);">background</span></p>';
-    console.log(content);
-    const delta = this.editor.clipboard.convert(content);
-    console.log(delta);
-    this.editor.setContents(delta);
-  },
+  mounted() {},
   methods: {
+    changePostType(type) {
+      this.postType = type;
+    },
     changeCategory(index) {
       console.log(index);
       this.category = index;
     },
     submitContent() {
-      let content = this.editor.root.innerHTML;
-      console.log(content);
-    }
+      /* let content = this.editor.root.innerHTML;
+      console.log(content); */
+    },
   },
-  beforeDestroy() {}
+  beforeDestroy() {},
 };
 </script>
