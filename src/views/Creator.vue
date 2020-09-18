@@ -34,7 +34,7 @@
         </div>
         <!-- Choose post type -->
 
-        <article v-if="postType == 'article'"></article>
+        <article-content v-if="postType == 'article'"></article-content>
         <flash-card v-if="postType == 'flashCard'"></flash-card>
         <quiz v-if="postType == 'quiz'"></quiz>
 
@@ -69,9 +69,9 @@
 import formSelect from "@/components/Form/Select.vue";
 import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
 import tags from "@/components/Creator/Tag.vue";
-import Article from "@/components/Creator/Article.vue";
-import FlashCard from "@/components/Creator/FlashCard.vue";
-import Quiz from "@/components/Creator/Quiz.vue";
+import articleContent from "@/components/Creator/ArticleContent.vue";
+import flashCard from "@/components/Creator/FlashCard.vue";
+import quiz from "@/components/Creator/Quiz.vue";
 
 export default {
   name: "creator",
@@ -79,9 +79,9 @@ export default {
     simpleTopNav,
     formSelect,
     tags,
-    Article,
-    FlashCard,
-    Quiz,
+    articleContent,
+    flashCard,
+    quiz,
   },
   data() {
     return {

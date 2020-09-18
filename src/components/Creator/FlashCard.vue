@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <div class="flashCards" v-for="(card, index) in flashCards" :key="'flash-card-'+ index"></div>
+  </div>
 </template>
 
 <script>
@@ -12,7 +14,9 @@ export default {
     ImagePreview,
   },
   data() {
-    return {};
+    return {
+      flashCards: [{ content: "", flip: "" }],
+    };
   },
 };
 </script>
