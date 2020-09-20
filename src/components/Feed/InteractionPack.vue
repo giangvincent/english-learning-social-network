@@ -2,7 +2,7 @@
   <div class="py-2 border-t-2 border-gray-400 flex content-center flex-wrap">
     <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold text-red-600">
       <svg
-        class="md:w-10 mx-auto"
+        class="sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -16,7 +16,7 @@
     <!-- saved icon -->
     <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold color-blue">
       <svg
-        class="md:w-10 mx-auto"
+        class="sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -31,7 +31,7 @@
 
     <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold color-blue">
       <svg
-        class="md:w-10 mx-auto"
+        class="sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -46,7 +46,7 @@
 
     <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold text-black-600">
       <svg
-        class="md:w-10 mx-auto"
+        class="sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

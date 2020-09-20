@@ -48,6 +48,9 @@ export default {
   },
   mounted() {},
   methods: {
+    removeTag(index) {
+      this.tags.splice(index, 1);
+    },
     createHashtag() {
       if (this.curTag !== "") {
         this.curTag = this.curTag.replace(/\s+/g, " ");

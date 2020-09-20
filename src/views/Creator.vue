@@ -14,9 +14,9 @@
           <div class="sm:rounded shadow">
             <div class="w-full mx-auto flex text-center font-bold">
               <div
-                @click="changePostType('article')"
+                @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
-                :class="{'border-b-2 border-gray-900': postType == 'article'}"
+                :class="{'border-b-2 border-gray-900': postType == 'normalPost'}"
               >Bài viết</div>
               <div
                 @click="changePostType('flashCard')"
@@ -34,7 +34,7 @@
         </div>
         <!-- Choose post type -->
 
-        <article-content v-if="postType == 'article'"></article-content>
+        <normalPost v-if="postType == 'normalPost'"></normalPost>
         <flash-card v-if="postType == 'flashCard'"></flash-card>
         <quiz v-if="postType == 'quiz'"></quiz>
 
@@ -69,7 +69,7 @@
 import formSelect from "@/components/Form/Select.vue";
 import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
 import tags from "@/components/Creator/Tag.vue";
-import articleContent from "@/components/Creator/ArticleContent.vue";
+import normalPost from "@/components/Creator/ArticleContent.vue";
 import flashCard from "@/components/Creator/FlashCard.vue";
 import quiz from "@/components/Creator/Quiz.vue";
 
@@ -79,13 +79,13 @@ export default {
     simpleTopNav,
     formSelect,
     tags,
-    articleContent,
+    normalPost,
     flashCard,
     quiz,
   },
   data() {
     return {
-      postType: "article",
+      postType: "normalPost",
       categories: [
         { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },

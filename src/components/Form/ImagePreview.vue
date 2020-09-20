@@ -24,14 +24,8 @@
       </svg>
       Chọn hình ảnh
     </button>
-    <input
-      ref="imgInput"
-      type="file"
-      class="hidden"
-      accept="images/*"
-      multiple
-    />
-    <div class="w-full my-4" ref="imageContainer"></div>
+    <input ref="imgInput" type="file" class="hidden" accept="images/*" multiple />
+    <div class="w-full my-4" ref="imageContainer" v-if="previewImages.length > 0"></div>
   </div>
 </template>
 
@@ -39,7 +33,9 @@
 export default {
   name: "image-preview",
   data() {
-    return {};
-  }
+    return {
+      previewImages: [],
+    };
+  },
 };
 </script>
