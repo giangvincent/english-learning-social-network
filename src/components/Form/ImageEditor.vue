@@ -264,10 +264,6 @@ function setActiveProp(name, value) {
 }
 export default {
   name: "editor",
-  components: {
-    BackToHome,
-    SlideReactTool,
-  },
   data() {
     return {
       startCreate: false,
