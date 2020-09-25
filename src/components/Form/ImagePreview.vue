@@ -32,7 +32,11 @@
       multiple
       @change="onImagesSelect"
     />
-    <div class="flex flex-wrap my-4" ref="imageContainer" v-if="previewImages.length > 0">
+    <div
+      class="w-full flex flex-wrap my-4"
+      ref="imageContainer"
+      v-if="previewImages.length > 0"
+    >
       <div
         class="w-1/5 relative mb-2 pr-2 flex flex-wrap items-center justify-center"
         v-for="(image, index) in previewImages"
@@ -95,13 +99,13 @@ import ImageEditor from "./ImageEditor.vue";
 export default {
   name: "image-preview",
   components: {
-    ImageEditor,
+    ImageEditor
   },
   data() {
     return {
       previewImages: [],
       indexImageChange: null,
-      imageChange: null,
+      imageChange: null
     };
   },
   methods: {
@@ -127,7 +131,7 @@ export default {
       this.previewImages[this.indexImageChange] = finalImage;
       this.indexImageChange = null;
       this.imageChange = null;
-    },
-  },
+    }
+  }
 };
 </script>
