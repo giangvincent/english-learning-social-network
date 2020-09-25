@@ -1,49 +1,53 @@
 <template>
-  <div>
-    <a @click="$router.go(-1)">
-      <div
-        class="bg-white top-0 container fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
-      >
-        <label class="cursor-pointer block">
-          <svg
-            class="color-black w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </label>
-        <label class="cursor-pointer block">
-          <svg
-            class="color-black w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        </label>
-      </div>
-    </a>
+  <div class="left-0 top-0 w-screen h-screen fixed">
+    <div
+      class="bg-white top-0  fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
+    >
+      <label class="cursor-pointer block" @click="cancelEdit()">
+        <svg
+          class="color-black w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </label>
+      <label class="cursor-pointer block" @click="finishEdit()">
+        <svg
+          class="color-black w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      </label>
+    </div>
     <!--Finish or Discard image creator-->
-    <div class="bg-gray-400 h-screen w-full py-10" ref="canvasContainer"></div>
+    <div class="bg-gray-400 h-screen w-full py-10" ref="canvasContainer">
+      <canvas
+        id="createCanvas"
+        :width="canvasSize[0]"
+        :height="canvasSize[1]"
+      ></canvas>
+    </div>
     <!-- image container -->
 
     <div
-      class="bg-white bottom-0 container fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
+      class="bg-white bottom-0 fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
     >
       <label class="cursor-pointer block">
         <svg
@@ -228,10 +232,10 @@ import { mapState, mapMutations, mapActions } from "vuex";
 
 var canvas;
 function setAttr(name, value, ob) {
-  ob.toObject = (function (toObject) {
-    return function () {
+  ob.toObject = (function(toObject) {
+    return function() {
       return fabric.util.object.extend(toObject.call(this), {
-        [name]: value,
+        [name]: value
       });
     };
   })(ob.toObject);
@@ -264,6 +268,9 @@ function setActiveProp(name, value) {
 }
 export default {
   name: "editor",
+  props: {
+    imageEdit: String
+  },
   data() {
     return {
       startCreate: false,
@@ -278,7 +285,7 @@ export default {
         "#00ffff",
         "#800080",
         "#dcdcdc",
-        "#000000",
+        "#000000"
       ],
       canvas: null,
       canvasSize: [675, 900],
@@ -288,30 +295,53 @@ export default {
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
       characterLimit: 240,
+      previewImage: null
     };
   },
   computed: {
     ...mapState({
-      previewImage: (state) => state.editor.previewImage,
+      popupEditor: state => state.popupEditor
     }),
-    limitTitle: function () {
+    limitTitle: function() {
       return this.postTitle.substring(0, this.characterLimit);
-    },
+    }
   },
   watch: {
-    activeObject: function (newVal, oldVal) {
+    activeObject: function(newVal, oldVal) {
       console.log(newVal);
       if (newVal !== oldVal && newVal !== null && newVal.type === "textbox") {
         this.showTextTool = true;
       } else {
         this.showTextTool = false;
       }
-    },
+    }
   },
-  mounted() {},
+  mounted() {
+    this.handlePreviewImage();
+  },
   methods: {
-    ...mapMutations(["TOGGLE_SIDEBAR", "updatePreviewImage"]),
+    ...mapMutations(["TOGGLE_SIDEBAR", "Toggle_popupEditor"]),
     ...mapActions(["createContent"]),
+    cancelEdit() {
+      this.Toggle_popupEditor();
+      this.$emit("cancel");
+    },
+    finishEdit() {
+      this.Toggle_popupEditor(canvas.toDataURL());
+      this.$emit("onDoneEvent");
+    },
+    handlePreviewImage() {
+      var self = this;
+      if (this.imageEdit) {
+        this.previewImage = this.imageEdit;
+        this.$set(this, "canvasSize", [
+          this.$refs.canvasContainer.clientWidth,
+          this.$refs.canvasContainer.clientHeight
+        ]);
+        this.startCreate = true;
+        this.initCanvas();
+      }
+    },
     initCanvas() {
       canvas = new fabric.Canvas("createCanvas");
       canvas.selectionColor = "rgba(0,0,0,0.2)";
@@ -320,19 +350,20 @@ export default {
       fabric.Object.prototype.objectCaching = false;
       canvas.setDimensions({
         width: this.canvasSize[0],
-        height: this.canvasSize[1],
+        height: this.canvasSize[1]
       });
       canvas.backgroundColor = "#303a52";
 
       var self = this;
 
-      fabric.Image.fromURL(this.previewImage, function (oImg) {
+      fabric.Image.fromURL(this.previewImage, function(oImg) {
+        let scale = self.canvasSize[0] / oImg.width;
         oImg.set({
           width: oImg.width,
           height: oImg.height,
-          selectable: false,
-          evented: false,
-          crossOrigin: "anonymous",
+          scaleX: scale,
+          scaleY: scale,
+          crossOrigin: "anonymous"
         });
 
         if (oImg.width >= self.canvasSize[0] && oImg.width >= oImg.height) {
@@ -370,7 +401,7 @@ export default {
         height: 100,
         hasRotatingPoint: true,
         centerTransform: true,
-        textAlign: "center",
+        textAlign: "center"
       };
       var textbox = new fabric.Textbox("text", textProp);
       canvas.add(textbox);
@@ -398,28 +429,7 @@ export default {
       console.log("clickCanvasHandle");
       this.activeObject = canvas.getActiveObject();
     },
-    triggerPreviewImage() {
-      this.$refs.previewImage.click();
-    },
-    handlePreviewImage(event) {
-      var self = this;
-      console.log(event.target.files);
-      if (event.target.files && event.target.files[0]) {
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
-          self.updatePreviewImage(e.target.result);
-          self.$set(self, "canvasSize", [
-            self.$refs.canvasContainer.clientWidth,
-            self.$refs.canvasContainer.clientHeight,
-          ]);
-          self.startCreate = true;
-          self.initCanvas();
-        };
-
-        reader.readAsDataURL(event.target.files[0]);
-      }
-    },
     deleteCanvas() {
       canvas.clear();
       this.startCreate = false;
@@ -430,7 +440,7 @@ export default {
         this.curTag = this.curTag
           .toLowerCase()
           .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join("");
         this.curTag =
           this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1);
@@ -441,7 +451,7 @@ export default {
     finishAndUpload() {
       try {
         var images = canvas.toDataURL({
-          format: "jpeg",
+          format: "jpeg"
         });
         var self = this;
         if (this.limitTitle !== "" && this.tags.length > 0) {
@@ -449,16 +459,16 @@ export default {
             images: [images],
             title: this.limitTitle,
             tags: this.tags,
-            cat_id: 1,
+            cat_id: 1
           };
-          this.createContent(data).then((resp) => {
+          this.createContent(data).then(resp => {
             self.$router.push("/");
           });
         }
       } catch ($e) {
         // console.log($e);
       }
-    },
-  },
+    }
+  }
 };
 </script>

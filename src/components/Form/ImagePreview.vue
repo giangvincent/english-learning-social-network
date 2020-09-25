@@ -88,7 +88,8 @@
     <!-- preview images -->
     <image-editor
       :imageEdit="imageChange"
-      v-on:onImageChange="onImageChange"
+      v-on:onDoneEvent="onDoneEvent"
+      v-on:cancel="onCancelEvent"
       v-if="imageChange !== null"
     ></image-editor>
   </div>
@@ -96,6 +97,16 @@
 
 <script>
 import ImageEditor from "./ImageEditor.vue";
+import { mapState, mapMutations, mapActions } from "vuex";
+var blobToBase64 = function(blob, callback) {
+  var reader = new FileReader();
+  reader.onload = function() {
+    var dataUrl = reader.result;
+    // var base64 = dataUrl.split(",")[1];
+    callback(dataUrl);
+  };
+  reader.readAsDataURL(blob);
+};
 export default {
   name: "image-preview",
   components: {
@@ -109,14 +120,18 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["Toggle_popupEditor"]),
     selectImages() {
       this.$refs.imgInput.click();
     },
     onImagesSelect(e) {
       let images = e.target.files;
+      var self = this;
       if (images) {
         for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
-          this.previewImages.push(URL.createObjectURL(images[imageIndex]));
+          blobToBase64(images[imageIndex], function(base64) {
+            self.previewImages.push(base64);
+          });
         }
       }
     },
@@ -124,11 +139,16 @@ export default {
       this.previewImages.splice(index, 1);
     },
     toImageEditor(index) {
+      this.Toggle_popupEditor();
       this.indexImageChange = index;
       this.imageChange = this.previewImages[index];
     },
-    onImageChange(finalImage) {
+    onDoneEvent(finalImage) {
       this.previewImages[this.indexImageChange] = finalImage;
+      this.indexImageChange = null;
+      this.imageChange = null;
+    },
+    onCancelEvent() {
       this.indexImageChange = null;
       this.imageChange = null;
     }
