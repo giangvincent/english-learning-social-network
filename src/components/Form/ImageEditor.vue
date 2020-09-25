@@ -37,7 +37,10 @@
       </label>
     </div>
     <!--Finish or Discard image creator-->
-    <div class="bg-gray-400 h-screen w-full py-10" ref="canvasContainer">
+    <div
+      class="bg-gray-400 w-full h-full py-10 flex flex-wrap content-center"
+      ref="canvasContainer"
+    >
       <canvas
         id="createCanvas"
         :width="canvasSize[0]"
@@ -150,7 +153,7 @@
         </svg>
       </label>
       <!-- Free draw -->
-      <label class="cursor-pointer block">
+      <label class="cursor-pointer block" @click="createText">
         <svg
           class="color-black w-5"
           xmlns="http://www.w3.org/2000/svg"
@@ -266,6 +269,43 @@ function setActiveProp(name, value) {
   object.set(name, value).setCoords();
   canvas.renderAll();
 }
+
+fabric.Object.prototype.resizeToScale = function(
+  scaleX,
+  scaleY,
+  belongsToGroup
+) {
+  var objectScaleX = scaleX || this.scaleX;
+  var objectScaleY = scaleY || this.scaleY;
+  switch (this.type) {
+    case "ellipse":
+      this.rx = parseInt(this.rx * objectScaleX);
+      this.ry = parseInt(this.ry * objectScaleY);
+      this.width = this.rx * 2;
+      this.height = this.ry * 2;
+      this.scaleX = 1;
+      this.scaleY = 1;
+      if (belongsToGroup) {
+        this.left *= objectScaleX;
+        this.top *= objectScaleY;
+      }
+      break;
+
+    default:
+      this.width = parseInt(this.width * objectScaleX);
+      this.height = parseInt(this.height * objectScaleY);
+      this.scaleX = 1;
+      this.scaleY = 1;
+      if (belongsToGroup) {
+        this.left *= objectScaleX;
+        this.top *= objectScaleY;
+      }
+      break;
+  }
+
+  canvas.renderAll();
+};
+
 export default {
   name: "editor",
   props: {
@@ -327,8 +367,10 @@ export default {
       this.$emit("cancel");
     },
     finishEdit() {
-      this.Toggle_popupEditor(canvas.toDataURL());
-      this.$emit("onDoneEvent");
+      let imageChange = canvas.toDataURL();
+      console.log(imageChange);
+      this.Toggle_popupEditor();
+      this.$emit("onDoneEvent", imageChange);
     },
     handlePreviewImage() {
       var self = this;
@@ -336,7 +378,7 @@ export default {
         this.previewImage = this.imageEdit;
         this.$set(this, "canvasSize", [
           this.$refs.canvasContainer.clientWidth,
-          this.$refs.canvasContainer.clientHeight
+          this.$refs.canvasContainer.clientHeight - 80
         ]);
         this.startCreate = true;
         this.initCanvas();
@@ -358,13 +400,20 @@ export default {
 
       fabric.Image.fromURL(this.previewImage, function(oImg) {
         let scale = self.canvasSize[0] / oImg.width;
+        canvas.setDimensions({
+          width: self.canvasSize[0],
+          height: oImg.height * scale
+        });
         oImg.set({
           width: oImg.width,
           height: oImg.height,
           scaleX: scale,
           scaleY: scale,
-          crossOrigin: "anonymous"
+          crossOrigin: "anonymous",
+          selectable: false,
+          evented: false
         });
+        console.log(oImg);
 
         if (oImg.width >= self.canvasSize[0] && oImg.width >= oImg.height) {
           oImg.scaleToWidth(self.canvasSize[0]);
@@ -377,6 +426,19 @@ export default {
         canvas.centerObject(oImg);
         oImg.setCoords();
         canvas.renderAll();
+      });
+
+      canvas.on("object:scaling", function(e) {
+        if (e.target.type === "group") {
+          var groupScaleX = e.target.scaleX;
+          var groupScaleY = e.target.scaleY;
+          e.target.resizeToScale();
+          e.target._objects.forEach(function(object) {
+            object.resizeToScale(groupScaleX, groupScaleY, true);
+          });
+        } else {
+          if (e.target.type == "textbox") e.target.resizeToScale();
+        }
       });
 
       // create a rectangle with angle=45

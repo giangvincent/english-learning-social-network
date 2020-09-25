@@ -38,7 +38,7 @@
       v-if="previewImages.length > 0"
     >
       <div
-        class="w-1/5 relative mb-2 pr-2 flex flex-wrap items-center justify-center"
+        class="w-1/3 sm:w-1/5 relative mb-2 pr-2 flex flex-wrap items-center justify-center"
         v-for="(image, index) in previewImages"
         :key="'previewImage-' + index"
       >
