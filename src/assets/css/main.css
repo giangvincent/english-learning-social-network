@@ -38,6 +38,11 @@ html {
     color: #303a52;
 }
 
+.mirror {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
 .color-black {
     color: #303a52;
 }

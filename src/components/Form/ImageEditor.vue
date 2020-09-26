@@ -1,7 +1,7 @@
 <template>
   <div class="left-0 top-0 w-screen h-screen fixed">
     <div
-      class="bg-white top-0  fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
+      class="bg-white top-0 fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
     >
       <label class="cursor-pointer block" @click="cancelEdit()">
         <svg
@@ -16,6 +16,93 @@
             stroke-linejoin="round"
             stroke-width="2"
             d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </label>
+      <button
+        type="button"
+        class="cursor-pointer block"
+        @click="undoEvent()"
+        v-show="isDrawingMode"
+        :disabled="undoDisable"
+      >
+        <svg
+          class="color-black w-5 mx-auto"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+          />
+        </svg>
+      </button>
+      <!-- Undo -->
+
+      <button
+        type="button"
+        class="cursor-pointer block"
+        @click="redoEvent()"
+        v-show="isDrawingMode"
+        :disabled="redoDisable"
+      >
+        <svg
+          class="color-black w-5 mirror mx-auto"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+          />
+        </svg>
+      </button>
+      <!-- redo -->
+      <label
+        class="cursor-pointer block"
+        v-show="isDrawingMode"
+        @click="isDrawingMode = false"
+      >
+        <svg
+          class="color-black w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+          />
+        </svg>
+      </label>
+      <label
+        class="cursor-pointer block"
+        @click="cancelEditText()"
+        v-show="activeObject"
+      >
+        <svg
+          class="color-black w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
           />
         </svg>
       </label>
@@ -40,6 +127,7 @@
     <div
       class="bg-gray-400 w-full h-full py-10 flex flex-wrap content-center"
       ref="canvasContainer"
+      @click="clickCanvasHandle"
     >
       <canvas
         id="createCanvas"
@@ -50,11 +138,17 @@
     <!-- image container -->
 
     <div
-      class="bg-white bottom-0 fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
+      class="bg-white bottom-0 fixed flex flex-wrap h-10 justify-between mx-auto px-4 w-full z-10"
     >
-      <label class="cursor-pointer block">
+      <button
+        type="button"
+        ref="undo"
+        class="w-1/5 cursor-pointer block"
+        @click="undoEvent()"
+        :disabled="undoDisable"
+      >
         <svg
-          class="color-black w-5"
+          class="color-black w-5 mx-auto"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -67,51 +161,35 @@
             d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
           />
         </svg>
-      </label>
+      </button>
       <!-- Undo -->
 
-      <label class="cursor-pointer block">
+      <button
+        type="button"
+        ref="redo"
+        class="w-1/5 cursor-pointer block"
+        @click="redoEvent()"
+        :disabled="redoDisable"
+      >
         <svg
-          class="color-black w-5"
+          class="color-black w-5 mirror mx-auto"
           xmlns="http://www.w3.org/2000/svg"
-          x="0px"
-          y="0px"
-          viewBox="0 0 433.25 433.25"
-          style="enable-background: new 0 0 433.25 433.25"
-          xml:space="preserve"
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <g>
-            <g>
-              <path
-                d="M418.4,192.331c19.8-19.8,19.8-51.9,0-71.7l-0.1-0.1l-78.6-78.3c-19.8-19.8-51.9-19.7-71.8,0l-169.5,169.6l-54.2,54.1
-                    c-19.8,19.7-19.8,51.8-0.1,71.6l48.3,48.3H10c-5.5,0-10,4.5-10,10s4.5,10,10,10h297.4c5.5,0,10-4.5,10-10s-4.5-10-10-10H225
-                    l23.9-23.7L418.4,192.331z M196.7,385.831h-76.1l-62.3-62.4c-12-12-11.9-31.4,0-43.4l47.1-47l122.2,122L196.7,385.831z
-                     M119.6,218.931l162.5-162.5c12-12,31.5-12,43.5,0l78.6,78.4c12,12,12,31.4,0,43.5l-162.4,162.8L119.6,218.931z"
-              />
-            </g>
-          </g>
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
-          <g />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+          />
         </svg>
-      </label>
-      <!-- Eraser -->
-      <label class="cursor-pointer block">
+      </button>
+      <!-- redo -->
+      <button class="w-1/5 cursor-pointer block" @click="isDrawingMode = true">
         <svg
-          class="color-black w-5"
+          class="color-black w-5 mx-auto"
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
           y="0px"
@@ -151,11 +229,11 @@
           <g />
           <g />
         </svg>
-      </label>
+      </button>
       <!-- Free draw -->
-      <label class="cursor-pointer block" @click="createText">
+      <button class="w-1/5 cursor-pointer block" @click="createText">
         <svg
-          class="color-black w-5"
+          class="color-black w-5 mx-auto"
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
           y="0px"
@@ -171,11 +249,11 @@
             d="m233.882 175.412v87.706h58.471v-29.235h29.235v146.176h-29.235v58.471h116.941v-58.471h-29.235v-146.177h29.235v29.235h58.471v-87.706h-233.883z"
           />
         </svg>
-      </label>
+      </button>
       <!-- Text -->
-      <label class="cursor-pointer block">
+      <button class="w-1/5 cursor-pointer block">
         <svg
-          class="color-black w-5"
+          class="color-black w-5 mx-auto"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -223,10 +301,57 @@
           <g />
           <g />
         </svg>
-      </label>
+      </button>
       <!-- Sticker -->
     </div>
     <!-- Basic tools -->
+
+    <div
+      class="bg-white bottom-0 fixed flex flex-wrap justify-between mx-auto pb-2 pt-3 px-4 w-full z-20"
+      v-show="showTextTool"
+    >
+      <div class="flex w-full">
+        <div
+          class="w-1/12 h-8 cursor-pointer"
+          v-for="(color, index) in colorList"
+          :key="'color-' + index"
+          :style="{ 'background-color': color }"
+          @click="changeTextProp(color, 'fill')"
+        ></div>
+      </div>
+      <!-- adjust color -->
+      <div class="w-full">
+        <label class="w-full"
+          >Cỡ chữ
+          <input type="range" v-model="fontSize" min="1" max="100" />
+        </label>
+      </div>
+      <!-- fontsize -->
+    </div>
+    <!-- text editor -->
+    <div
+      class="bg-white bottom-0 fixed flex flex-wrap justify-between mx-auto pb-2 pt-3 px-4 w-full z-20"
+      v-show="isDrawingMode"
+    >
+      <div class="flex w-full">
+        <div
+          class="w-1/12 h-8 cursor-pointer"
+          v-for="(color, index) in colorList"
+          :key="'color-' + index"
+          :style="{ 'background-color': color }"
+          @click="bushColor = color"
+        ></div>
+      </div>
+      <!-- adjust color -->
+      <div class="w-full">
+        <label class="w-full"
+          >Cỡ bút
+          <input type="range" v-model="bushSize" min="1" max="100" />
+        </label>
+      </div>
+      <!-- bushSzie -->
+    </div>
+    <!-- Free draw option -->
   </div>
 </template>
 
@@ -235,10 +360,10 @@ import { mapState, mapMutations, mapActions } from "vuex";
 
 var canvas;
 function setAttr(name, value, ob) {
-  ob.toObject = (function(toObject) {
-    return function() {
+  ob.toObject = (function (toObject) {
+    return function () {
       return fabric.util.object.extend(toObject.call(this), {
-        [name]: value
+        [name]: value,
       });
     };
   })(ob.toObject);
@@ -270,21 +395,33 @@ function setActiveProp(name, value) {
   canvas.renderAll();
 }
 
-fabric.Object.prototype.resizeToScale = function(
+fabric.Object.prototype.transparentCorners = false;
+fabric.Object.prototype.cornerColor = " #574b90";
+fabric.Object.prototype.cornerStyle = "circle";
+fabric.Object.prototype.set({
+  borderColor: "#303a52",
+  borderScaleFactor: 2,
+  cornerSize: 20,
+});
+
+fabric.Object.prototype.resizeToScale = function (
   scaleX,
   scaleY,
   belongsToGroup
 ) {
   var objectScaleX = scaleX || this.scaleX;
   var objectScaleY = scaleY || this.scaleY;
+  console.log(objectScaleX, objectScaleY, belongsToGroup);
   switch (this.type) {
-    case "ellipse":
-      this.rx = parseInt(this.rx * objectScaleX);
-      this.ry = parseInt(this.ry * objectScaleY);
-      this.width = this.rx * 2;
-      this.height = this.ry * 2;
+    case "textbox":
+      if (objectScaleX < 1) {
+        this.fontSize -= 2;
+      } else {
+        this.fontSize += 2;
+      }
       this.scaleX = 1;
       this.scaleY = 1;
+
       if (belongsToGroup) {
         this.left *= objectScaleX;
         this.top *= objectScaleY;
@@ -309,25 +446,38 @@ fabric.Object.prototype.resizeToScale = function(
 export default {
   name: "editor",
   props: {
-    imageEdit: String
+    imageEdit: String,
   },
   data() {
     return {
-      startCreate: false,
+      isDrawingMode: false,
+      bushColor: "#FFFFFF",
+      bushSize: 30,
       postTitle: "",
       tags: [],
       curTag: "",
       showTextTool: false,
+      fontSize: 40,
       colorList: [
         "#ff0000",
         "#ffa500",
         "#008000",
-        "#00ffff",
-        "#800080",
-        "#dcdcdc",
-        "#000000"
+        "#2196F3",
+        "#009688",
+        "#9C27B0",
+        "#FFEB3B",
+        "#afbbc9",
+        "#4CAF50",
+        "#2d3748",
+        "#f56565",
+        "#ed64a6",
       ],
       canvas: null,
+      canvasState: null,
+      undoStates: [],
+      redoStates: [],
+      undoDisable: false,
+      redoDisable: false,
       canvasSize: [675, 900],
       canvasResultsJson: [],
       imagesDataUrl: [],
@@ -335,26 +485,58 @@ export default {
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
       characterLimit: 240,
-      previewImage: null
+      previewImage: null,
     };
   },
   computed: {
     ...mapState({
-      popupEditor: state => state.popupEditor
+      popupEditor: (state) => state.popupEditor,
     }),
-    limitTitle: function() {
+    limitTitle: function () {
       return this.postTitle.substring(0, this.characterLimit);
-    }
+    },
   },
   watch: {
-    activeObject: function(newVal, oldVal) {
+    activeObject: function (newVal, oldVal) {
       console.log(newVal);
-      if (newVal !== oldVal && newVal !== null && newVal.type === "textbox") {
+      if (
+        typeof newVal !== "undefined" &&
+        newVal !== oldVal &&
+        newVal !== null &&
+        newVal.type === "textbox"
+      ) {
         this.showTextTool = true;
       } else {
         this.showTextTool = false;
       }
-    }
+    },
+    fontSize: function (newVal, oldVal) {
+      if (newVal !== oldVal && newVal !== null) {
+        this.changeTextProp(newVal, "fontSize");
+        this.historySave();
+      }
+    },
+    isDrawingMode: function (newVal, oldVal) {
+      if (newVal !== oldVal && newVal !== null) {
+        canvas.isDrawingMode = newVal;
+        if (newVal) {
+          this.historySave();
+          var brush = canvas.freeDrawingBrush;
+          brush.color = this.bushColor;
+          brush.width = this.bushSize;
+        }
+      }
+    },
+    bushColor: function (newVal, oldVal) {
+      if (newVal !== oldVal && newVal !== null) {
+        canvas.freeDrawingBrush.color = newVal;
+      }
+    },
+    bushSize: function (newVal, oldVal) {
+      if (newVal !== oldVal && newVal !== null) {
+        canvas.freeDrawingBrush.width = newVal;
+      }
+    },
   },
   mounted() {
     this.handlePreviewImage();
@@ -363,6 +545,8 @@ export default {
     ...mapMutations(["TOGGLE_SIDEBAR", "Toggle_popupEditor"]),
     ...mapActions(["createContent"]),
     cancelEdit() {
+      canvas.clear();
+      this.startCreate = false;
       this.Toggle_popupEditor();
       this.$emit("cancel");
     },
@@ -372,13 +556,50 @@ export default {
       this.Toggle_popupEditor();
       this.$emit("onDoneEvent", imageChange);
     },
+    historySave() {
+      // clear the redo stack
+      this.redoStates = [];
+      this.redoDisable = true;
+      // initial call won't have a state
+      if (this.canvasState) {
+        this.undoStates.push(this.canvasState);
+        this.undoDisable = false;
+      }
+      this.canvasState = JSON.stringify(canvas);
+    },
+    historyReplay(playStack, saveStack, buttonsOn, buttonsOff) {
+      saveStack.push(this.canvasState);
+      this.canvasState = playStack.pop();
+      var on = buttonsOn + "Disable";
+      var off = buttonsOff + "Disable";
+      // turn both buttons off for the moment to prevent rapid clicking
+      eval("this." + on + "= true;");
+      eval("this." + off + "= true;");
+      canvas.clear();
+      var self = this;
+      canvas.loadFromJSON(this.canvasState, function () {
+        canvas.renderAll();
+        // now turn the buttons back on if applicable
+
+        eval("self." + on + "= false;");
+        if (playStack.length) {
+          eval("self." + off + "= false;");
+        }
+      });
+    },
+    undoEvent() {
+      this.historyReplay(this.undoStates, this.redoStates, "redo", "undo");
+    },
+    redoEvent() {
+      this.historyReplay(this.redoStates, this.undoStates, "undo", "redo");
+    },
     handlePreviewImage() {
       var self = this;
       if (this.imageEdit) {
         this.previewImage = this.imageEdit;
         this.$set(this, "canvasSize", [
           this.$refs.canvasContainer.clientWidth,
-          this.$refs.canvasContainer.clientHeight - 80
+          this.$refs.canvasContainer.clientHeight - 80,
         ]);
         this.startCreate = true;
         this.initCanvas();
@@ -386,23 +607,23 @@ export default {
     },
     initCanvas() {
       canvas = new fabric.Canvas("createCanvas");
-      canvas.selectionColor = "rgba(0,0,0,0.2)";
+      canvas.selectionColor = "rgba(0,0,0,0.5)";
       canvas.selectionBorderColor = "gray";
       canvas.selectionLineWidth = 1;
       fabric.Object.prototype.objectCaching = false;
+      // console.log(this.__canvas);
       canvas.setDimensions({
         width: this.canvasSize[0],
-        height: this.canvasSize[1]
+        height: this.canvasSize[1],
       });
+
       canvas.backgroundColor = "#303a52";
-
       var self = this;
-
-      fabric.Image.fromURL(this.previewImage, function(oImg) {
+      fabric.Image.fromURL(this.previewImage, function (oImg) {
         let scale = self.canvasSize[0] / oImg.width;
         canvas.setDimensions({
           width: self.canvasSize[0],
-          height: oImg.height * scale
+          height: oImg.height * scale,
         });
         oImg.set({
           width: oImg.width,
@@ -411,9 +632,9 @@ export default {
           scaleY: scale,
           crossOrigin: "anonymous",
           selectable: false,
-          evented: false
+          evented: false,
         });
-        console.log(oImg);
+        // console.log(oImg);
 
         if (oImg.width >= self.canvasSize[0] && oImg.width >= oImg.height) {
           oImg.scaleToWidth(self.canvasSize[0]);
@@ -428,23 +649,13 @@ export default {
         canvas.renderAll();
       });
 
-      canvas.on("object:scaling", function(e) {
-        if (e.target.type === "group") {
-          var groupScaleX = e.target.scaleX;
-          var groupScaleY = e.target.scaleY;
-          e.target.resizeToScale();
-          e.target._objects.forEach(function(object) {
-            object.resizeToScale(groupScaleX, groupScaleY, true);
-          });
-        } else {
-          if (e.target.type == "textbox") e.target.resizeToScale();
-        }
+      this.historySave();
+      canvas.on("object:modified", function () {
+        self.historySave();
       });
-
-      // create a rectangle with angle=45
     },
-    changeTextColor(color) {
-      setActiveProp("fill", color);
+    changeTextProp(val, prop) {
+      setActiveProp(prop, val);
     },
     createText() {
       var textProp = {
@@ -458,24 +669,18 @@ export default {
         scaleY: 1,
         fontWeight: "bold",
         originX: "left",
-        padding: 20,
+        padding: 35,
         width: 100,
         height: 100,
         hasRotatingPoint: true,
         centerTransform: true,
-        textAlign: "center"
+        textAlign: "center",
       };
       var textbox = new fabric.Textbox("text", textProp);
       canvas.add(textbox);
       canvas.setActiveObject(textbox);
       this.activeObject = canvas.getActiveObject();
       this.showTextTool = true;
-    },
-    doneEditText() {
-      this.activeObject = null;
-      canvas.discardActiveObject();
-      this.showTextTool = false;
-      canvas.renderAll();
     },
     cancelEditText() {
       var activeObjects = canvas.getActiveObjects();
@@ -490,47 +695,102 @@ export default {
     clickCanvasHandle() {
       console.log("clickCanvasHandle");
       this.activeObject = canvas.getActiveObject();
-    },
-
-    deleteCanvas() {
-      canvas.clear();
-      this.startCreate = false;
-    },
-    createHashtag() {
-      if (this.curTag !== "") {
-        this.curTag = this.curTag.replace(/\s+/g, " ");
-        this.curTag = this.curTag
-          .toLowerCase()
-          .split(" ")
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join("");
-        this.curTag =
-          this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1);
-        this.tags.push(this.curTag);
-        this.curTag = "";
+      if (this.activeObject && this.activeObject.type === "textbox") {
+        this.fontSize = this.activeObject.fontSize;
       }
     },
-    finishAndUpload() {
-      try {
-        var images = canvas.toDataURL({
-          format: "jpeg"
-        });
-        var self = this;
-        if (this.limitTitle !== "" && this.tags.length > 0) {
-          var data = {
-            images: [images],
-            title: this.limitTitle,
-            tags: this.tags,
-            cat_id: 1
-          };
-          this.createContent(data).then(resp => {
-            self.$router.push("/");
-          });
-        }
-      } catch ($e) {
-        // console.log($e);
-      }
-    }
-  }
+  },
 };
 </script>
+
+<style lang="css">
+input[type="range"] {
+  height: 26px;
+  -webkit-appearance: none;
+  margin: 10px 0;
+  width: 100%;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #50555c;
+  background: #50555c;
+  border-radius: 14px;
+  border: 0px solid #000000;
+}
+input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #529de1;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -3px;
+}
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #50555c;
+}
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #50555c;
+  background: #50555c;
+  border-radius: 14px;
+  border: 0px solid #000000;
+}
+input[type="range"]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #529de1;
+  cursor: pointer;
+}
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: #50555c;
+  border: 0px solid #000000;
+  border-radius: 28px;
+  box-shadow: 1px 1px 1px #50555c;
+}
+input[type="range"]::-ms-fill-upper {
+  background: #50555c;
+  border: 0px solid #000000;
+  border-radius: 28px;
+  box-shadow: 1px 1px 1px #50555c;
+}
+input[type="range"]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #529de1;
+  cursor: pointer;
+}
+input[type="range"]:focus::-ms-fill-lower {
+  background: #50555c;
+}
+input[type="range"]:focus::-ms-fill-upper {
+  background: #50555c;
+}
+</style>
