@@ -1,8 +1,12 @@
 <template>
-  <div class="py-2 border-t-2 border-gray-400 flex content-center flex-wrap">
-    <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold text-red-600">
+  <div
+    class="py-2 px-2 border-t-2 border-gray-400 flex content-center flex-wrap"
+  >
+    <div
+      class="w-1/4 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-red-600"
+    >
       <svg
-        class="sm:w-12 md:w-10 mx-auto"
+        class="w-8 sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -14,9 +18,11 @@
       <span>Lưu</span>
     </div>
     <!-- saved icon -->
-    <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold color-blue">
+    <div
+      class="w-1/4 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue"
+    >
       <svg
-        class="sm:w-12 md:w-10 mx-auto"
+        class="w-8 sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -29,9 +35,11 @@
     </div>
     <!-- Like icon -->
 
-    <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold color-blue">
+    <div
+      class="w-1/4 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue"
+    >
       <svg
-        class="sm:w-12 md:w-10 mx-auto"
+        class="w-8 sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -44,9 +52,11 @@
     </div>
     <!-- Share icon -->
 
-    <div class="w-1/4 py-2 px-6 rounded-lg hover:bg-gray-300 text-center font-bold text-black-600">
+    <div
+      class="w-1/4 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600"
+    >
       <svg
-        class="sm:w-12 md:w-10 mx-auto"
+        class="w-8 sm:w-12 md:w-10 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

@@ -1,16 +1,24 @@
 <template>
   <div class="w-full my-6 md:px-6 lg:px-8 py-20 md:py-10 md:w-6/12 mx-auto">
-    <feed-item v-for="item in itemArray" :key="item"></feed-item>
+    <section v-for="(item, index) in itemArray" :key="'post-' + index">
+      <post v-if="item.type == 'normalPost'"></post>
+      <flash-card v-if="item.type == 'flashCard'"></flash-card>
+      <quiz v-if="item.type == 'quiz'"></quiz>
+    </section>
   </div>
   <!-- END Feed grid -->
 </template>
 
 <script>
-import feedItem from "./ImageItem";
+import Post from "./Post";
+import FlashCard from "./FlashCard";
+import Quiz from "./Quiz";
 export default {
   name: "feed-template",
   components: {
-    feedItem,
+    Post,
+    FlashCard,
+    Quiz,
   },
   props: {
     itemArray: Array,
