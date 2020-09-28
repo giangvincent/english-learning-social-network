@@ -20,17 +20,21 @@
     </div>
     <!-- End media -->
     <div class="px-3 py-4">
-      <h4 style="font-size: 20px; font-weight: bold">
-        The standard Lorem Ipsum passage, used since the 1500s
-      </h4>
+      <h2>This is a Heading H2</h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        <span class="ql-size-small">this is a small with </span
+        ><span class="ql-size-small" style="color: rgb(230, 0, 0);"
+          >COLOR TEXT</span
+        >
+      </p>
+      <p class="ql-align-center">
+        <span class="ql-size-large ql-font-monospace"
+          >This is a large Text with </span
+        ><span
+          class="ql-size-large ql-font-monospace"
+          style="background-color: rgb(255, 255, 102);"
+          >background</span
+        >
       </p>
     </div>
     <!-- End content text -->
@@ -60,7 +64,7 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "Feed-flash-card",
   components: {
-    interactionPack,
-  },
+    interactionPack
+  }
 };
 </script>
