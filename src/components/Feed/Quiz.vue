@@ -15,11 +15,7 @@
     </div>
     <!-- End author info parts -->
 
-    <div class="mx-auto bg-color-black">
-      <img class="w-full" src="@/assets/images/default.jpg" />
-    </div>
-    <!-- End media -->
-    <div class="px-3 py-4">
+    <div class="px-3 pb-4">
       <h4 style="font-size: 20px; font-weight: bold">
         The standard Lorem Ipsum passage, used since the 1500s
       </h4>
@@ -34,6 +30,54 @@
       </p>
     </div>
     <!-- End content text -->
+    <div class="mx-auto bg-color-black mb-4">
+      <img class="w-full" src="@/assets/images/default-vertical.jpg" />
+    </div>
+    <!-- End media -->
+
+    <div class="py-3 text-sm">
+      <div
+        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+      >
+        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+        <div class="flex-grow font-medium px-2">Tighten Co.</div>
+        <div class="text-sm font-normal text-gray-500 tracking-wide">Team</div>
+      </div>
+      <div
+        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+      >
+        <span class="bg-green-400 h-2 w-2 m-2 rounded-full"></span>
+        <div class="flex-grow font-medium px-2">Taylor Otwell</div>
+        <div class="text-sm font-normal text-gray-500 tracking-wide">
+          Member
+        </div>
+      </div>
+      <div
+        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+      >
+        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+        <div class="flex-grow font-medium px-2">Adam Wathan</div>
+        <div class="text-sm font-normal text-gray-500 tracking-wide">
+          Member
+        </div>
+      </div>
+      <div
+        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+      >
+        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+        <div class="flex-grow font-medium px-2">Duke Street Studio Inc.</div>
+        <div class="text-sm font-normal text-gray-500 tracking-wide">Team</div>
+      </div>
+      <div
+        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+      >
+        <span class="bg-green-400 h-2 w-2 m-2 rounded-full"></span>
+        <div class="flex-grow font-medium px-2">Jeffrey Wey</div>
+        <div class="text-sm font-normal text-gray-500 tracking-wide">
+          Member
+        </div>
+      </div>
+    </div>
 
     <div class="px-3 pb-4">
       <span
@@ -59,7 +103,7 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   components: {
-    interactionPack,
-  },
+    interactionPack
+  }
 };
 </script>
