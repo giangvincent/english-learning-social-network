@@ -36,46 +36,31 @@
     <!-- End media -->
 
     <div class="py-3 text-sm">
+      <sp class="px-2">Các đáp án là :</sp>
       <div
-        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-black"
       >
-        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
-        <div class="flex-grow font-medium px-2">Tighten Co.</div>
-        <div class="text-sm font-normal text-gray-500 tracking-wide">Team</div>
+        <div class="px-2 font-bold">Tighten Co.</div>
       </div>
       <div
-        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-red-700 bg-red-400"
       >
-        <span class="bg-green-400 h-2 w-2 m-2 rounded-full"></span>
-        <div class="flex-grow font-medium px-2">Taylor Otwell</div>
-        <div class="text-sm font-normal text-gray-500 tracking-wide">
-          Member
-        </div>
+        <div class="px-2 font-bold">Taylor Otwell</div>
       </div>
       <div
-        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-green-800 bg-green-400"
       >
-        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
-        <div class="flex-grow font-medium px-2">Adam Wathan</div>
-        <div class="text-sm font-normal text-gray-500 tracking-wide">
-          Member
-        </div>
+        <div class="px-2 font-bold">Adam Wathan</div>
       </div>
       <div
-        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 border-gray-300 hover:border-gray-600 py-2 m-2"
       >
-        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
-        <div class="flex-grow font-medium px-2">Duke Street Studio Inc.</div>
-        <div class="text-sm font-normal text-gray-500 tracking-wide">Team</div>
+        <div class="px-2">Duke Street Studio Inc.</div>
       </div>
       <div
-        class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 border-gray-300 hover:border-gray-600 py-2 m-2"
       >
-        <span class="bg-green-400 h-2 w-2 m-2 rounded-full"></span>
-        <div class="flex-grow font-medium px-2">Jeffrey Wey</div>
-        <div class="text-sm font-normal text-gray-500 tracking-wide">
-          Member
-        </div>
+        <div class="px-2">Jeffrey Wey</div>
       </div>
     </div>
 
@@ -103,7 +88,7 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   components: {
-    interactionPack
-  }
+    interactionPack,
+  },
 };
 </script>
