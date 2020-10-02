@@ -1,6 +1,7 @@
 <template>
   <div>
     <main-navigation></main-navigation>
+    <side-panel-left></side-panel-left>
     <main-feed :itemArray="items"></main-feed>
     <to-creator></to-creator>
   </div>
@@ -10,6 +11,7 @@
 // @ is an alias to /src
 import { mapState, mapMutations } from "vuex";
 import MainNavigation from "@/components/MainNavigation.vue";
+import SidePanelLeft from "@/components/Navigator/SidePanelLeft.vue";
 import MainFeed from "@/components/Feed/Main.vue";
 import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
@@ -19,10 +21,11 @@ export default {
     MainNavigation,
     MainFeed,
     ToCreator,
+    SidePanelLeft
   },
   data() {
     return {
-      items: [],
+      items: []
     };
   },
   mounted() {
@@ -37,7 +40,7 @@ export default {
     }, 500);
   },
   methods: {
-    ...mapMutations(["CHANGE_TAB"]),
-  },
+    ...mapMutations(["CHANGE_TAB"])
+  }
 };
 </script>

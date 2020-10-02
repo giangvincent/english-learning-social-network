@@ -1,7 +1,7 @@
 <template>
   <div>
     <main-navigation></main-navigation>
-
+    <side-panel-left></side-panel-left>
     <div class="my-6 md:px-6 lg:px-8 md:w-6/12 pt-16 mx-auto">
       <div class="sm:rounded sm:rounded-t-lg shadow">
         <div
@@ -19,14 +19,16 @@
         <!-- End avatar image -->
         <div class="text-center px-3 pb-6 pt-2">
           <h3 class="text-black text-sm bold font-sans">Olivia Dunham</h3>
-          <p
-            class="mt-2 font-sans font-light text-grey-dark"
-          >Hello, i'm from another the other side!</p>
+          <p class="mt-2 font-sans font-light text-grey-dark">
+            Hello, i'm from another the other side!
+          </p>
         </div>
         <!-- End bio -->
 
         <div class="w-full mx-auto flex text-center font-bold">
-          <a href="user.html" class="w-1/3 py-3 border-b-2 border-gray-900">Đã đăng</a>
+          <a href="user.html" class="w-1/3 py-3 border-b-2 border-gray-900"
+            >Đã đăng</a
+          >
           <a href="#" class="w-1/3 py-3">Đă lưu</a>
           <a href="user-setting.html" class="w-1/3 py-3">Cài đặt</a>
         </div>
@@ -44,6 +46,7 @@
 // @ is an alias to /src
 import { mapState, mapMutations } from "vuex";
 import MainNavigation from "@/components/MainNavigation.vue";
+import SidePanelLeft from "@/components/Navigator/SidePanelLeft.vue";
 import MainFeed from "@/components/Feed/Main.vue";
 import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
@@ -53,10 +56,11 @@ export default {
     MainNavigation,
     MainFeed,
     ToCreator,
+    SidePanelLeft
   },
   data() {
     return {
-      items: [],
+      items: []
     };
   },
   mounted() {
@@ -71,7 +75,7 @@ export default {
     this.SET_PAGE("user");
   },
   methods: {
-    ...mapMutations(["SET_PAGE"]),
-  },
+    ...mapMutations(["SET_PAGE"])
+  }
 };
 </script>

@@ -1,13 +1,22 @@
 <template>
-  <div class="w-full my-6 md:px-6 lg:px-8 py-20 md:py-10 md:w-6/12 mx-auto">
-    <section v-for="(item, index) in itemArray" :key="'post-' + index">
-      <post v-if="item.type == 'normalPost'"></post>
-      <flash-card v-if="item.type == 'flashCard'"></flash-card>
-      <quiz></quiz>
-      <!-- <quiz v-if="item.type == 'quiz'"></quiz> -->
-    </section>
+  <div class="flex">
+    <div class="hidden md:block md:w-1/5"></div>
+    <div
+      class="w-full md:w-3/5 lg:-mx-2 my-6 md:px-6 lg:px-8 py-24 md:py-16 columns mx-1 md:mx-0"
+    >
+      <div
+        class="inline-block"
+        v-for="(item, index) in itemArray"
+        :key="'post-' + index"
+      >
+        <post v-if="item.type == 'normalPost'"></post>
+        <flash-card v-if="item.type == 'flashCard'"></flash-card>
+        <quiz></quiz>
+        <!-- <quiz v-if="item.type == 'quiz'"></quiz> -->
+      </div>
+    </div>
+    <!-- END Feed grid -->
   </div>
-  <!-- END Feed grid -->
 </template>
 
 <script>

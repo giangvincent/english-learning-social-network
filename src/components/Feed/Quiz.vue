@@ -1,5 +1,7 @@
 <template>
-  <div class="border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full">
+  <div
+    class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full"
+  >
     <div class="w-full flex justify-between p-3">
       <div class="flex">
         <div class="rounded-full h-8 w-8 flex overflow-hidden">
@@ -36,7 +38,7 @@
     <!-- End media -->
 
     <div class="py-3 text-sm">
-      <sp class="px-2">Các đáp án là :</sp>
+      <span class="px-2">Các đáp án là :</span>
       <div
         class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-black"
       >
@@ -88,7 +90,7 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   components: {
-    interactionPack,
-  },
+    interactionPack
+  }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <nav id="header" class="bg-white w-full z-20 top-0 fixed shadow">
     <div
-      class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
+      class="w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
     >
       <label for="menu-toggle" class="cursor-pointer md:hidden block py-2">
         <svg
@@ -17,7 +17,9 @@
       </label>
       <input class="hidden" type="checkbox" id="menu-toggle" />
 
-      <div class="hidden md:flex md:items-center w-full order-3 md:order-1 md:w-1/3">
+      <div
+        class="hidden md:flex md:items-center w-full order-3 md:order-1 md:w-1/3"
+      >
         <desktop-nav></desktop-nav>
       </div>
 
@@ -26,7 +28,10 @@
       </div>
 
       <div class="order-2 md:order-3 flex md:w-1/3 flex-wrap justify-end">
-        <router-link to="/auth/login" class="inline-block no-underline hover:text-black">
+        <router-link
+          to="/auth/login"
+          class="inline-block no-underline hover:text-black"
+        >
           <svg
             class="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
@@ -46,19 +51,22 @@
     <div class="w-full mx-auto flex text-center font-bold block md:hidden">
       <a
         class="w-1/3 py-3"
-        :class="{'border-b-2 border-gray-900': currentTab === 'vocabulary'}"
+        :class="{ 'border-b-2 border-gray-900': currentTab === 'vocabulary' }"
         @click="navigate('vocabulary')"
-      >Từ vựng</a>
+        >Từ vựng</a
+      >
       <a
         class="w-1/3 py-3"
-        :class="{'border-b-2 border-gray-900': currentTab === 'listen'}"
+        :class="{ 'border-b-2 border-gray-900': currentTab === 'listen' }"
         @click="navigate('listen')"
-      >Nghe</a>
+        >Nghe</a
+      >
       <a
         class="w-1/3 py-3"
-        :class="{'border-b-2 border-gray-900': currentTab === 'article'}"
+        :class="{ 'border-b-2 border-gray-900': currentTab === 'article' }"
         @click="navigate('article')"
-      >Bài viết</a>
+        >Bài viết</a
+      >
     </div>
     <!-- END topbar lvl1 -->
   </nav>
@@ -71,15 +79,15 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav,
+    DesktopNav
   },
   data() {
     return {};
   },
   computed: {
     ...mapState({
-      currentTab: (state) => state.currentTab,
-    }),
+      currentTab: state => state.currentTab
+    })
   },
   mounted() {
     if (
@@ -94,7 +102,7 @@ export default {
     navigate(goto) {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
-    },
-  },
+    }
+  }
 };
 </script>

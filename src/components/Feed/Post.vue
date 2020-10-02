@@ -1,5 +1,7 @@
 <template>
-  <div class="border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full">
+  <div
+    class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full"
+  >
     <div class="w-full flex justify-between p-3">
       <div class="flex">
         <div class="rounded-full h-8 w-8 flex overflow-hidden">
@@ -61,7 +63,7 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "image-item",
   components: {
-    interactionPack,
-  },
+    interactionPack
+  }
 };
 </script>

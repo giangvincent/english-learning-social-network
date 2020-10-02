@@ -6,7 +6,10 @@
       <div class="mx-auto max-w-lg">
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600">Danh mục</span>
-          <form-select :selectData="categories" @changeSelectData="changeCategory"></form-select>
+          <form-select
+            :selectData="categories"
+            @changeSelectData="changeCategory"
+          ></form-select>
         </div>
         <!-- pickup category -->
         <div class="py-1">
@@ -16,18 +19,28 @@
               <div
                 @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
-                :class="{'border-b-2 border-gray-900': postType == 'normalPost'}"
-              >Bài viết</div>
+                :class="{
+                  'border-b-2 border-gray-900': postType == 'normalPost'
+                }"
+              >
+                Bài viết
+              </div>
               <div
                 @click="changePostType('flashCard')"
                 class="w-1/3 py-3 cursor-pointer"
-                :class="{'border-b-2 border-gray-900': postType == 'flashCard'}"
-              >Flash Cards</div>
+                :class="{
+                  'border-b-2 border-gray-900': postType == 'flashCard'
+                }"
+              >
+                Flash Cards
+              </div>
               <div
                 @click="changePostType('quiz')"
                 class="w-1/3 py-3 cursor-pointer"
-                :class="{'border-b-2 border-gray-900': postType == 'quiz'}"
-              >Câu đố</div>
+                :class="{ 'border-b-2 border-gray-900': postType == 'quiz' }"
+              >
+                Câu đố
+              </div>
             </div>
             <!-- END topbar lvl1 -->
           </div>
@@ -81,7 +94,7 @@ export default {
     tags,
     normalPost,
     flashCard,
-    quiz,
+    quiz
   },
   data() {
     return {
@@ -89,9 +102,9 @@ export default {
       categories: [
         { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
-        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 },
+        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
       ],
-      category: 0,
+      category: 0
     };
   },
   mounted() {},
@@ -106,8 +119,8 @@ export default {
     submitContent() {
       /* let content = this.editor.root.innerHTML;
       console.log(content); */
-    },
+    }
   },
-  beforeDestroy() {},
+  beforeDestroy() {}
 };
 </script>
