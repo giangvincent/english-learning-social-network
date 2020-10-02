@@ -1,11 +1,11 @@
 <template>
-  <div class="hidden md:block">
+  <div class="hidden md:block ">
     <div
       class="bg-black bg-opacity-50 fixed z-30 top-0 bottom-0 left-0 right-0 md:hidden"
     ></div>
     <!-- shade -->
     <section
-      class="fixed top-0 bottom-0 z-30 w-screen md:w-1/5 lg:w-1/6 h-screen pt-16"
+      class="transform md:transform-none ease-in-out transition-all duration-300 translate-x-0 -translate-x-full fixed top-0 bottom-0 z-30 w-64 md:w-1/5 lg:w-1/6 h-screen md:pt-16"
     >
       <nav class="bg-white md:bg-none min min-h-full shadow-2xl md:shadow-none">
         <div class="px-1 xl:px-4">
