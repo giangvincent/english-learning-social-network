@@ -14,6 +14,11 @@ export default new Router({
       component: Home
     },
     {
+      path: '/p/:slug',
+      name: 'detail',
+      component: () => import('./views/Detail.vue')
+    },
+    {
       path: '/u/:id',
       name: 'user-page',
       component: () => import('./views/User.vue'),
