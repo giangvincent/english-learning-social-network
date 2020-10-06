@@ -17,9 +17,9 @@
         >
           Card 2/10
         </div>
-        <span class="text-gray-500">
+        <router-link to="/p/test-detail-flashcard" class="text-gray-500">
           2h ago
-        </span>
+        </router-link>
       </div>
     </div>
     <!-- End author info parts -->

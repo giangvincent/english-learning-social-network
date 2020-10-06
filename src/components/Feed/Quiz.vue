@@ -11,9 +11,12 @@
           braydoncoyer
         </div>
       </div>
-      <div class="flex cursor-pointer content-center flex-wrap text-gray-500">
+      <router-link
+        to="/p/test-detail-quiz"
+        class="flex cursor-pointer content-center flex-wrap text-gray-500"
+      >
         2h ago
-      </div>
+      </router-link>
     </div>
     <!-- End author info parts -->
 
