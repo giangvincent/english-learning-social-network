@@ -28,9 +28,36 @@
       </div>
 
       <div class="order-2 md:order-3 flex md:w-1/3 flex-wrap justify-end">
+        <div
+          class="inline-block no-underline hover:text-black relative"
+          title="Thông báo"
+        >
+          <label
+            class="-m-2 absolute bg-color-blue font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6"
+            >9+</label
+          >
+          <svg
+            class="hover:text-black"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            width="24"
+            height="24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            />
+          </svg>
+          <!-- Notify icon -->
+        </div>
         <router-link
           to="/auth/login"
-          class="inline-block no-underline hover:text-black"
+          class="inline-block no-underline hover:text-black ml-2"
+          title="User"
         >
           <svg
             class="fill-current hover:text-black"
@@ -44,10 +71,11 @@
               d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z"
             />
           </svg>
+          <!-- User icon -->
         </router-link>
       </div>
     </div>
-    <!-- End topbar lvl0 -->
+    <!-- End top bar lvl0 -->
     <div class="w-full mx-auto flex text-center font-bold block md:hidden">
       <a
         class="w-1/3 py-3"
@@ -68,7 +96,7 @@
         >Bài viết</a
       >
     </div>
-    <!-- END topbar lvl1 -->
+    <!-- END top bar lvl1 -->
   </nav>
 </template>
 <script>

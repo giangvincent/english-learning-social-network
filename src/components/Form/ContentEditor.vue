@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div :id="'editor-container-' + contentIndex" class="overflow-y-auto">
     <div
-      :id="'editor-'+ contentIndex"
-      class="editor rounded-b-lg border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+      :id="'editor-' + contentIndex"
+      class="editor h-64 rounded-b-lg border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
     ></div>
   </div>
 </template>
@@ -14,18 +14,18 @@ import "quill/dist/quill.snow.css";
 export default {
   name: "content-editor",
   props: {
-    contentIndex: String,
+    contentIndex: String
   },
   data() {
     return {
-      editor: null,
+      editor: null
     };
   },
   watch: {
-    contentIndex: function (newVal, oldVal) {
+    contentIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
-    },
+    }
   },
   mounted() {
     console.log(this.contentIndex);
@@ -50,7 +50,7 @@ export default {
         [{ font: [] }],
         [{ align: [] }],
 
-        ["clean"], // remove formatting button
+        ["clean"] // remove formatting button
       ];
 
       var content =
@@ -58,16 +58,17 @@ export default {
 
       this.editor = new Quill("#editor-" + this.contentIndex, {
         modules: {
-          toolbar: toolbarOptions,
+          toolbar: toolbarOptions
         },
-        theme: "snow",
+        scrollingContainer: "#editor-container-" + this.contentIndex,
+        theme: "snow"
       });
 
       console.log(content);
       const delta = this.editor.clipboard.convert(content);
       console.log(delta);
       this.editor.setContents(delta);
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full"
+    class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
   >
     <div class="w-full flex justify-between p-3">
       <div class="flex">

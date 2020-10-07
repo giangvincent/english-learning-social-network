@@ -239,7 +239,7 @@
 
 <script>
 export default {
-  name: "interaction pack",
+  name: "interaction-pack",
   data() {
     return {
       saved: false,
