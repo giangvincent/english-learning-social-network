@@ -3,6 +3,9 @@ import Vuex from "vuex";
 import mutations from "./mutations";
 import actions from "./actions";
 
+import creator from "./Creator";
+import user from "./User";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -12,5 +15,9 @@ export default new Vuex.Store({
     currentPage: ""
   },
   mutations: mutations,
-  actions: actions
+  actions: actions,
+  modules: {
+    creator,
+    user
+  }
 });
