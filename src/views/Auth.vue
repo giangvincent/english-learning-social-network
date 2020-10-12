@@ -8,9 +8,12 @@
         <router-link
           class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
           to="/"
-        >ohitsgood</router-link>
+          >ohitsgood</router-link
+        >
       </div>
-      <div class="w-full text-sm text-center font-semibold">Lorem ipsum dolor, sit amet?</div>
+      <div class="w-full text-sm text-center font-semibold">
+        Lorem ipsum dolor, sit amet?
+      </div>
 
       <div class="mt-8 w-full mx-auto">
         <div class="py-2">
@@ -29,12 +32,14 @@
               :type="showPass ? 'password' : 'text'"
               class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
             />
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+            <div
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
               <svg
                 class="h-6 text-gray-700"
                 fill="none"
                 @click="showPass = !showPass"
-                :class="{'hidden': !showPass, 'block':showPass }"
+                :class="{ hidden: !showPass, block: showPass }"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 576 512"
               >
@@ -48,7 +53,7 @@
                 class="h-6 text-gray-700"
                 fill="none"
                 @click="showPass = !showPass"
-                :class="{'block': !showPass, 'hidden':showPass }"
+                :class="{ block: !showPass, hidden: showPass }"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 640 512"
               >
@@ -63,13 +68,17 @@
         <div class="flex justify-between">
           <label class="block text-gray-500 font-bold my-4">
             <input type="checkbox" class="leading-loose text-pink-600" />
-            <span class="pl-2 py-2 text-sm text-gray-600 leading-snug">Nhớ tài khoản cho lần sau</span>
+            <span class="pl-2 py-2 text-sm text-gray-600 leading-snug"
+              >Nhớ tài khoản cho lần sau</span
+            >
           </label>
         </div>
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="login()"
-        >Đăng nhập</button>
+        >
+          Đăng nhập
+        </button>
         <div class="flex flex-col flex-wrap content-center text-center">
           <label class="block text-gray-500 font-bold my-4">
             <a
@@ -85,7 +94,8 @@
               <br />
               <span
                 class="font-semibold border-b-2 border-gray-400 hover:border-teal-500"
-              >Đăng ký ở đây nè</span>
+                >Đăng ký ở đây nè</span
+              >
             </a>
           </div>
         </div>
@@ -97,11 +107,14 @@
       v-if="page === 'register'"
       class="container mx-auto p-6 md:p-12 mt-6 relative flex flex-wrap md:w-6/12"
     >
-      <div class="w-full mb-5 pb-1border-b-2 text-center font-base text-gray-700">
+      <div
+        class="w-full mb-5 pb-1border-b-2 text-center font-base text-gray-700"
+      >
         <router-link
           class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
           to="/"
-        >ohitsgood</router-link>
+          >ohitsgood</router-link
+        >
       </div>
       <div class="w-full">
         <div class="text-center font-semibold">Lorem ipsum dolor</div>
@@ -146,10 +159,20 @@
           <ul>
             <li class="flex items-center py-1">
               <div
-                :class="{'bg-green-200 text-green-700': password == password_confirm && password.length > 0, 'bg-red-200 text-red-700':password != password_confirm || password.length == 0}"
+                :class="{
+                  'bg-green-200 text-green-700':
+                    password == password_confirm && password.length > 0,
+                  'bg-red-200 text-red-700':
+                    password != password_confirm || password.length == 0,
+                }"
                 class="rounded-full p-1 fill-current"
               >
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path
                     x-show="password == password_confirm && password.length > 0"
                     stroke-linecap="round"
@@ -167,17 +190,30 @@
                 </svg>
               </div>
               <span
-                :class="{'text-green-700': password == password_confirm && password.length > 0, 'text-red-700':password != password_confirm || password.length == 0}"
+                :class="{
+                  'text-green-700':
+                    password == password_confirm && password.length > 0,
+                  'text-red-700':
+                    password != password_confirm || password.length == 0,
+                }"
                 class="font-medium text-sm ml-3"
                 x-text="password == password_confirm && password.length > 0 ? 'Passwords match' : 'Passwords do not match' "
               ></span>
             </li>
             <li class="flex items-center py-1">
               <div
-                :class="{'bg-green-200 text-green-700': password.length > 7, 'bg-red-200 text-red-700':password.length < 7 }"
+                :class="{
+                  'bg-green-200 text-green-700': password.length > 7,
+                  'bg-red-200 text-red-700': password.length < 7,
+                }"
                 class="rounded-full p-1 fill-current"
               >
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path
                     x-show="password.length > 7"
                     stroke-linecap="round"
@@ -195,7 +231,10 @@
                 </svg>
               </div>
               <span
-                :class="{'text-green-700': password.length > 7, 'text-red-700':password.length < 7 }"
+                :class="{
+                  'text-green-700': password.length > 7,
+                  'text-red-700': password.length < 7,
+                }"
                 class="font-medium text-sm ml-3"
                 x-text="password.length > 7 ? 'The minimum length is reached' : 'At least 8 characters required' "
               ></span>
@@ -210,18 +249,22 @@
               <a
                 href="#"
                 class="font-semibold border-b-2 border-gray-200 hover:border-gray-500 text-black"
-              >Terms and Conditions of the site</a>and
+                >Terms and Conditions of the site</a
+              >and
               <a
                 href="#"
                 class="font-semibold border-b-2 border-gray-200 hover:border-gray-500 text-black"
-              >the information data policy.</a>
+                >the information data policy.</a
+              >
             </span>
           </label>
         </div>
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="register()"
-        >Register</button>
+        >
+          Register
+        </button>
         <div class="text-sm font-semibold block py-6 flex justify-center">
           <a
             @click="changeAuthRoute('login')"
@@ -238,15 +281,34 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+function validateEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 export default {
   name: "Authenticate",
   data() {
     return {
       showPass: false,
+      full_name: "",
+      nickname: "",
+      email: "",
       password: "",
       password_confirm: "",
       page: "login",
     };
+  },
+  watch: {
+    email: function (newVal, oldVal) {
+      if (newVal && newVal !== oldVal) {
+        let checkEmail = validateEmail(newVal);
+        console.log(checkEmail);
+      }
+    },
+  },
+  computed: {
+    ...mapState(["apiUrl"]),
   },
   created() {
     if (
@@ -256,7 +318,9 @@ export default {
       this.page = "register";
     } else this.page = "login";
   },
+  mounted() {},
   methods: {
+    ...mapActions(["LOGIN", "REGISTER"]),
     changeAuthRoute(Auth) {
       this.page = Auth;
       this.$router.push("/auth/" + Auth);
