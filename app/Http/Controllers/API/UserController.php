@@ -22,6 +22,7 @@ class UserController extends Controller
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $success['token'] = $user->createToken(env('APP_NAME'))->accessToken;
+            $success['user'] = $user;
             return response()->json(['success' => $success], $this->successStatus);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
@@ -51,7 +52,7 @@ class UserController extends Controller
         $user = User::create($input);
 
         $success['token'] = $user->createToken(env('APP_NAME'))->accessToken;
-        $success['full_name'] = $user->full_name;
+        $success['user'] = $user;
 
         return response()->json(['success' => $success], $this->successStatus);
     }
