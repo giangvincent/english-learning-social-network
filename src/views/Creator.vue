@@ -85,6 +85,7 @@ import tags from "@/components/Creator/Tag.vue";
 import normalPost from "@/components/Creator/ArticleContent.vue";
 import flashCard from "@/components/Creator/FlashCard.vue";
 import quiz from "@/components/Creator/Quiz.vue";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   name: "creator",
@@ -107,8 +108,18 @@ export default {
       category: 0
     };
   },
-  mounted() {},
+  computed: {
+    ...mapState({
+      user: state => state.user.user,
+      user_token: state => state.user.token
+    })
+  },
+  mounted() {
+    console.log(this.user, this.token);
+  },
   methods: {
+    ...mapMutations(),
+    ...mapActions(["SUBMIT_POST"]),
     changePostType(type) {
       this.postType = type;
     },
@@ -119,6 +130,7 @@ export default {
     submitContent() {
       /* let content = this.editor.root.innerHTML;
       console.log(content); */
+      this.SUBMIT_POST();
     }
   },
   beforeDestroy() {}

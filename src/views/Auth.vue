@@ -22,6 +22,8 @@
             placeholder
             type="text"
             class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            autocomplete="on"
+            v-model="email"
           />
         </div>
         <div class="py-2" x-data="{ show: true }">
@@ -29,8 +31,9 @@
           <div class="relative">
             <input
               placeholder
-              :type="showPass ? 'password' : 'text'"
+              :type="!showPass ? 'password' : 'text'"
               class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+              v-model="password"
             />
             <div
               class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
@@ -67,7 +70,11 @@
         </div>
         <div class="flex justify-between">
           <label class="block text-gray-500 font-bold my-4">
-            <input type="checkbox" class="leading-loose text-pink-600" />
+            <input
+              type="checkbox"
+              class="leading-loose text-pink-600"
+              v-model="keepLogin"
+            />
             <span class="pl-2 py-2 text-sm text-gray-600 leading-snug"
               >Nhớ tài khoản cho lần sau</span
             >
@@ -75,7 +82,7 @@
         </div>
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
-          @click="login()"
+          @click="sendLogin()"
         >
           Đăng nhập
         </button>
@@ -163,7 +170,7 @@
                   'bg-green-200 text-green-700':
                     password == password_confirm && password.length > 0,
                   'bg-red-200 text-red-700':
-                    password != password_confirm || password.length == 0,
+                    password != password_confirm || password.length == 0
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -194,7 +201,7 @@
                   'text-green-700':
                     password == password_confirm && password.length > 0,
                   'text-red-700':
-                    password != password_confirm || password.length == 0,
+                    password != password_confirm || password.length == 0
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password == password_confirm && password.length > 0 ? 'Passwords match' : 'Passwords do not match' "
@@ -204,7 +211,7 @@
               <div
                 :class="{
                   'bg-green-200 text-green-700': password.length > 7,
-                  'bg-red-200 text-red-700': password.length < 7,
+                  'bg-red-200 text-red-700': password.length < 7
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -233,7 +240,7 @@
               <span
                 :class="{
                   'text-green-700': password.length > 7,
-                  'text-red-700': password.length < 7,
+                  'text-red-700': password.length < 7
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password.length > 7 ? 'The minimum length is reached' : 'At least 8 characters required' "
@@ -261,7 +268,7 @@
         </div>
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
-          @click="register()"
+          @click="sendRegister()"
         >
           Register
         </button>
@@ -281,10 +288,21 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+
 function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
+}
+function isLocalStorage() {
+  var mod = "modernizr";
+  try {
+    localStorage.setItem(mod, mod);
+    localStorage.removeItem(mod);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 export default {
   name: "Authenticate",
@@ -297,18 +315,22 @@ export default {
       password: "",
       password_confirm: "",
       page: "login",
+      keepLogin: true
     };
   },
   watch: {
-    email: function (newVal, oldVal) {
+    email: function(newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
         console.log(checkEmail);
       }
-    },
+    }
   },
   computed: {
-    ...mapState(["apiUrl"]),
+    ...mapState({
+      user: state => state.user.user,
+      user_token: state => state.user.token
+    })
   },
   created() {
     if (
@@ -318,19 +340,48 @@ export default {
       this.page = "register";
     } else this.page = "login";
   },
-  mounted() {},
+  mounted() {
+    if (isLocalStorage() && user_token) {
+      let user_token = localStorage.getItem("user_token");
+      let user = localStorage.getItem("user");
+      console.log(JSON.parse(user_token), JSON.parse(user));
+      if (user_token && user) {
+        this.SET_USER(JSON.parse(user));
+        this.SET_TOKEN(JSON.parse(user_token));
+        this.$router.go(-1);
+      }
+    }
+  },
   methods: {
     ...mapActions(["LOGIN", "REGISTER"]),
+    ...mapMutations(["SET_USER", "SET_TOKEN"]),
     changeAuthRoute(Auth) {
       this.page = Auth;
       this.$router.push("/auth/" + Auth);
     },
-    login() {
-      this.$router.push("/u/1");
+    sendLogin() {
+      var self = this;
+      this.LOGIN({ email: this.email, password: this.password }).then(res => {
+        if (self.keepLogin && isLocalStorage()) {
+          localStorage.setItem("user", JSON.stringify(res.user));
+          localStorage.setItem("user_token", JSON.stringify(res.token));
+        }
+        self.$router.go(-1);
+      });
     },
-    register() {
-      this.$router.push("/u/1");
-    },
-  },
+    sendRegister() {
+      this.REGISTER({
+        full_name: this.full_name,
+        nick_name: this.nickname,
+        email: this.email,
+        password: this.password,
+        c_password: this.c_password
+      }).then(() => {
+        localStorage.setItem("user", res.success.token);
+        localStorage.setItem("user_token", res.success.user);
+        self.$router.go(-1);
+      });
+    }
+  }
 };
 </script>

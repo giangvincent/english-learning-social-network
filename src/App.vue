@@ -5,12 +5,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
+
 export default {
   computed: {
     ...mapState({
       popupEditor: state => state.popupEditor
     })
+  },
+  mouted() {},
+  methods: {
+    ...mapMutations(["SET_USER", "SET_TOKEN"])
   }
 };
 </script>
