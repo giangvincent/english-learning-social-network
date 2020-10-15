@@ -20,7 +20,7 @@
                 @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'normalPost'
+                  'border-b-2 border-gray-900': postType == 'normalPost',
                 }"
               >
                 Bài viết
@@ -29,7 +29,7 @@
                 @click="changePostType('flashCard')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'flashCard'
+                  'border-b-2 border-gray-900': postType == 'flashCard',
                 }"
               >
                 Flash Cards
@@ -104,7 +104,7 @@ export default {
     tags,
     normalPost,
     flashCard,
-    quiz
+    quiz,
   },
   data() {
     return {
@@ -112,25 +112,25 @@ export default {
       categories: [
         { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
-        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
+        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 },
       ],
       category: 0,
       postContent: null,
-      tags: {}
+      tags: {},
     };
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   watch: {
-    postContent: function(newVal, oldVal) {
+    postContent: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         console.log(newVal);
       }
-    }
+    },
   },
   mounted() {
     console.log(this.user, this.token);
@@ -156,15 +156,14 @@ export default {
       /* let content = this.editor.root.innerHTML;
       console.log(content); */
       let postData = {
-        category: this.categories[this.category],
+        cat_id: this.categories[this.category].id,
         postType: this.postType,
-        postContent: this.postContent,
-        user: this.user,
-        user_token: this.user_token
+        postContent: JSON.stringify(this.postContent),
+        user: JSON.stringify(this.user),
       };
       this.SUBMIT_POST(postData);
-    }
+    },
   },
-  beforeDestroy() {}
+  beforeDestroy() {},
 };
 </script>

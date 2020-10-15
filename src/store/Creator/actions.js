@@ -1,10 +1,10 @@
 export default {
-  SUBMIT_POST: function({ rootState, state, commit }, payload) {
+  SUBMIT_POST: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
-    data.append("cat_id", 1);
-    data.append("post_type", "flash_card");
-    data.append("content", "test content");
-    data.append("user", rootState.user.user);
+    data.append("cat_id", payload.cat_id);
+    data.append("post_type", payload.postType);
+    data.append("content", payload.postContent);
+    data.append("user", payload.user);
 
     return new Promise((res, rej) => {
       fetch(rootState.apiUrl + "/create-post", {
@@ -15,10 +15,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
