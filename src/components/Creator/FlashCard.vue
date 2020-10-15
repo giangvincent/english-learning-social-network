@@ -35,7 +35,10 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview></image-preview>
+      <image-preview
+        @updateImages="updateImages"
+        :paraIndex="index"
+      ></image-preview>
 
       <div class="py-1">
         <span class="px-1 text-sm text-gray-600">Kết quả</span>
