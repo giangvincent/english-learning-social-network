@@ -21,6 +21,20 @@ class PostController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
+        $this->CreateUploadFol();
         return response()->json(['success' => $request->all()], $this->successStatus);
+    }
+
+    public function CreateUploadFol()
+    {
+        if (!file_exists(public_path('upload'))) {
+            mkdir(public_path('upload'), 0777);
+        }
+        if (!file_exists(public_path('upload/post'))) {
+            mkdir(public_path('upload/post'), 0777);
+        }
+        if (!file_exists(public_path('upload/temp'))) {
+            mkdir(public_path('upload/temp'), 0777);
+        }
     }
 }
