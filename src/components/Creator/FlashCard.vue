@@ -90,6 +90,14 @@ export default {
       ]
     };
   },
+  watch: {
+    flashCards: {
+      handler(val) {
+        this.$emit("changeContent", this.flashCards);
+      },
+      deep: true
+    }
+  },
   methods: {
     removeCard(index) {
       this.flashCards.splice(index, 1);

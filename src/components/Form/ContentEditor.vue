@@ -63,18 +63,22 @@ export default {
         theme: "snow"
       });
 
-      const delta = this.editor.clipboard.convert(this.contentHtml);
-      console.log(delta);
+      const importContent = this.editor.clipboard.convert(this.contentHtml);
       console.log(this.contentOrigin);
-      this.editor.setContents(delta);
+      this.editor.setContents(importContent);
       var self = this;
       this.editor.on("text-change", function(delta, oldDelta, source) {
-        if (source == "api") {
+        /* if (source == "api") {
           console.log("An API call triggered this change.");
         } else if (source == "user") {
           console.log("A user action triggered this change.");
-        }
-        self.$emit("updateContent", delta, self.paraIndex);
+        } */
+        let contentChanged = {
+          html: self.editor.root.innerHTML,
+          origin: self.editor.getContents()
+        };
+        // console.log(delta, self.editor.root.innerHTML);
+        self.$emit("updateContent", contentChanged, self.paraIndex);
       });
     }
   }

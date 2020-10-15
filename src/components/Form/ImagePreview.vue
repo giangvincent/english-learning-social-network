@@ -122,6 +122,14 @@ export default {
       imageChange: null
     };
   },
+  watch: {
+    previewImages: {
+      handler(val) {
+        this.$emit("updateImages", this.previewImages, this.paraIndex);
+      },
+      deep: true
+    }
+  },
   methods: {
     ...mapMutations(["Toggle_popupEditor"]),
     selectImages() {
@@ -140,7 +148,6 @@ export default {
     },
     removePreview(index) {
       this.previewImages.splice(index, 1);
-      this.$emit("updateImages", this.previewImages, this.paraIndex);
     },
     toImageEditor(index) {
       this.Toggle_popupEditor();
@@ -149,7 +156,6 @@ export default {
     },
     onDoneEvent(finalImage) {
       this.previewImages[this.indexImageChange] = finalImage;
-      this.$emit("updateImages", this.previewImages, this.paraIndex);
       this.indexImageChange = null;
       this.imageChange = null;
     },

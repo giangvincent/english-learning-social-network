@@ -65,6 +65,14 @@ export default {
       paragraphs: [{ contentHtml: "", contentOrigin: { ops: [] }, images: [] }]
     };
   },
+  watch: {
+    paragraphs: {
+      handler(val) {
+        this.$emit("changeContent", this.paragraphs);
+      },
+      deep: true
+    }
+  },
   methods: {
     removeParagraph(index) {
       this.paragraphs.splice(index, 1);
@@ -82,7 +90,7 @@ export default {
       this.paragraphs[paraIndex].contentOrigin = content.origin;
     },
     updateImages(images, paraIndex) {
-      console.log(images, paraIndex);
+      // console.log(images, paraIndex);
       this.paragraphs[paraIndex].images = images;
     }
   }

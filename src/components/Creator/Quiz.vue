@@ -116,6 +116,14 @@ export default {
       }
     };
   },
+  watch: {
+    quiz: {
+      handler(val) {
+        this.$emit("changeContent", this.quiz);
+      },
+      deep: true
+    }
+  },
   methods: {
     createAnswer() {
       this.quiz.answers.push("");
