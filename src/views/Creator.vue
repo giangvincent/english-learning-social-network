@@ -47,11 +47,20 @@
         </div>
         <!-- Choose post type -->
 
-        <normalPost v-if="postType == 'normalPost'"></normalPost>
-        <flash-card v-if="postType == 'flashCard'"></flash-card>
-        <quiz v-if="postType == 'quiz'"></quiz>
+        <normalPost
+          v-if="postType == 'normalPost'"
+          @changeContent="changePostContent"
+        ></normalPost>
+        <flash-card
+          v-if="postType == 'flashCard'"
+          @changeContent="changePostContent"
+        ></flash-card>
+        <quiz
+          v-if="postType == 'quiz'"
+          @changeContent="changePostContent"
+        ></quiz>
 
-        <tags></tags>
+        <tags @updateTags="changeTags"></tags>
 
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -105,7 +114,9 @@ export default {
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
         { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
       ],
-      category: 0
+      category: 0,
+      postContent: null,
+      tags: {}
     };
   },
   computed: {
@@ -113,6 +124,13 @@ export default {
       user: state => state.user.user,
       user_token: state => state.user.token
     })
+  },
+  watch: {
+    postContent: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        console.log(newVal);
+      }
+    }
   },
   mounted() {
     console.log(this.user, this.token);
@@ -127,10 +145,24 @@ export default {
       console.log(index);
       this.category = index;
     },
+    changePostContent(data) {
+      this.postContent = data;
+    },
+    changeTags(data) {
+      console.log(data);
+      this.tags = data;
+    },
     submitContent() {
       /* let content = this.editor.root.innerHTML;
       console.log(content); */
-      this.SUBMIT_POST();
+      let postData = {
+        category: this.categories[this.category],
+        postType: this.postType,
+        postContent: this.postContent,
+        user: this.user,
+        user_token: this.user_token
+      };
+      this.SUBMIT_POST(postData);
     }
   },
   beforeDestroy() {}

@@ -11,10 +11,10 @@
     <div class="py-3">
       <span
         v-for="(tag, index) in tags"
-        :key="'tag-'+index"
+        :key="'tag-' + index"
         class="bg-color-purple font-bold inline-block m-1 pr-8 px-2 py-1 relative rounded-full text-white text-xs"
       >
-        #{{tag}}
+        #{{ tag }}
         <svg
           @click="removeTag(index)"
           class="absolute inline text-white w-5 cursor-pointer"
@@ -43,13 +43,14 @@ export default {
   data() {
     return {
       curTag: "",
-      tags: [],
+      tags: []
     };
   },
   mounted() {},
   methods: {
     removeTag(index) {
       this.tags.splice(index, 1);
+      this.$emit("updateTags", this.tags);
     },
     createHashtag() {
       if (this.curTag !== "") {
@@ -57,14 +58,15 @@ export default {
         this.curTag = this.curTag
           .toLowerCase()
           .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join("");
         this.curTag =
           this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1);
         this.tags.push(this.curTag);
         this.curTag = "";
+        this.$emit("updateTags", this.tags);
       }
-    },
-  },
+    }
+  }
 };
 </script>

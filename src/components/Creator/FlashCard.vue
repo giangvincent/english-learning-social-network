@@ -26,7 +26,12 @@
       </div>
       <div class="py-1">
         <span class="px-1 text-sm text-gray-600">Nội dung gợi ý</span>
-        <content-editor :contentIndex="index.toString()"></content-editor>
+        <content-editor
+          :contentHtml="card.contentHtml"
+          :contentOrigin="card.contentOrigin"
+          :paraIndex="index.toString()"
+          @updateContent="updateContent"
+        ></content-editor>
       </div>
       <!-- text content editor -->
 
@@ -35,12 +40,18 @@
       <div class="py-1">
         <span class="px-1 text-sm text-gray-600">Kết quả</span>
         <content-editor
-          :contentIndex="'-flip-content-' + index"
+          :paraIndex="'-flip-content-' + index"
+          :contentHtml="card.flipContentHtml"
+          :contentOrigin="card.flipContentOrigin"
+          @updateContent="updateFlipContent"
         ></content-editor>
       </div>
       <!-- text content editor -->
 
-      <image-preview></image-preview>
+      <image-preview
+        @updateImages="updateFlipImages"
+        :paraIndex="index"
+      ></image-preview>
     </fieldset>
     <div class="flex justify-center">
       <button
@@ -64,7 +75,16 @@ export default {
   },
   data() {
     return {
-      flashCards: [{ content: "", images: [], flipContent: "" }]
+      flashCards: [
+        {
+          contentHtml: "",
+          contentOrigin: { ops: [] },
+          images: [],
+          flipContentHtml: "",
+          flipContentOrigin: { ops: [] },
+          flipImages: []
+        }
+      ]
     };
   },
   methods: {
@@ -72,7 +92,29 @@ export default {
       this.flashCards.splice(index, 1);
     },
     addCard() {
-      this.flashCards.push({ content: "", images: [] });
+      this.flashCards.push({
+        contentHtml: "",
+        contentOrigin: { ops: [] },
+        images: [],
+        flipContentHtml: "",
+        flipContentOrigin: { ops: [] },
+        flipImages: []
+      });
+    },
+    updateContent(content, paraIndex) {
+      this.flashCards[paraIndex].contentHtml = content.html;
+      this.flashCards[paraIndex].contentOrigin = content.origin;
+    },
+    updateFlipContent(content, paraIndex) {
+      paraIndex = parseInt(paraIndex.replace("-flip-content-", ""));
+      this.flashCards[paraIndex].flipContentHtml = content.html;
+      this.flashCards[paraIndex].flipContentOrigin = content.origin;
+    },
+    updateImages(images, paraIndex) {
+      this.flashCards[paraIndex].images = images;
+    },
+    updateFlipImages(images, paraIndex) {
+      this.flashCards[paraIndex].flipImages = images;
     }
   }
 };

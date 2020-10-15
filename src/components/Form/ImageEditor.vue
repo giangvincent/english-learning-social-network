@@ -1,5 +1,5 @@
 <template>
-  <div class="left-0 top-0 w-screen h-screen fixed">
+  <div class="left-0 top-0 w-screen h-screen fixed  z-50">
     <div
       class="bg-white top-0 fixed flex flex-wrap h-10 justify-between mx-auto pb-2 pt-3 px-4 w-full z-10"
     >
@@ -360,10 +360,10 @@ import { mapState, mapMutations, mapActions } from "vuex";
 
 var canvas;
 function setAttr(name, value, ob) {
-  ob.toObject = (function (toObject) {
-    return function () {
+  ob.toObject = (function(toObject) {
+    return function() {
       return fabric.util.object.extend(toObject.call(this), {
-        [name]: value,
+        [name]: value
       });
     };
   })(ob.toObject);
@@ -401,10 +401,10 @@ fabric.Object.prototype.cornerStyle = "circle";
 fabric.Object.prototype.set({
   borderColor: "#303a52",
   borderScaleFactor: 2,
-  cornerSize: 20,
+  cornerSize: 20
 });
 
-fabric.Object.prototype.resizeToScale = function (
+fabric.Object.prototype.resizeToScale = function(
   scaleX,
   scaleY,
   belongsToGroup
@@ -446,7 +446,7 @@ fabric.Object.prototype.resizeToScale = function (
 export default {
   name: "editor",
   props: {
-    imageEdit: String,
+    imageEdit: String
   },
   data() {
     return {
@@ -470,7 +470,7 @@ export default {
         "#4CAF50",
         "#2d3748",
         "#f56565",
-        "#ed64a6",
+        "#ed64a6"
       ],
       canvas: null,
       canvasState: null,
@@ -485,19 +485,19 @@ export default {
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
       characterLimit: 240,
-      previewImage: null,
+      previewImage: null
     };
   },
   computed: {
     ...mapState({
-      popupEditor: (state) => state.popupEditor,
+      popupEditor: state => state.popupEditor
     }),
-    limitTitle: function () {
+    limitTitle: function() {
       return this.postTitle.substring(0, this.characterLimit);
-    },
+    }
   },
   watch: {
-    activeObject: function (newVal, oldVal) {
+    activeObject: function(newVal, oldVal) {
       console.log(newVal);
       if (
         typeof newVal !== "undefined" &&
@@ -510,13 +510,13 @@ export default {
         this.showTextTool = false;
       }
     },
-    fontSize: function (newVal, oldVal) {
+    fontSize: function(newVal, oldVal) {
       if (newVal !== oldVal && newVal !== null) {
         this.changeTextProp(newVal, "fontSize");
         this.historySave();
       }
     },
-    isDrawingMode: function (newVal, oldVal) {
+    isDrawingMode: function(newVal, oldVal) {
       if (newVal !== oldVal && newVal !== null) {
         canvas.isDrawingMode = newVal;
         if (newVal) {
@@ -527,16 +527,16 @@ export default {
         }
       }
     },
-    bushColor: function (newVal, oldVal) {
+    bushColor: function(newVal, oldVal) {
       if (newVal !== oldVal && newVal !== null) {
         canvas.freeDrawingBrush.color = newVal;
       }
     },
-    bushSize: function (newVal, oldVal) {
+    bushSize: function(newVal, oldVal) {
       if (newVal !== oldVal && newVal !== null) {
         canvas.freeDrawingBrush.width = newVal;
       }
-    },
+    }
   },
   mounted() {
     this.handlePreviewImage();
@@ -577,7 +577,7 @@ export default {
       eval("this." + off + "= true;");
       canvas.clear();
       var self = this;
-      canvas.loadFromJSON(this.canvasState, function () {
+      canvas.loadFromJSON(this.canvasState, function() {
         canvas.renderAll();
         // now turn the buttons back on if applicable
 
@@ -599,7 +599,7 @@ export default {
         this.previewImage = this.imageEdit;
         this.$set(this, "canvasSize", [
           this.$refs.canvasContainer.clientWidth,
-          this.$refs.canvasContainer.clientHeight - 80,
+          this.$refs.canvasContainer.clientHeight - 80
         ]);
         this.startCreate = true;
         this.initCanvas();
@@ -614,16 +614,16 @@ export default {
       // console.log(this.__canvas);
       canvas.setDimensions({
         width: this.canvasSize[0],
-        height: this.canvasSize[1],
+        height: this.canvasSize[1]
       });
 
       canvas.backgroundColor = "#303a52";
       var self = this;
-      fabric.Image.fromURL(this.previewImage, function (oImg) {
+      fabric.Image.fromURL(this.previewImage, function(oImg) {
         let scale = self.canvasSize[0] / oImg.width;
         canvas.setDimensions({
           width: self.canvasSize[0],
-          height: oImg.height * scale,
+          height: oImg.height * scale
         });
         oImg.set({
           width: oImg.width,
@@ -632,7 +632,7 @@ export default {
           scaleY: scale,
           crossOrigin: "anonymous",
           selectable: false,
-          evented: false,
+          evented: false
         });
         // console.log(oImg);
 
@@ -650,7 +650,7 @@ export default {
       });
 
       this.historySave();
-      canvas.on("object:modified", function () {
+      canvas.on("object:modified", function() {
         self.historySave();
       });
     },
@@ -674,7 +674,7 @@ export default {
         height: 100,
         hasRotatingPoint: true,
         centerTransform: true,
-        textAlign: "center",
+        textAlign: "center"
       };
       var textbox = new fabric.Textbox("text", textProp);
       canvas.add(textbox);
@@ -698,8 +698,8 @@ export default {
       if (this.activeObject && this.activeObject.type === "textbox") {
         this.fontSize = this.activeObject.fontSize;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

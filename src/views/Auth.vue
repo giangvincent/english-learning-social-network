@@ -341,7 +341,7 @@ export default {
     } else this.page = "login";
   },
   mounted() {
-    if (isLocalStorage() && user_token) {
+    if (isLocalStorage() && !this.user_token) {
       let user_token = localStorage.getItem("user_token");
       let user = localStorage.getItem("user");
       console.log(JSON.parse(user_token), JSON.parse(user));
@@ -350,6 +350,8 @@ export default {
         this.SET_TOKEN(JSON.parse(user_token));
         this.$router.go(-1);
       }
+    } else {
+      this.$router.go(-1);
     }
   },
   methods: {

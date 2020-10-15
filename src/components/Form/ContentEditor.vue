@@ -1,7 +1,7 @@
 <template>
-  <div :id="'editor-container-' + contentIndex" class="overflow-y-auto">
+  <div :id="'editor-container-' + paraIndex" class="overflow-y-auto">
     <div
-      :id="'editor-' + contentIndex"
+      :id="'editor-' + paraIndex"
       class="editor h-64 rounded-b-lg border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
     ></div>
   </div>
@@ -14,7 +14,9 @@ import "quill/dist/quill.snow.css";
 export default {
   name: "content-editor",
   props: {
-    contentIndex: String
+    paraIndex: String,
+    contentHtml: String,
+    contentOrigin: Object
   },
   data() {
     return {
@@ -22,13 +24,13 @@ export default {
     };
   },
   watch: {
-    contentIndex: function(newVal, oldVal) {
+    paraIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
     }
   },
   mounted() {
-    console.log(this.contentIndex);
+    console.log("para index: ", this.paraIndex);
     this.initEditor();
   },
   methods: {
@@ -53,21 +55,27 @@ export default {
         ["clean"] // remove formatting button
       ];
 
-      var content =
-        '<h2>This is a Heading H2</h2><p><span class="ql-size-small">this is a small with </span><span class="ql-size-small" style="color: rgb(230, 0, 0);">COLOR TEXT</span></p><p class="ql-align-center"><span class="ql-size-large ql-font-monospace">This is a large Text with </span><span class="ql-size-large ql-font-monospace" style="background-color: rgb(255, 255, 102);">background</span></p>';
-
-      this.editor = new Quill("#editor-" + this.contentIndex, {
+      this.editor = new Quill("#editor-" + this.paraIndex, {
         modules: {
           toolbar: toolbarOptions
         },
-        scrollingContainer: "#editor-container-" + this.contentIndex,
+        scrollingContainer: "#editor-container-" + this.paraIndex,
         theme: "snow"
       });
 
-      console.log(content);
-      const delta = this.editor.clipboard.convert(content);
+      const delta = this.editor.clipboard.convert(this.contentHtml);
       console.log(delta);
+      console.log(this.contentOrigin);
       this.editor.setContents(delta);
+      var self = this;
+      this.editor.on("text-change", function(delta, oldDelta, source) {
+        if (source == "api") {
+          console.log("An API call triggered this change.");
+        } else if (source == "user") {
+          console.log("A user action triggered this change.");
+        }
+        self.$emit("updateContent", delta, self.paraIndex);
+      });
     }
   }
 };
