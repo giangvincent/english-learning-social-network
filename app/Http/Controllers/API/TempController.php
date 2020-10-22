@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TempController extends Controller
 {
@@ -22,24 +23,44 @@ class TempController extends Controller
 
     public function uploadTempImg(Request $request)
     {
-        $res = [
-            'success' => false,
-            'message' => '',
-        ];
         $this->CreateUploadFol();
-        $base64String = $request->input('base64');
-        $tempImg = new Photo();
-        $tempImg->image = $this->saveImgBase64($base64String, 'upload/temp');
-
-        if ($tempImg->save()) {
+        $base64String = $request->base64;
+        if (!$this->validateBaseImg($base64String)) {
+            $res = [
+                'success' => false,
+                'message' => 'Validate failed: Image error',
+            ];
+            return response()->json($res);
+        }
+        $tempImg = $this->saveImgBase64($base64String, 'temp');
+        if ($tempImg) {
             $res = [
                 'success' => true,
-                'message' => 'Successfully updated',
+                'data' => $tempImg,
             ];
         }
 
         return response()->json($res);
     }
+
+    public function validateBaseImg($base64Str = '')
+    {
+        $base64StrData = explode(',', $base64Str)[1];
+        $file_data = base64_decode($base64StrData);
+        $f = finfo_open();
+        $mime_type = finfo_buffer($f, $file_data, FILEINFO_MIME_TYPE); // mimetype, f.ex. image/jpeg
+        $file_type = explode('/', $mime_type)[0]; // file type, f.ex. image
+        $extension = explode('/', $mime_type)[1]; // extension, f.ex. jpeg
+
+        $acceptable_mimetypes = [
+            'image/png', 'image/gif', 'image/jpeg', 'image/bmp',
+        ];
+        if (!in_array($mime_type, $acceptable_mimetypes)) {
+            return false;
+        }
+        return true;
+    }
+
     protected function saveImgBase64($param, $folder)
     {
         list($extension, $content) = explode(';', $param);
@@ -51,6 +72,6 @@ class TempController extends Controller
 
         $storage->put($folder . '/' . $fileName, base64_decode($content), 'public');
 
-        return $fileName;
+        return 'upload' . '/' . $folder . '/' . $fileName;
     }
 }
