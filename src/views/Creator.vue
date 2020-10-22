@@ -20,7 +20,7 @@
                 @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'normalPost',
+                  'border-b-2 border-gray-900': postType == 'normalPost'
                 }"
               >
                 Bài viết
@@ -29,7 +29,7 @@
                 @click="changePostType('flashCard')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'flashCard',
+                  'border-b-2 border-gray-900': postType == 'flashCard'
                 }"
               >
                 Flash Cards
@@ -66,21 +66,102 @@
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="submitContent"
         >
-          <svg
-            class="text-white w-5 inline"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <div
+            v-if="!processPost"
+            class="h-8 flex flex-wrap justify-center content-center"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
-          Đăng bài
+            <svg
+              class="text-white w-5 inline mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              />
+            </svg>
+            Đăng bài
+          </div>
+          <div v-if="processPost">
+            <svg
+              class="w-8 h-8"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              style="margin: auto; background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%; display: block; shape-rendering: auto;"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <rect x="18" y="30.5" width="14" height="39" fill="#ffffff">
+                <animate
+                  attributeName="y"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="11;30.5;30.5"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.1680672268907563s"
+                ></animate>
+                <animate
+                  attributeName="height"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="78;39;39"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.1680672268907563s"
+                ></animate>
+              </rect>
+              <rect x="43" y="30.5" width="14" height="39" fill="#ffffff">
+                <animate
+                  attributeName="y"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="15.875;30.5;30.5"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.08403361344537814s"
+                ></animate>
+                <animate
+                  attributeName="height"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="68.25;39;39"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.08403361344537814s"
+                ></animate>
+              </rect>
+              <rect x="68" y="30.5" width="14" height="39" fill="#ffffff">
+                <animate
+                  attributeName="y"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="15.875;30.5;30.5"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                ></animate>
+                <animate
+                  attributeName="height"
+                  repeatCount="indefinite"
+                  dur="0.8403361344537814s"
+                  calcMode="spline"
+                  keyTimes="0;0.5;1"
+                  values="68.25;39;39"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1"
+                ></animate>
+              </rect>
+              <!-- [ldio] generated by https://loading.io/ -->
+            </svg>
+          </div>
         </button>
       </div>
     </div>
@@ -104,7 +185,7 @@ export default {
     tags,
     normalPost,
     flashCard,
-    quiz,
+    quiz
   },
   data() {
     return {
@@ -112,32 +193,34 @@ export default {
       categories: [
         { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
         { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
-        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 },
+        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 }
       ],
       category: 0,
       postContent: null,
-      tags: {},
+      tags: [],
+      processPost: false,
+      processUpImages: false
     };
   },
   computed: {
     ...mapState({
-      user: (state) => state.user.user,
-      user_token: (state) => state.user.token,
-    }),
+      user: state => state.user.user,
+      user_token: state => state.user.token
+    })
   },
   watch: {
-    postContent: function (newVal, oldVal) {
+    postContent: function(newVal, oldVal) {
       if (newVal !== oldVal) {
         console.log(newVal);
       }
-    },
+    }
   },
   mounted() {
     console.log(this.user, this.token);
   },
   methods: {
     ...mapMutations(),
-    ...mapActions(["SUBMIT_POST"]),
+    ...mapActions(["SUBMIT_POST", "Upload_image"]),
     changePostType(type) {
       this.postType = type;
     },
@@ -153,17 +236,52 @@ export default {
       this.tags = data;
     },
     submitContent() {
-      /* let content = this.editor.root.innerHTML;
-      console.log(content); */
+      this.processPost = true;
+      this.processUpImages = true;
       let postData = {
         cat_id: this.categories[this.category].id,
         postType: this.postType,
-        postContent: JSON.stringify(this.postContent),
+        postContent: this.postContent,
         user: JSON.stringify(this.user),
+        tags: JSON.stringify(this.tags)
       };
-      this.SUBMIT_POST(postData);
-    },
+      var self = this;
+      var uploadImages = [];
+      postData.postContent.forEach((content, contentIndex) => {
+        content.images.forEach((image, imgIndex) => {
+          uploadImages.push(
+            self
+              .Upload_image(image)
+              .then(imageUrl => {
+                console.log(imageUrl);
+                postData.postContent[contentIndex].images[imgIndex] = imageUrl;
+              })
+              .catch(error => {
+                console.log(error);
+                postData.postContent[contentIndex].images.splice(imgIndex, 1);
+              })
+          );
+        });
+      });
+      Promise.all(uploadImages).then(() => {
+        self.processUpImages = false;
+        postData.postContent = JSON.stringify(postData.postContent);
+        self
+          .SUBMIT_POST(postData)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {
+            self.processPost = false;
+          });
+      });
+    }
   },
-  beforeDestroy() {},
+  beforeDestroy() {}
 };
 </script>
+
+<style scoped></style>

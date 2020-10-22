@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    rootUrl: "http://thatsgood-backend.local/",
     apiUrl: "http://thatsgood-backend.local/api",
     popupEditor: false,
     currentTab: "home",
