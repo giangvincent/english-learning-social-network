@@ -8,19 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class TempController extends Controller
 {
-    public function CreateUploadFol()
-    {
-        if (!file_exists(public_path('upload'))) {
-            mkdir(public_path('upload'), 0777);
-        }
-        if (!file_exists(public_path('upload/post'))) {
-            mkdir(public_path('upload/post'), 0777);
-        }
-        if (!file_exists(public_path('upload/temp'))) {
-            mkdir(public_path('upload/temp'), 0777);
-        }
-    }
-
     public function uploadTempImg(Request $request)
     {
         $this->CreateUploadFol();

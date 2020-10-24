@@ -28,51 +28,110 @@ class PostController extends Controller
         }
         $this->CreateUploadFol();
 
-        $postContent = json_decode($request->content, true);
+        $newPost = $this->newPostDB($request);
+        $this->attachTags($request->tags, $newPost);
+        return response()->json(['success' => $request->all()], $this->successStatus);
+    }
+
+    public function updatePost(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'pid' => 'required',
+            'cat_id' => 'required',
+            'post_type' => 'required',
+            'content' => 'required',
+            'tags' => '',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        $post = Post::firstOrFail($request->id);
+        if ($post->pid !== $request->pid) {
+            return response()->json(['error' => 'Your request has been refused.'], 401);
+        }
+        $this->changePostDB($request, $post);
+        $post->tags()->detach();
+        $this->attachTags($request->tags, $post);
+
+        return response()->json(['success' => $request->all()], $this->successStatus);
+    }
+
+    public function deletePost(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'pid' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $post = Post::firstOrFail($request->id);
+        if ($post->pid !== $request->pid) {
+            return response()->json(['error' => 'Your request has been refused.'], 401);
+        }
+        $this->removeMedias($post);
+        $post->tags()->detach();
+        $post->delete();
+        return response()->json(['success' => 'Post deleted successfully.'], $this->successStatus);
+    }
+
+    private function removeMedias($post)
+    {
+        $postContent = json_decode($post->content, true);
         $medias = array();
-        $contentHtml = array();
         for ($paraIndex = 0; $paraIndex < count($postContent); $paraIndex++) {
-            array_push($contentHtml, $postContent[$paraIndex]['contentHtml']);
             array_push($medias, $postContent[$paraIndex]['images']);
         }
-        $textOnly = Str::limit(strip_tags(implode("-", $contentHtml)), 100);
 
+        foreach ($medias as $media) {
+            if (file_exist(public_path($media))) {
+                unlink(public_path($media));
+            }
+        }
+    }
+
+    private function newPostDB($request)
+    {
         $pid = (string) Str::uuid();
         $newPost = new Post();
         $newPost->pid = $pid;
-        $newPost->url = Str::slug($textOnly, "-") . '-' . $pid;
         $newPost->content = $request->content;
-        $newPost->medias = json_encode($medias);
         $newPost->type = $request->post_type;
         $newPost->category = $request->cat_id;
         $newPost->author = Auth::user()->id;
         $newPost->save();
+        return $newPost;
+    }
 
-        $tags = json_decode($request->tags, true);
+    private function changePostDB($request, $post)
+    {
+        $post->content = $request->content;
+        $post->type = $request->post_type;
+        $post->category = $request->cat_id;
+        $post->save();
+    }
+ 
+    private function filterBadWords()
+    {
+    }
+
+    protected function attachTags($requestTags, $post)
+    {
+        $tags = json_decode($requestTags, true);
         for ($tagIndex = 0; $tagIndex < count($tags); $tagIndex++) {
-
             $tag = Tag::firstOrCreate([
                 'name' => $tags[$tagIndex],
                 'slug' => Str::slug($tags[$tagIndex], '-'),
                 'status' => 'publish',
             ]);
-            dump($tag);
-            $newPost->tags()->attach($tag->id);
+            $post->tags()->attach($tag->id);
         }
-
-        return response()->json(['success' => $request->all()], $this->successStatus);
     }
 
-    public function CreateUploadFol()
+    private function exportPost($post)
     {
-        if (!file_exists(public_path('upload'))) {
-            mkdir(public_path('upload'), 0777);
-        }
-        if (!file_exists(public_path('upload/post'))) {
-            mkdir(public_path('upload/post'), 0777);
-        }
-        if (!file_exists(public_path('upload/temp'))) {
-            mkdir(public_path('upload/temp'), 0777);
-        }
+        $this->CreateContentFol();
     }
 }
