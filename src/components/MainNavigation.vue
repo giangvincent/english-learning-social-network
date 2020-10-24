@@ -55,7 +55,7 @@
           <!-- Notify icon -->
         </div>
         <router-link
-          to="/auth/login"
+          :to="userNavigateUrl"
           class="inline-block no-underline hover:text-black ml-2"
           title="User"
         >
@@ -107,17 +107,33 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav
+    DesktopNav,
   },
   data() {
-    return {};
+    return {
+      userNavigateUrl: "/auth/login",
+    };
+  },
+  watch: {
+    user: {
+      handler: function (val) {
+        if (this.user.id) {
+          this.userNavigateUrl = "/u/" + this.user.id;
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
     ...mapState({
-      currentTab: state => state.currentTab
-    })
+      currentTab: (state) => state.currentTab,
+      user: (state) => state.user.user,
+    }),
   },
   mounted() {
+    if (this.user.id) {
+      this.userNavigateUrl = "/u/" + this.user.id;
+    }
     if (
       typeof this.$route.params.name !== "undefined" &&
       this.$route.params.name !== this.currentTab
@@ -130,7 +146,7 @@ export default {
     navigate(goto) {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
-    }
-  }
+    },
+  },
 };
 </script>

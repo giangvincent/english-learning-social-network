@@ -84,7 +84,8 @@
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="sendLogin()"
         >
-          Đăng nhập
+          <span v-if="!loading">Đăng nhập</span>
+          <loading-icon v-if="loading"></loading-icon>
         </button>
         <div class="flex flex-col flex-wrap content-center text-center">
           <label class="block text-gray-500 font-bold my-4">
@@ -170,7 +171,7 @@
                   'bg-green-200 text-green-700':
                     password == password_confirm && password.length > 0,
                   'bg-red-200 text-red-700':
-                    password != password_confirm || password.length == 0
+                    password != password_confirm || password.length == 0,
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -201,7 +202,7 @@
                   'text-green-700':
                     password == password_confirm && password.length > 0,
                   'text-red-700':
-                    password != password_confirm || password.length == 0
+                    password != password_confirm || password.length == 0,
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password == password_confirm && password.length > 0 ? 'Passwords match' : 'Passwords do not match' "
@@ -211,7 +212,7 @@
               <div
                 :class="{
                   'bg-green-200 text-green-700': password.length > 7,
-                  'bg-red-200 text-red-700': password.length < 7
+                  'bg-red-200 text-red-700': password.length < 7,
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -240,7 +241,7 @@
               <span
                 :class="{
                   'text-green-700': password.length > 7,
-                  'text-red-700': password.length < 7
+                  'text-red-700': password.length < 7,
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password.length > 7 ? 'The minimum length is reached' : 'At least 8 characters required' "
@@ -315,22 +316,23 @@ export default {
       password: "",
       password_confirm: "",
       page: "login",
-      keepLogin: true
+      keepLogin: true,
+      loading: false,
     };
   },
   watch: {
-    email: function(newVal, oldVal) {
+    email: function (newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
         console.log(checkEmail);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   created() {
     if (
@@ -362,8 +364,9 @@ export default {
       this.$router.push("/auth/" + Auth);
     },
     sendLogin() {
+      this.loading = true;
       var self = this;
-      this.LOGIN({ email: this.email, password: this.password }).then(res => {
+      this.LOGIN({ email: this.email, password: this.password }).then((res) => {
         if (self.keepLogin && isLocalStorage()) {
           localStorage.setItem("user", JSON.stringify(res.user));
           localStorage.setItem("user_token", JSON.stringify(res.token));
@@ -377,13 +380,13 @@ export default {
         nick_name: this.nickname,
         email: this.email,
         password: this.password,
-        c_password: this.c_password
+        c_password: this.c_password,
       }).then(() => {
         localStorage.setItem("user", res.success.token);
         localStorage.setItem("user_token", res.success.user);
         self.$router.go(-1);
       });
-    }
-  }
+    },
+  },
 };
 </script>
