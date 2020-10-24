@@ -30,6 +30,7 @@ class PostController extends Controller
 
         $newPost = $this->newPostDB($request);
         $this->attachTags($request->tags, $newPost);
+        $this->exportPost($newPost);
         return response()->json(['success' => $request->all()], $this->successStatus);
     }
 
@@ -55,6 +56,7 @@ class PostController extends Controller
         $post->tags()->detach();
         $this->attachTags($request->tags, $post);
 
+        $this->exportPost($post);
         return response()->json(['success' => $request->all()], $this->successStatus);
     }
 
@@ -73,7 +75,10 @@ class PostController extends Controller
         }
         $this->removeMedias($post);
         $post->tags()->detach();
+        
+        unlink(public_path('content/posts/'). $post->pid .'.json');
         $post->delete();
+
         return response()->json(['success' => 'Post deleted successfully.'], $this->successStatus);
     }
 
@@ -133,5 +138,23 @@ class PostController extends Controller
     private function exportPost($post)
     {
         $this->CreateContentFol();
+        // $authorData = $post->user()->first()->toArray();
+
+        $exportData = array([
+            'id' => $post->id,
+            'url' => $post->pid,
+            'content' => json_decode($post->content, true),
+            'author' => $post->user()->first()->toArray(),
+            'category' => $post->category()->first()->toArray(),
+            'tags' => $post->tags()->get()->toArray(),
+            'datetime' => $post->updated_at,
+            'nums_pocket' => $post->nums_pocket,
+            'nums_good' => $post->nums_good,
+            'nums_bad' => $post->nums_bad,
+            'nums_share' => $post->nums_share,
+            'nums_comment' => $post->nums_comment,
+        ]);
+
+        return file_put_contents(public_path('content/posts') . $post->pid . '.json', json_encode($exportData));
     }
 }
