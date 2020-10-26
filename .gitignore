@@ -2,6 +2,9 @@
 /public/hot
 /public/storage
 /public/upload
+/public/content/categories/*.*
+/public/content/posts/*.*
+/public/content/tags/*.*
 /storage/*.key
 /vendor
 .env

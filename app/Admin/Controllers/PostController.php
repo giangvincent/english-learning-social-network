@@ -28,7 +28,7 @@ class PostController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('pid', __('Pid'));
-        
+
         $grid->column('status', __('Status'));
         $grid->column('content', __('Content'));
         $grid->column('answer_list', __('Answer list'));
@@ -87,12 +87,43 @@ class PostController extends AdminController
         $form->text('type', __('Type'));
         $form->number('author', __('Author'));
         $form->number('category', __('Category'));
-        $form->number('nums_pocket', __('Nums pocket'));
-        $form->number('nums_good', __('Nums good'));
-        $form->number('nums_bad', __('Nums bad'));
-        $form->number('nums_share', __('Nums share'));
-        $form->number('nums_comment', __('Nums comment'));
 
+        $form->saved(function (Form $form) {
+            $post = Post::find($form->model()->id);
+            $this->checkFolderContent();
+            $this->exportPost($post);
+        });
         return $form;
     }
+
+    private function exportPost($post)
+    {
+        // $authorData = $post->user()->first()->toArray();
+        $exportData = array([
+            'id' => $post->id,
+            'url' => $post->pid,
+            'content' => json_decode($post->content, true),
+            'author' => $post->user()->first()->toArray(),
+            'category' => $post->categoryRelated()->first()->toArray(),
+            'tags' => $post->tags()->get()->toArray(),
+            'datetime' => $post->updated_at,
+            'nums_pocket' => $post->nums_pocket,
+            'nums_good' => $post->nums_good,
+            'nums_bad' => $post->nums_bad,
+            'nums_share' => $post->nums_share,
+            'nums_comment' => $post->nums_comment,
+        ]);
+        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
+    }
+
+    public function checkFolderContent()
+    {
+        if (!file_exists(public_path() . '/content/')) {
+            mkdir(public_path() . '/content/', 0777);
+        }
+        if (!file_exists(public_path() . '/content/posts/')) {
+            mkdir(public_path() . '/content/posts/', 0777);
+        }
+    }
+
 }

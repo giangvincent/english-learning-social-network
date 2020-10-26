@@ -39,8 +39,8 @@ class CategoryController extends AdminController
         });
 
         $states = [
-            'on' => ['value' => 'pending', 'text' => 'Publish', 'color' => 'primary'],
-            'off' => ['value' => 'publish', 'text' => 'Pending', 'color' => 'default'],
+            'off' => ['value' => 'pending', 'text' => 'Pending', 'color' => 'default'],
+            'on' => ['value' => 'publish', 'text' => 'Publish', 'color' => 'primary'],
         ];
         $grid->column('status', __('Status'))->switch($states);
 
@@ -98,8 +98,8 @@ class CategoryController extends AdminController
             return $categories;
         });
         $states = [
-            'on' => ['value' => 'pending', 'text' => 'Pending', 'color' => 'success'],
-            'off' => ['value' => 'publish', 'text' => 'Publish', 'color' => 'danger'],
+            'on' => ['value' => 'publish', 'text' => 'Publish', 'color' => 'success'],
+            'off' => ['value' => 'pending', 'text' => 'Pending', 'color' => 'default'],
         ];
         $form->switch('status', __('Status'))->states($states);
         $form->saving(function (Form $form) {

@@ -64,7 +64,7 @@ class PostController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'pid' => 'required'
+            'pid' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
@@ -75,8 +75,8 @@ class PostController extends Controller
         }
         $this->removeMedias($post);
         $post->tags()->detach();
-        
-        unlink(public_path('content/posts/'). $post->pid .'.json');
+
+        unlink(public_path('content/posts/') . $post->pid . '.json');
         $post->delete();
 
         return response()->json(['success' => 'Post deleted successfully.'], $this->successStatus);
@@ -117,7 +117,7 @@ class PostController extends Controller
         $post->category = $request->cat_id;
         $post->save();
     }
- 
+
     private function filterBadWords()
     {
     }
@@ -127,11 +127,13 @@ class PostController extends Controller
         $tags = json_decode($requestTags, true);
         for ($tagIndex = 0; $tagIndex < count($tags); $tagIndex++) {
             $tag = Tag::firstOrCreate([
-                'name' => $tags[$tagIndex],
+                'name' => Str::of($tags[$tagIndex])->lower(),
                 'slug' => Str::slug($tags[$tagIndex], '-'),
                 'status' => 'publish',
             ]);
+
             $post->tags()->attach($tag->id);
+            $this->exportTag($tag);
         }
     }
 
@@ -139,13 +141,12 @@ class PostController extends Controller
     {
         $this->CreateContentFol();
         // $authorData = $post->user()->first()->toArray();
-
         $exportData = array([
             'id' => $post->id,
             'url' => $post->pid,
             'content' => json_decode($post->content, true),
             'author' => $post->user()->first()->toArray(),
-            'category' => $post->category()->first()->toArray(),
+            'category' => $post->categoryRelated()->first()->toArray(),
             'tags' => $post->tags()->get()->toArray(),
             'datetime' => $post->updated_at,
             'nums_pocket' => $post->nums_pocket,
@@ -154,7 +155,18 @@ class PostController extends Controller
             'nums_share' => $post->nums_share,
             'nums_comment' => $post->nums_comment,
         ]);
+        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
+    }
 
-        return file_put_contents(public_path('content/posts') . $post->pid . '.json', json_encode($exportData));
+    private function exportTag($tag)
+    {
+        $exportData = array([
+            'id' => $tag->id,
+            'name' => $tag->name,
+            'slug' => $tag->slug,
+            'posts' => $tag->posts()->count(),
+            'datetime' => $tag->updated_at,
+        ]);
+        return file_put_contents(public_path('content/tags') . $tag->pid . '.json', json_encode($exportData));
     }
 }
