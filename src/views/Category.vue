@@ -15,7 +15,7 @@ import MainFeed from "@/components/Feed/Main.vue";
 import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
 export default {
-  name: "home",
+  name: "cat-feed",
   components: {
     MainNavigation,
     MainFeed,

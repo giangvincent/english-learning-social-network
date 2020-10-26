@@ -4,54 +4,56 @@
   >
     <div class="w-full flex justify-between p-3">
       <div class="flex">
-        <div class="rounded-full h-8 w-8 flex overflow-hidden">
-          <img src="~@/assets/images/default_avatar.jpg" alt="profilepic" />
-        </div>
-        <div class="ml-2 font-bold flex content-center flex-wrap">
-          braydoncoyer
-        </div>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="rounded-full h-8 w-8 flex overflow-hidden"
+        >
+          <img :src="postData.author.avatar" alt="profilepic" />
+        </router-link>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="ml-2 font-bold flex content-center flex-wrap"
+        >
+          {{ postData.author.full_name }}
+        </router-link>
       </div>
       <router-link
-        to="/p/test-detail"
+        :to="`/p/${pid}`"
         class="flex cursor-pointer content-center flex-wrap text-gray-500"
       >
-        2h ago
+        {{ postData.datetime }}
       </router-link>
     </div>
     <!-- End author info parts -->
-
-    <div class="mx-auto bg-color-black">
-      <img class="w-full" src="@/assets/images/default.jpg" />
+    <div
+      v-for="(content, index) in postData.content"
+      :key="`PostData-${index}`"
+    >
+      <div class="mx-auto bg-color-black">
+        <img
+          v-for="(image, imgIndex) in content.images"
+          :key="`content.images.${imgIndex}`"
+          class="w-full"
+          :src="rootUrl + image"
+        />
+      </div>
+      <!-- End media -->
+      <div class="px-3 py-4" v-html="content.contentHtml"></div>
+      <!-- End content text -->
     </div>
-    <!-- End media -->
-    <div class="px-3 py-4">
-      <h4 style="font-size: 20px; font-weight: bold">
-        The standard Lorem Ipsum passage, used since the 1500s
-      </h4>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
-    </div>
-    <!-- End content text -->
 
     <div class="px-3 pb-4">
-      <span
+      <router-link
+        :to="`/${postData.category.slug}`"
         class="inline-block rounded-min text-gray-600 bg-gray-100 px-2 py-1 text-xs font-bold mr-3"
-        >Default</span
+        >{{ postData.category.name }}</router-link
       >
-      <span
+      <router-link
+        :to="`/tag/${tag.slug}`"
+        v-for="(tag, tagIndex) in postData.tags"
+        :key="`tag-${tagIndex}`"
         class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 1</span
-      >
-      <span
-        class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 2</span
+        >{{ tag.name }}</router-link
       >
     </div>
     <!-- End relation label -->
@@ -61,12 +63,55 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
 import interactionPack from "./InteractionPack";
 export default {
   name: "image-item",
+  props: {
+    pid: String
+  },
   components: {
     interactionPack
+  },
+  data() {
+    return {
+      postData: {
+        author: {
+          id: 1,
+          full_name: "loading",
+          nick_name: "loading",
+          avatar: ""
+        },
+        content: [
+          {
+            contentHtml: "<p>loading...</p>",
+            images: [""]
+          }
+        ],
+        category: {
+          id: 1,
+          name: "loading",
+          slug: "loading"
+        },
+        tags: []
+      }
+    };
+  },
+  computed: {
+    ...mapState({
+      rootUrl: state => state.rootUrl
+    })
+  },
+  mounted() {
+    var self = this;
+    fetch("/content/posts/" + this.pid + ".json")
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        self.postData = res[0];
+      })
+      .catch(err => console.log(err));
   }
 };
 </script>

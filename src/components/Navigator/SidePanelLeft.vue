@@ -10,7 +10,17 @@
       <nav class="md:bg-none min min-h-full shadow-2xl md:shadow-none">
         <div class="px-1 xl:px-4">
           <ul class="flex flex-col w-full">
-            <li class="my-px"></li>
+            <li
+              class="my-px"
+              v-for="(tag, index) in tags"
+              :key="`tag-${index}_${tag.slug}`"
+            >
+              <tag-route
+                :text="tag.name"
+                :router="`/tag/${tag.slug}`"
+                :numPost="tag.posts"
+              ></tag-route>
+            </li>
           </ul>
         </div>
       </nav>
@@ -21,8 +31,18 @@
 
 <script>
 import TagRoute from "@/components/Navigator/TagRoute.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "side-panel-left",
+  data() {
+    return {};
+  },
+  components: {
+    TagRoute
+  },
+  computed: {
+    ...mapState(["tags"])
+  }
 };
 </script>

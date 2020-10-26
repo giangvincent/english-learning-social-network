@@ -9,9 +9,12 @@
         v-for="(item, index) in itemArray"
         :key="'post-' + index"
       >
-        <post v-if="item.type == 'normalPost'"></post>
-        <flash-card v-if="item.type == 'flashCard'"></flash-card>
-        <quiz></quiz>
+        <post :pid="item.pid" v-if="item.type == 'normalPost'"></post>
+        <flash-card
+          :pid="item.pid"
+          v-if="item.type == 'flashCard'"
+        ></flash-card>
+        <quiz :pid="item.pid" v-if="item.type == 'quiz'"></quiz>
         <!-- <quiz v-if="item.type == 'quiz'"></quiz> -->
       </div>
     </div>

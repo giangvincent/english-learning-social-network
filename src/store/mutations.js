@@ -7,5 +7,14 @@ export default {
   },
   SET_PAGE: function(state, payload) {
     state.currentPage = payload;
+  },
+  SET_CURRENTFEED: function(state, payload) {
+    state.currentFeed = payload;
+  },
+  SET_TAGS: function(state, payload) {
+    state.tags = payload;
+  },
+  SET_CATEGORIES: function(state, payload) {
+    state.categories = payload;
   }
 };

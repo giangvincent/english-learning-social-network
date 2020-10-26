@@ -8,16 +8,7 @@ import "@/assets/css/tailwind.css";
 import "@/assets/css/main.css";
 
 Vue.config.productionTip = false;
-function isLocalStorage() {
-  var mod = "modernizr";
-  try {
-    localStorage.setItem(mod, mod);
-    localStorage.removeItem(mod);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
+
 if (isLocalStorage()) {
   try {
     let user_token = JSON.parse(localStorage.getItem("user_token"));
@@ -37,3 +28,14 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
+
+function isLocalStorage() {
+  var mod = "modernizr";
+  try {
+    localStorage.setItem(mod, mod);
+    localStorage.removeItem(mod);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

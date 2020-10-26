@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   computed: {
@@ -13,9 +13,13 @@ export default {
       popupEditor: state => state.popupEditor
     })
   },
-  mouted() {},
+  mounted() {
+    this.LOAD_TAGS();
+    this.LOAD_CATEGORIES();
+  },
   methods: {
-    ...mapMutations(["SET_USER", "SET_TOKEN"])
+    ...mapMutations(["SET_USER", "SET_TOKEN"]),
+    ...mapActions(["LOAD_TAGS", "LOAD_CATEGORIES"])
   }
 };
 </script>

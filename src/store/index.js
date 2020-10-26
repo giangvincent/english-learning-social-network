@@ -15,9 +15,10 @@ export default new Vuex.Store({
     popupEditor: false,
     currentTab: "home",
     currentPage: "",
+    currentFeed: [],
     tags: [],
     categories: [],
-    posts: [],
+    posts: []
   },
   mutations: mutations,
   actions: actions,
