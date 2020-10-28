@@ -9,8 +9,8 @@
         <span class="px-1 text-sm text-gray-600">Câu hỏi</span>
         <content-editor
           paraIndex="quiz-question"
-          :contentHtml="quiz.contentHtml"
-          :contentOrigin="quiz.contentOrigin"
+          :contentHtml="quiz[0].contentHtml"
+          :contentOrigin="quiz[0].contentOrigin"
           @updateContent="updateContent"
         ></content-editor>
       </div>
@@ -28,7 +28,7 @@
       </legend>
       <div
         class="py-1 flex"
-        v-for="(answer, index) in quiz.answers"
+        v-for="(answer, index) in quiz[0].answers"
         :key="'answers-' + index"
       >
         <input
@@ -41,14 +41,14 @@
         <button
           class="mx-1 border border-2 border-green-600 rounded w-10"
           @click="makeCorrectAnswer(index)"
-          :class="{ 'bg-green-600': quiz.correctAnswers.includes(index) }"
+          :class="{ 'bg-green-600': quiz[0].correctAnswers.includes(index) }"
           title="Đánh dấu câu trả lời đúng"
         >
           <svg
-            class=" w-full h-full inline"
+            class="w-full h-full inline"
             :class="{
-              'text-green-600': !quiz.correctAnswers.includes(index),
-              'text-white': quiz.correctAnswers.includes(index)
+              'text-green-600': !quiz[0].correctAnswers.includes(index),
+              'text-white': quiz[0].correctAnswers.includes(index),
             }"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -103,17 +103,19 @@ export default {
   name: "quiz",
   components: {
     ContentEditor,
-    ImagePreview
+    ImagePreview,
   },
   data() {
     return {
-      quiz: {
-        contentHtml: "",
-        contentOrigin: { ops: [] },
-        images: [],
-        answers: [],
-        correctAnswers: []
-      }
+      quiz: [
+        {
+          contentHtml: "",
+          contentOrigin: { ops: [] },
+          images: [],
+          answers: [],
+          correctAnswers: [],
+        },
+      ],
     };
   },
   watch: {
@@ -121,40 +123,41 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.quiz);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     createAnswer() {
-      this.quiz.answers.push("");
+      console.log("create new Answer");
+      this.quiz[0].answers.push("");
     },
     delAnswer(index) {
-      this.quiz.answers.splice(index, 1);
-      this.quiz.correctAnswers.splice(
-        this.quiz.correctAnswers.indexOf(index),
+      this.quiz[0].answers.splice(index, 1);
+      this.quiz[0].correctAnswers.splice(
+        this.quiz[0].correctAnswers.indexOf(index),
         1
       );
     },
     makeCorrectAnswer(index) {
-      if (this.quiz.correctAnswers.includes(index)) {
-        this.quiz.correctAnswers.splice(
-          this.quiz.correctAnswers.indexOf(index),
+      if (this.quiz[0].correctAnswers.includes(index)) {
+        this.quiz[0].correctAnswers.splice(
+          this.quiz[0].correctAnswers.indexOf(index),
           1
         );
       } else {
-        this.quiz.correctAnswers.push(index);
+        this.quiz[0].correctAnswers.push(index);
       }
     },
     updateContent(content, paraIndex) {
-      this.quiz.contentHtml = content.html;
-      this.quiz.contentOrigin = content.origin;
+      this.quiz[0].contentHtml = content.html;
+      this.quiz[0].contentOrigin = content.origin;
     },
     updateImages(images, paraIndex) {
-      this.quiz.images = images;
+      this.quiz[0].images = images;
     },
     updateAnswer(value, index) {
-      this.quiz.answers[index] = value;
-    }
-  }
+      this.quiz[0].answers[index] = value;
+    },
+  },
 };
 </script>

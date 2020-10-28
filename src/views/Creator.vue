@@ -119,11 +119,6 @@ export default {
   data() {
     return {
       postType: "normalPost",
-      categories: [
-        { title: "Từ vựng", desc: "Thêm cách học từ mới nè", id: 1 },
-        { title: "Luyện nghe", desc: "Video hoặc audio để luyện nghe", id: 2 },
-        { title: "Ngữ pháp", desc: "Ngữ pháp cũng quan trọng lắm", id: 3 },
-      ],
       category: 0,
       postContent: null,
       tags: [],
@@ -133,6 +128,7 @@ export default {
   },
   computed: {
     ...mapState({
+      categories: (state) => state.categories,
       user: (state) => state.user.user,
       user_token: (state) => state.user.token,
     }),

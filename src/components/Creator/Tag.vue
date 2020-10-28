@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       curTag: "",
-      tags: []
+      tags: [],
     };
   },
   mounted() {},
@@ -55,18 +55,17 @@ export default {
     createHashtag() {
       if (this.curTag !== "") {
         this.curTag = this.curTag.replace(/\s+/g, " ");
-        this.curTag = this.curTag
-          .toLowerCase()
-          .split(" ")
+        this.curTag = this.curTag.toLowerCase().trim();
+        /* .split(" ")
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join("");
         this.curTag =
-          this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1);
+          this.curTag.charAt(0).toLowerCase() + this.curTag.slice(1); */
         this.tags.push(this.curTag);
         this.curTag = "";
         this.$emit("updateTags", this.tags);
       }
-    }
-  }
+    },
+  },
 };
 </script>

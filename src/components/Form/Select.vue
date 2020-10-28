@@ -10,10 +10,10 @@
         <input
           placeholder="Click để chọn"
           class="p-1 px-2 appearance-none w-full text-gray-800"
-          :value="selectData[picked].title"
+          :value="selectData[picked].name"
         />
         <div
-          class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 "
+          class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200"
         >
           <button
             class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none"
@@ -68,12 +68,12 @@
             class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100"
           >
             <div class="w-full items-center flex">
-              <div class="mx-2 -mt-1  ">
-                {{ data.title }}
+              <div class="mx-2 -mt-1">
+                {{ data.name }}
                 <div
                   class="text-xs truncate w-full normal-case font-normal -mt-1 text-gray-500"
                 >
-                  {{ data.desc }}
+                  {{ data.description }}
                 </div>
               </div>
             </div>
@@ -88,20 +88,20 @@
 export default {
   name: "form-select",
   props: {
-    selectData: Array
+    selectData: Array,
   },
   data() {
     return {
       initPick: false,
-      picked: 0
+      picked: 0,
     };
   },
   watch: {
-    picked: function(newVal, old) {
+    picked: function (newVal, old) {
       if (newVal !== old) {
         this.$emit("changeSelectData", newVal);
       }
-    }
-  }
+    },
+  },
 };
 </script>

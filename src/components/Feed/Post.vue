@@ -8,7 +8,14 @@
           :to="`/u/${postData.author.id}`"
           class="rounded-full h-8 w-8 flex overflow-hidden"
         >
-          <img :src="postData.author.avatar" alt="profilepic" />
+          <img
+            :src="
+              postData.author.avatar !== ''
+                ? postData.author.avatar
+                : '~@/assets/images/default_avatar.jpg'
+            "
+            alt="profilepic"
+          />
         </router-link>
         <router-link
           :to="`/u/${postData.author.id}`"
@@ -19,9 +26,9 @@
       </div>
       <router-link
         :to="`/p/${pid}`"
-        class="flex cursor-pointer content-center flex-wrap text-gray-500"
+        class="flex text-sm cursor-pointer content-center flex-wrap text-gray-500"
       >
-        {{ postData.datetime }}
+        {{ shortTime }} trước
       </router-link>
     </div>
     <!-- End author info parts -->
@@ -69,49 +76,78 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "image-item",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
-    interactionPack
+    interactionPack,
   },
   data() {
     return {
+      shortTime: "",
       postData: {
         author: {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         content: [
           {
             contentHtml: "<p>loading...</p>",
-            images: [""]
-          }
+            images: [""],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
-        tags: []
-      }
+        tags: [],
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         console.log(res);
         self.postData = res[0];
+        self.shortTimer = evaluateTime(self.postData.datetime);
       })
-      .catch(err => console.log(err));
-  }
+      .catch((err) => console.log(err));
+  },
 };
+
+function evaluateTime(beginTime) {
+  let timeString = new Date(beginTime).getTime() / 1000;
+  let timeNow = new Date().getTime() / 1000;
+  let distanceTime = parseInt(timeNow) - timeString;
+  let yearInSecond = 31536000;
+  let monthInSecond = 2592000;
+  let weekInSecond = 604800;
+  let dayInSecond = 86400;
+  let hourInsecond = 3600;
+  let minuteInSecond = 60;
+  if (distanceTime > yearInSecond) {
+    return parseInt(distanceTime / yearInSecond) + " năm";
+  } else if (distanceTime > monthInSecond) {
+    return parseInt(distanceTime / monthInSecond) + " tháng";
+  } else if (distanceTime > weekInSecond) {
+    return parseInt(distanceTime / weekInSecond) + " tuần";
+  } else if (distanceTime > dayInSecond) {
+    return parseInt(distanceTime / dayInSecond) + " ngày";
+  } else if (distanceTime > hourInsecond) {
+    return parseInt(distanceTime / hourInsecond) + " giờ";
+  } else if (distanceTime > minuteInSecond) {
+    return parseInt(distanceTime / minuteInSecond) + " phút";
+  } else {
+    return parseInt(distanceTime) + " giây";
+  }
+}
 </script>

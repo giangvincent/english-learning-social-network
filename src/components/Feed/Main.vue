@@ -5,7 +5,7 @@
       class="w-full md:w-4/5 lg:-mx-2 my-6 md:px-6 lg:px-8 py-24 md:py-16 columns mx-1 md:mx-0"
     >
       <div
-        class="inline-block"
+        class="inline-block w-full"
         v-for="(item, index) in itemArray"
         :key="'post-' + index"
       >

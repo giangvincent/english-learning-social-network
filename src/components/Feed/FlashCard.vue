@@ -4,59 +4,71 @@
   >
     <div class="w-full flex justify-between p-3">
       <div class="flex">
-        <div class="rounded-full h-8 w-8 flex overflow-hidden">
-          <img src="~@/assets/images/default_avatar.jpg" alt="profilepic" />
-        </div>
-        <div class="ml-2 font-bold flex content-center flex-wrap">
-          braydoncoyer
-        </div>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="rounded-full h-8 w-8 flex overflow-hidden"
+        >
+          <img
+            :src="
+              postData.author.avatar
+                ? postData.author.avatar
+                : '/assets/images/default_avatar.jpg'
+            "
+            alt="profilepic"
+          />
+        </router-link>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="ml-2 font-bold flex content-center flex-wrap"
+        >
+          {{ postData.author.full_name }}
+        </router-link>
       </div>
       <div class="flex cursor-pointer items-center flex-wrap">
         <div
           class="bg-gray-700 border-2 border-white text-white text-center font-bold rounded-full p-1 mx-2"
         >
-          Card 2/10
+          Card {{ currentCardIndex + 1 }}/{{ postData.content.length }}
         </div>
-        <router-link to="/p/test-detail-flashcard" class="text-gray-500">
-          2h ago
+        <router-link
+          :to="`/p/${pid}`"
+          class="flex text-xs cursor-pointer content-center flex-wrap text-gray-500"
+        >
+          {{ shortTimer }} trước
         </router-link>
       </div>
     </div>
     <!-- End author info parts -->
 
     <!-- card indicator -->
-    <div ref="frontCard">
+    <div
+      ref="frontCard"
+      :class="{ block: !currentBackCard, hidden: currentBackCard }"
+    >
       <div class="mx-auto bg-color-black">
-        <img class="w-full" src="@/assets/images/default-vertical.jpg" />
+        <img
+          v-for="(image, imgIndex) in postData.content[currentCardIndex].images"
+          :key="`content.images.${imgIndex}`"
+          class="w-full"
+          :src="rootUrl + image"
+        />
       </div>
       <!-- End media -->
-      <div class="px-3 py-4">
-        <h2>This is a Heading H2</h2>
-        <p>
-          <span class="ql-size-small">this is a small with </span
-          ><span class="ql-size-small" style="color: rgb(230, 0, 0);"
-            >COLOR TEXT</span
-          >
-        </p>
-        <p class="ql-align-center">
-          <span class="ql-size-large ql-font-monospace"
-            >This is a large Text with </span
-          ><span
-            class="ql-size-large ql-font-monospace"
-            style="background-color: rgb(255, 255, 102);"
-            >background</span
-          >
-        </p>
-      </div>
+      <div
+        class="px-3 py-4"
+        v-html="postData.content[currentCardIndex].contentHtml"
+      ></div>
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
         <textarea
           placeholder="Nội dung mặt sau"
           type="text"
           class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+          v-model="currentAnswer"
         ></textarea>
         <button
           class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="reviewBackCard()"
         >
           Review
         </button>
@@ -65,38 +77,34 @@
     </div>
     <!-- front card -->
 
-    <div ref="backCard">
+    <div
+      ref="backCard"
+      :class="{ block: currentBackCard, hidden: !currentBackCard }"
+    >
       <div class="mx-auto bg-color-black">
-        <img class="w-full" src="@/assets/images/default-vertical.jpg" />
+        <img
+          v-for="(image, imgIndex) in postData.content[currentCardIndex]
+            .flipImages"
+          :key="`content.images.${imgIndex}`"
+          class="w-full"
+          :src="rootUrl + image"
+        />
       </div>
       <!-- End media -->
-      <div class="px-3 py-4">
-        <h2>This is a Heading H2</h2>
-        <p>
-          <span class="ql-size-small">this is a small with </span
-          ><span class="ql-size-small" style="color: rgb(230, 0, 0);"
-            >COLOR TEXT</span
-          >
-        </p>
-        <p class="ql-align-center">
-          <span class="ql-size-large ql-font-monospace"
-            >This is a large Text with </span
-          ><span
-            class="ql-size-large ql-font-monospace"
-            style="background-color: rgb(255, 255, 102);"
-            >background</span
-          >
-        </p>
-      </div>
+      <div
+        class="px-3 py-4"
+        v-html="postData.content[currentCardIndex].flipContentHtml"
+      ></div>
       <!-- End content text -->
-      <div class="px-3 pb-4 flex flex-row ">
+      <div class="px-3 pb-4 flex flex-row">
         <div
           class="flex flex-wrap content-center justify-center text-md block px-3 py-2 rounded-lg w-full bg-white border-2 bg-white border-gray-600 focus:outline-none"
         >
-          Your answer
+          {{ currentAnswer }}
         </div>
         <button
           class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="toNextCard()"
         >
           Next Card
         </button>
@@ -106,17 +114,17 @@
     <!-- Back card -->
 
     <div class="px-3 pb-4">
-      <span
+      <router-link
+        :to="`/${postData.category.slug}`"
         class="inline-block rounded-min text-gray-600 bg-gray-100 px-2 py-1 text-xs font-bold mr-3"
-        >Default</span
+        >{{ postData.category.name }}</router-link
       >
-      <span
+      <router-link
+        :to="`/tag/${tag.slug}`"
+        v-for="(tag, tagIndex) in postData.tags"
+        :key="`tag-${tagIndex}`"
         class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 1</span
-      >
-      <span
-        class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 2</span
+        >{{ tag.name }}</router-link
       >
     </div>
     <!-- End relation label -->
@@ -125,12 +133,101 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
 import interactionPack from "./InteractionPack";
 export default {
   name: "Feed-flash-card",
+  props: {
+    pid: String,
+  },
   components: {
-    interactionPack
-  }
+    interactionPack,
+  },
+  data() {
+    return {
+      shortTimer: "",
+      currentCardIndex: 0,
+      currentBackCard: false,
+      currentAnswer: null,
+      shortTime: "",
+      postData: {
+        author: {
+          id: 1,
+          full_name: "loading",
+          nick_name: "loading",
+          avatar: "",
+        },
+        content: [
+          {
+            contentHtml: "",
+            images: [],
+            flipContentHtml: "",
+            flipImages: [],
+          },
+        ],
+        category: {
+          id: 1,
+          name: "loading",
+          slug: "loading",
+        },
+        tags: [],
+      },
+    };
+  },
+  computed: {
+    ...mapState({
+      rootUrl: (state) => state.rootUrl,
+    }),
+  },
+  mounted() {
+    var self = this;
+    fetch("/content/posts/" + this.pid + ".json")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        self.postData = res[0];
+        self.shortTimer = evaluateTime(self.postData.datetime);
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    reviewBackCard() {
+      this.currentBackCard = true;
+    },
+    toNextCard() {
+      this.currentCardIndex =
+        this.currentCardIndex < this.postData.content.length - 1
+          ? this.currentCardIndex + 1
+          : this.currentCardIndex;
+    },
+  },
 };
+
+function evaluateTime(beginTime) {
+  let timeString = new Date(beginTime).getTime() / 1000;
+  let timeNow = new Date().getTime() / 1000;
+  let distanceTime = parseInt(timeNow) - timeString;
+  let yearInSecond = 31536000;
+  let monthInSecond = 2592000;
+  let weekInSecond = 604800;
+  let dayInSecond = 86400;
+  let hourInsecond = 3600;
+  let minuteInSecond = 60;
+  if (distanceTime > yearInSecond) {
+    return parseInt(distanceTime / yearInSecond) + " năm";
+  } else if (distanceTime > monthInSecond) {
+    return parseInt(distanceTime / monthInSecond) + " tháng";
+  } else if (distanceTime > weekInSecond) {
+    return parseInt(distanceTime / weekInSecond) + " tuần";
+  } else if (distanceTime > dayInSecond) {
+    return parseInt(distanceTime / dayInSecond) + " ngày";
+  } else if (distanceTime > hourInsecond) {
+    return parseInt(distanceTime / hourInsecond) + " giờ";
+  } else if (distanceTime > minuteInSecond) {
+    return parseInt(distanceTime / minuteInSecond) + " phút";
+  } else {
+    return parseInt(distanceTime) + " giây";
+  }
+}
 </script>

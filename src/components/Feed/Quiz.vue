@@ -4,45 +4,50 @@
   >
     <div class="w-full flex justify-between p-3">
       <div class="flex">
-        <div class="rounded-full h-8 w-8 flex overflow-hidden">
-          <img src="~@/assets/images/default_avatar.jpg" alt="profilepic" />
-        </div>
-        <div class="ml-2 font-bold flex content-center flex-wrap">
-          braydoncoyer
-        </div>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="rounded-full h-8 w-8 flex overflow-hidden"
+        >
+          <img
+            :src="
+              postData.author.avatar
+                ? postData.author.avatar
+                : '/assets/images/default_avatar.jpg'
+            "
+            alt="profilepic"
+          />
+        </router-link>
+        <router-link
+          :to="`/u/${postData.author.id}`"
+          class="ml-2 font-bold flex content-center flex-wrap"
+        >
+          {{ postData.author.full_name }}
+        </router-link>
       </div>
       <router-link
-        to="/p/test-detail-quiz"
-        class="flex cursor-pointer content-center flex-wrap text-gray-500"
+        :to="`/p/${pid}`"
+        class="flex text-xs cursor-pointer content-center flex-wrap text-gray-500"
       >
-        2h ago
+        {{ shortTimer }} trước
       </router-link>
     </div>
     <!-- End author info parts -->
 
-    <div class="px-3 pb-4">
-      <h4 style="font-size: 20px; font-weight: bold">
-        The standard Lorem Ipsum passage, used since the 1500s
-      </h4>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
-    </div>
+    <div class="px-3 pb-4" v-html="postData.content[0].contentHtml"></div>
     <!-- End content text -->
     <div class="mx-auto bg-color-black mb-4">
-      <img class="w-full" src="@/assets/images/default-vertical.jpg" />
+      <img
+        v-for="(image, imgIndex) in postData.content[0].images"
+        :key="`content.images.${imgIndex}`"
+        class="w-full"
+        :src="rootUrl + image"
+      />
     </div>
     <!-- End media -->
 
     <div class="py-3 text-sm">
       <span class="px-2">Các đáp án là :</span>
-      <div
+      <!-- <div
         class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-black"
       >
         <div class="px-2 font-bold">Tighten Co.</div>
@@ -56,31 +61,44 @@
         class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-green-800 bg-green-400"
       >
         <div class="px-2 font-bold">Adam Wathan</div>
-      </div>
+      </div> -->
       <div
-        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 border-gray-300 hover:border-gray-600 py-2 m-2"
+        class="flex justify-start cursor-pointer text-md rounded-lg border-2 hover:border-gray-600 py-2 m-2"
+        :class="{
+          'border-gray-300':
+            !postData.content[0].correctAnswers.includes(index) &&
+            (!answered || numAnswer !== index),
+          'border-black': answered && numAnswer === index,
+          'bg-white': !postData.content[0].correctAnswers.includes(index),
+          'border-green-800 bg-green-400':
+            reviewCorrectAns &&
+            postData.content[0].correctAnswers.includes(numAnswer) &&
+            numAnswer === index,
+          'border-red-700 bg-red-400':
+            reviewCorrectAns &&
+            !postData.content[0].correctAnswers.includes(numAnswer) &&
+            numAnswer !== index,
+        }"
+        v-for="(answer, index) in postData.content[0].answers"
+        :key="'answers-' + index"
+        @click="pickAnswer(index)"
       >
-        <div class="px-2">Duke Street Studio Inc.</div>
-      </div>
-      <div
-        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 border-gray-300 hover:border-gray-600 py-2 m-2"
-      >
-        <div class="px-2">Jeffrey Wey</div>
+        <div class="px-2">{{ answer }}</div>
       </div>
     </div>
 
     <div class="px-3 pb-4">
-      <span
+      <router-link
+        :to="`/${postData.category.slug}`"
         class="inline-block rounded-min text-gray-600 bg-gray-100 px-2 py-1 text-xs font-bold mr-3"
-        >Default</span
+        >{{ postData.category.name }}</router-link
       >
-      <span
+      <router-link
+        :to="`/tag/${tag.slug}`"
+        v-for="(tag, tagIndex) in postData.tags"
+        :key="`tag-${tagIndex}`"
         class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 1</span
-      >
-      <span
-        class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >Tag 2</span
+        >{{ tag.name }}</router-link
       >
     </div>
     <!-- End relation label -->
@@ -89,11 +107,101 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
+  props: {
+    pid: String,
+  },
   components: {
-    interactionPack
-  }
+    interactionPack,
+  },
+  data() {
+    return {
+      reviewCorrectAns: false,
+      answered: false,
+      numAnswer: null,
+      shortTimer: "",
+      postData: {
+        author: {
+          id: 1,
+          full_name: "loading",
+          nick_name: "loading",
+          avatar: "",
+        },
+        content: [
+          {
+            contentHtml: "",
+
+            images: [],
+            answers: [],
+            correctAnswers: [],
+          },
+        ],
+        category: {
+          id: 1,
+          name: "loading",
+          slug: "loading",
+        },
+        tags: [],
+      },
+    };
+  },
+  computed: {
+    ...mapState({
+      rootUrl: (state) => state.rootUrl,
+    }),
+  },
+  mounted() {
+    var self = this;
+    fetch("/content/posts/" + this.pid + ".json")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        self.postData = res[0];
+        self.shortTimer = evaluateTime(self.postData.datetime);
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    pickAnswer(index) {
+      if (!this.answered) {
+        this.answered = true;
+        this.numAnswer = index;
+        var self = this;
+        setTimeout(() => {
+          self.reviewCorrectAns = true;
+        }, 1000);
+      }
+    },
+  },
 };
+
+function evaluateTime(beginTime) {
+  let timeString = new Date(beginTime).getTime() / 1000;
+  let timeNow = new Date().getTime() / 1000;
+  let distanceTime = parseInt(timeNow) - timeString;
+  let yearInSecond = 31536000;
+  let monthInSecond = 2592000;
+  let weekInSecond = 604800;
+  let dayInSecond = 86400;
+  let hourInsecond = 3600;
+  let minuteInSecond = 60;
+  if (distanceTime > yearInSecond) {
+    return parseInt(distanceTime / yearInSecond) + " năm";
+  } else if (distanceTime > monthInSecond) {
+    return parseInt(distanceTime / monthInSecond) + " tháng";
+  } else if (distanceTime > weekInSecond) {
+    return parseInt(distanceTime / weekInSecond) + " tuần";
+  } else if (distanceTime > dayInSecond) {
+    return parseInt(distanceTime / dayInSecond) + " ngày";
+  } else if (distanceTime > hourInsecond) {
+    return parseInt(distanceTime / hourInsecond) + " giờ";
+  } else if (distanceTime > minuteInSecond) {
+    return parseInt(distanceTime / minuteInSecond) + " phút";
+  } else {
+    return parseInt(distanceTime) + " giây";
+  }
+}
 </script>
