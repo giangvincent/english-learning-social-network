@@ -103,9 +103,9 @@ class PostController extends AdminController
             'id' => $post->id,
             'url' => $post->pid,
             'content' => json_decode($post->content, true),
-            'author' => $post->user()->first()->toArray(),
-            'category' => $post->categoryRelated()->first()->toArray(),
-            'tags' => $post->tags()->get()->toArray(),
+            'author' => $post->user()->select(['id','nick_name', 'full_name', 'avatar'])->first()->toArray(),
+            'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
+            'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
             'datetime' => $post->updated_at,
             'nums_pocket' => $post->nums_pocket,
             'nums_good' => $post->nums_good,
@@ -125,5 +125,4 @@ class PostController extends AdminController
             mkdir(public_path() . '/content/posts/', 0777);
         }
     }
-
 }

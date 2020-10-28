@@ -29,6 +29,7 @@ class CategoryController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Name'))->filter('like');
+        $grid->column('description', __('Description'))->width(100);
         $grid->column('cover', __('Cover'))->image();
         $grid->column('parent', __('Parent'))->display(function ($parent) {
             if ($parent !== 0 && $parent !== null) {
@@ -91,6 +92,7 @@ class CategoryController extends AdminController
         $form = new Form(new Category());
 
         $form->text('name', __('Name'));
+        $form->textarea('description', __('Description'));
         $form->hidden('slug', __('Slug'));
         $form->cropper('cover', __('Cover'));
         $form->select('parent', __('Parent'))->options(function ($par_id) {
