@@ -4,7 +4,7 @@
     <side-panel-left></side-panel-left>
     <div class="flex">
       <div class="hidden md:block md:w-1/5"></div>
-      <div class="my-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
+      <div class="w-full px-4 my-10 md:my-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
         <div class="sm:rounded sm:rounded-t-lg shadow bg-white">
           <div
             class="h-40 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
@@ -66,13 +66,13 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 },
+                params: { id: 123 }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
                 'border-b-2 border-gray-900':
-                  typeof $route.query.cur === 'undefined',
+                  typeof $route.query.cur === 'undefined'
               }"
               >Đã đăng</router-link
             >
@@ -80,12 +80,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: 123 },
-                query: { cur: 'saved' },
+                query: { cur: 'saved' }
               }"
               replace
               class="w-1/3 py-3"
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'saved',
+                'border-b-2 border-gray-900': $route.query.cur === 'saved'
               }"
               >Đang học</router-link
             >
@@ -93,12 +93,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: 123 },
-                query: { cur: 'setting' },
+                query: { cur: 'setting' }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'setting',
+                'border-b-2 border-gray-900': $route.query.cur === 'setting'
               }"
               >Cài đặt</router-link
             >
@@ -136,18 +136,18 @@ export default {
     SidePanelLeft,
     SavedPost,
     UserCreated,
-    Setting,
+    Setting
   },
   data() {
     return {
-      items: [],
+      items: []
     };
   },
   mounted() {
     this.SET_PAGE("user");
   },
   methods: {
-    ...mapMutations(["SET_PAGE"]),
-  },
+    ...mapMutations(["SET_PAGE"])
+  }
 };
 </script>

@@ -2,6 +2,12 @@ export default {
   Toggle_popupEditor: function(state) {
     state.popupEditor = !state.popupEditor;
   },
+  toggle_left_panel: function(state) {
+    state.showPanelLeft = !state.showPanelLeft;
+  },
+  toggle_right_panel: function(state) {
+    state.showPanelRight = !state.showPanelRight;
+  },
   CHANGE_TAB: function(state, payload) {
     state.currentTab = payload;
   },

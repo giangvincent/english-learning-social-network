@@ -18,7 +18,9 @@ export default new Vuex.Store({
     currentFeed: [],
     tags: [],
     categories: [],
-    posts: []
+    posts: [],
+    showPanelRight: false,
+    showPanelLeft: false
   },
   mutations: mutations,
   actions: actions,

@@ -20,7 +20,7 @@
                 @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'normalPost',
+                  'border-b-2 border-gray-900': postType == 'normalPost'
                 }"
               >
                 Bài viết
@@ -29,7 +29,7 @@
                 @click="changePostType('flashCard')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'flashCard',
+                  'border-b-2 border-gray-900': postType == 'flashCard'
                 }"
               >
                 Flash Cards
@@ -114,7 +114,7 @@ export default {
     normalPost,
     flashCard,
     quiz,
-    LoadingIcon,
+    LoadingIcon
   },
   data() {
     return {
@@ -123,22 +123,22 @@ export default {
       postContent: null,
       tags: [],
       processPost: false,
-      processUpImages: false,
+      processUpImages: false
     };
   },
   computed: {
     ...mapState({
-      categories: (state) => state.categories,
-      user: (state) => state.user.user,
-      user_token: (state) => state.user.token,
-    }),
+      categories: state => state.categories,
+      user: state => state.user.user,
+      user_token: state => state.user.token
+    })
   },
   watch: {
-    postContent: function (newVal, oldVal) {
+    postContent: function(newVal, oldVal) {
       if (newVal !== oldVal) {
         console.log(newVal);
       }
-    },
+    }
   },
   mounted() {
     console.log(this.user, this.user_token);
@@ -171,7 +171,7 @@ export default {
         postType: this.postType,
         postContent: this.postContent,
         user: JSON.stringify(this.user),
-        tags: JSON.stringify(this.tags),
+        tags: JSON.stringify(this.tags)
       };
       var self = this;
       var uploadImages = [];
@@ -180,11 +180,11 @@ export default {
           uploadImages.push(
             self
               .Upload_image(image)
-              .then((imageUrl) => {
+              .then(imageUrl => {
                 console.log(imageUrl);
                 postData.postContent[contentIndex].images[imgIndex] = imageUrl;
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
                 postData.postContent[contentIndex].images.splice(imgIndex, 1);
               })
@@ -196,19 +196,19 @@ export default {
         postData.postContent = JSON.stringify(postData.postContent);
         self
           .SUBMIT_POST(postData)
-          .then((res) => {
+          .then(res => {
             console.log(res);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           })
           .finally(() => {
             self.processPost = false;
           });
       });
-    },
+    }
   },
-  beforeDestroy() {},
+  beforeDestroy() {}
 };
 </script>
 

@@ -3,7 +3,11 @@
     <div
       class="w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
     >
-      <label for="menu-toggle" class="cursor-pointer md:hidden block py-2">
+      <label
+        for="menu-toggle"
+        class="cursor-pointer md:hidden block py-2"
+        @click="toggle_left_panel"
+      >
         <svg
           class="fill-current text-gray-900"
           xmlns="http://www.w3.org/2000/svg"
@@ -31,6 +35,7 @@
         <div
           class="inline-block no-underline hover:text-black relative"
           title="Thông báo"
+          @click="toggle_right_panel"
         >
           <label
             class="-m-2 absolute bg-color-blue font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6"
@@ -79,21 +84,11 @@
     <div class="w-full mx-auto flex text-center font-bold block md:hidden">
       <a
         class="w-1/3 py-3"
-        :class="{ 'border-b-2 border-gray-900': currentTab === 'vocabulary' }"
-        @click="navigate('vocabulary')"
-        >Từ vựng</a
-      >
-      <a
-        class="w-1/3 py-3"
-        :class="{ 'border-b-2 border-gray-900': currentTab === 'listen' }"
-        @click="navigate('listen')"
-        >Nghe</a
-      >
-      <a
-        class="w-1/3 py-3"
-        :class="{ 'border-b-2 border-gray-900': currentTab === 'article' }"
-        @click="navigate('article')"
-        >Bài viết</a
+        :class="{ 'border-b-2 border-gray-900': currentTab === cat.slug }"
+        v-for="(cat, index) in categories"
+        :key="`cat-${index}-${cat.slug}`"
+        @click="navigate(cat.slug)"
+        >{{ cat.name }}</a
       >
     </div>
     <!-- END top bar lvl1 -->
@@ -107,28 +102,29 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav,
+    DesktopNav
   },
   data() {
     return {
-      userNavigateUrl: "/auth/login",
+      userNavigateUrl: "/auth/login"
     };
   },
   watch: {
     user: {
-      handler: function (val) {
+      handler: function(val) {
         if (this.user.id) {
           this.userNavigateUrl = "/u/" + this.user.id;
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   computed: {
     ...mapState({
-      currentTab: (state) => state.currentTab,
-      user: (state) => state.user.user,
-    }),
+      currentTab: state => state.currentTab,
+      user: state => state.user.user,
+      categories: state => state.categories
+    })
   },
   mounted() {
     if (this.user.id) {
@@ -142,11 +138,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["CHANGE_TAB"]),
+    ...mapMutations(["CHANGE_TAB", "toggle_left_panel", "toggle_right_panel"]),
     navigate(goto) {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
-    },
-  },
+    }
+  }
 };
 </script>
