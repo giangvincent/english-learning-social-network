@@ -1,6 +1,6 @@
 <template>
   <div
-    class="content-center flex items-center justify-between flex-wrap mt-3 px-1 text-gray-600 text-sm px-1 text-sm text-gray-600"
+    class="content-center flex items-center justify-between flex-wrap mt-3 px-1 text-gray-600 text-sm "
   >
     <span>Hình ảnh</span>
     <button

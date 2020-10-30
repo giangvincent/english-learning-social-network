@@ -47,21 +47,6 @@
 
     <div class="py-3 text-sm">
       <span class="px-2">Các đáp án là :</span>
-      <!-- <div
-        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-black"
-      >
-        <div class="px-2 font-bold">Tighten Co.</div>
-      </div>
-      <div
-        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-red-700 bg-red-400"
-      >
-        <div class="px-2 font-bold">Taylor Otwell</div>
-      </div>
-      <div
-        class="flex justify-start cursor-pointer text-md rounded-lg bg-white border-2 hover:border-gray-600 py-2 m-2 border-green-800 bg-green-400"
-      >
-        <div class="px-2 font-bold">Adam Wathan</div>
-      </div> -->
       <div
         class="flex justify-start cursor-pointer text-md rounded-lg border-2 hover:border-gray-600 py-2 m-2"
         :class="{

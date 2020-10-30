@@ -108,7 +108,7 @@
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
         <div
-          class="flex flex-wrap content-center justify-center text-md block px-3 py-2 rounded-lg w-full bg-white border-2 bg-white border-gray-600 focus:outline-none"
+          class="flex flex-wrap content-center justify-center text-md px-3 py-2 rounded-lg w-full border-2 bg-white border-gray-600 focus:outline-none"
         >
           {{ currentAnswer }}
         </div>
