@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,5 +71,20 @@ class UserController extends Controller
     public function interactPost(Request $request)
     {
         # code...
+    }
+
+    public function uploadedPosts()
+    {
+        $user = Auth::user();
+        $posts = $user->posts()->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
+        return response()->json($posts, $this->successStatus);
+    }
+
+    public function baggedPosts()
+    {
+        $postsBagged = Auth::user()->where('interact', 'bagged')->orderBy('id', 'desc')->select(['post_id'])->get()->toArray();
+
+        $posts = Post::whereIn($postsBagged)->select(['id', 'pid', 'type'])->simplePaginate(10);
+        return response()->json($posts, $this->successStatus);
     }
 }

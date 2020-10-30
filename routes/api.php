@@ -25,6 +25,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('create-post', 'PostController@CreatePost');
     Route::post('upload-image', 'TempController@uploadTempImg');
 
+    Route::get('uploaded-posts', 'UserController@uploadedPosts');
+    Route::get('bagged-posts', 'UserController@baggedPosts');
+
 });
 
 Route::get('feed-home', 'FeedController@home');
