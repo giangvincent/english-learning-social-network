@@ -28,3 +28,5 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::get('feed-home', 'FeedController@home');
+Route::get('feed-category/{slug}', 'FeedController@feedCategory');
+Route::get('feed-tag/{slug}', 'FeedController@feedTag');
