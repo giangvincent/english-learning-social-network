@@ -86,17 +86,19 @@
       </div>
     </div>
     <!-- preview images -->
-    <image-editor
+    <component
+      v-bind:is="asyncComponent"
       :imageEdit="imageChange"
       v-on:onDoneEvent="onDoneEvent"
       v-on:cancel="onCancelEvent"
       v-if="imageChange !== null"
-    ></image-editor>
+    >
+      <!-- component changes when vm.currentView changes! -->
+    </component>
   </div>
 </template>
 
 <script>
-import ImageEditor from "./ImageEditor.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 var blobToBase64 = function(blob, callback) {
   var reader = new FileReader();
@@ -113,10 +115,11 @@ export default {
     paraIndex: Number
   },
   components: {
-    ImageEditor
+    ImageEditor: () => import("./ImageEditor.vue")
   },
   data() {
     return {
+      asyncComponent: "ImageEditor",
       previewImages: [],
       indexImageChange: null,
       imageChange: null

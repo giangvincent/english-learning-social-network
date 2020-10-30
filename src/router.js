@@ -51,6 +51,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   store.state.showPanelLeft = false;
   store.state.showPanelRight = false;
+
   next();
 });
 

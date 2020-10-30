@@ -54,10 +54,15 @@
         />
       </div>
       <!-- End media -->
-      <div
-        class="px-3 py-4"
-        v-html="postData.content[currentCardIndex].contentHtml"
-      ></div>
+      <section>
+        <div class="ql-container ql-snow" style="height: auto;border: none">
+          <div
+            class="ql-editor"
+            v-html="postData.content[currentCardIndex].contentHtml"
+            style="height: auto"
+          ></div>
+        </div>
+      </section>
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
         <textarea
@@ -65,6 +70,7 @@
           type="text"
           class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
           v-model="currentAnswer"
+          @keydown.enter="reviewBackCard"
         ></textarea>
         <button
           class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -91,10 +97,14 @@
         />
       </div>
       <!-- End media -->
-      <div
-        class="px-3 py-4"
-        v-html="postData.content[currentCardIndex].flipContentHtml"
-      ></div>
+      <section>
+        <div class="ql-container ql-snow" style="border: none">
+          <div
+            class="ql-editor"
+            v-html="postData.content[currentCardIndex].flipContentHtml"
+          ></div>
+        </div>
+      </section>
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
         <div
@@ -133,16 +143,17 @@
 </template>
 
 <script>
+import "quill/dist/quill.snow.css";
 import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
 import interactionPack from "./InteractionPack";
 export default {
   name: "Feed-flash-card",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
-    interactionPack,
+    interactionPack
   },
   data() {
     return {
@@ -150,84 +161,58 @@ export default {
       currentCardIndex: 0,
       currentBackCard: false,
       currentAnswer: null,
-      shortTime: "",
       postData: {
         author: {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         content: [
           {
             contentHtml: "",
             images: [],
             flipContentHtml: "",
-            flipImages: [],
-          },
+            flipImages: []
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
-        tags: [],
-      },
+        tags: []
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
-        self.shortTimer = evaluateTime(self.postData.datetime);
+        self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     reviewBackCard() {
       this.currentBackCard = true;
     },
     toNextCard() {
+      this.currentBackCard = false;
+      this.currentAnswer = null;
       this.currentCardIndex =
         this.currentCardIndex < this.postData.content.length - 1
           ? this.currentCardIndex + 1
           : this.currentCardIndex;
-    },
-  },
-};
-
-function evaluateTime(beginTime) {
-  let timeString = new Date(beginTime).getTime() / 1000;
-  let timeNow = new Date().getTime() / 1000;
-  let distanceTime = parseInt(timeNow) - timeString;
-  let yearInSecond = 31536000;
-  let monthInSecond = 2592000;
-  let weekInSecond = 604800;
-  let dayInSecond = 86400;
-  let hourInsecond = 3600;
-  let minuteInSecond = 60;
-  if (distanceTime > yearInSecond) {
-    return parseInt(distanceTime / yearInSecond) + " năm";
-  } else if (distanceTime > monthInSecond) {
-    return parseInt(distanceTime / monthInSecond) + " tháng";
-  } else if (distanceTime > weekInSecond) {
-    return parseInt(distanceTime / weekInSecond) + " tuần";
-  } else if (distanceTime > dayInSecond) {
-    return parseInt(distanceTime / dayInSecond) + " ngày";
-  } else if (distanceTime > hourInsecond) {
-    return parseInt(distanceTime / hourInsecond) + " giờ";
-  } else if (distanceTime > minuteInSecond) {
-    return parseInt(distanceTime / minuteInSecond) + " phút";
-  } else {
-    return parseInt(distanceTime) + " giây";
+    }
   }
-}
+};
 </script>

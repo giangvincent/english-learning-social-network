@@ -6,6 +6,7 @@ import "./registerServiceWorker";
 
 import "@/assets/css/tailwind.css";
 import "@/assets/css/main.css";
+import helperFunc from "./helperFunc";
 
 Vue.config.productionTip = false;
 
@@ -22,6 +23,23 @@ if (isLocalStorage()) {
     console.log(err);
   }
 }
+console.log();
+Vue.mixin({
+  methods: helperFunc
+});
+
+Vue.component("ToCreator", () =>
+  import("@/components/Navigator/ToCreationBtn.vue")
+);
+Vue.component("MainNavigation", () =>
+  import("@/components/MainNavigation.vue")
+);
+Vue.component("SidePanelLeft", () =>
+  import("@/components/Navigator/SidePanelLeft.vue")
+);
+Vue.component("SidePanelRight", () =>
+  import("@/components/Navigator/SidePanelRight.vue")
+);
 
 new Vue({
   router,

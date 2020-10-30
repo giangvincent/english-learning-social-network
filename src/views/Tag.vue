@@ -2,6 +2,7 @@
   <div>
     <main-navigation></main-navigation>
     <side-panel-left></side-panel-left>
+    <side-panel-right></side-panel-right>
     <main-feed :itemArray="items"></main-feed>
     <to-creator></to-creator>
   </div>
@@ -9,18 +10,12 @@
 
 <script>
 // @ is an alias to /src
-import MainNavigation from "@/components/MainNavigation.vue";
-import SidePanelLeft from "@/components/Navigator/SidePanelLeft.vue";
 import MainFeed from "@/components/Feed/Main.vue";
-import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
 export default {
   name: "tag-feed",
   components: {
-    MainNavigation,
-    MainFeed,
-    ToCreator,
-    SidePanelLeft
+    MainFeed
   },
   data() {
     return {

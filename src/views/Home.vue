@@ -11,20 +11,13 @@
 <script>
 // @ is an alias to /src
 import { mapState, mapMutations, mapActions } from "vuex";
-import MainNavigation from "@/components/MainNavigation.vue";
-import SidePanelLeft from "@/components/Navigator/SidePanelLeft.vue";
-import SidePanelRight from "@/components/Navigator/SidePanelRight.vue";
+
 import MainFeed from "@/components/Feed/Main.vue";
-import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
 
 export default {
   name: "home",
   components: {
-    MainNavigation,
-    MainFeed,
-    ToCreator,
-    SidePanelLeft,
-    SidePanelRight
+    MainFeed
   },
   data() {
     return {

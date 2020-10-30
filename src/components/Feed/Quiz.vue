@@ -77,7 +77,7 @@
           'border-red-700 bg-red-400':
             reviewCorrectAns &&
             !postData.content[0].correctAnswers.includes(numAnswer) &&
-            numAnswer !== index,
+            numAnswer !== index
         }"
         v-for="(answer, index) in postData.content[0].answers"
         :key="'answers-' + index"
@@ -112,10 +112,10 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
-    interactionPack,
+    interactionPack
   },
   data() {
     return {
@@ -128,7 +128,7 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         content: [
           {
@@ -136,33 +136,33 @@ export default {
 
             images: [],
             answers: [],
-            correctAnswers: [],
-          },
+            correctAnswers: []
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
-        tags: [],
-      },
+        tags: []
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
-        self.shortTimer = evaluateTime(self.postData.datetime);
+        self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     pickAnswer(index) {
@@ -174,34 +174,7 @@ export default {
           self.reviewCorrectAns = true;
         }, 1000);
       }
-    },
-  },
-};
-
-function evaluateTime(beginTime) {
-  let timeString = new Date(beginTime).getTime() / 1000;
-  let timeNow = new Date().getTime() / 1000;
-  let distanceTime = parseInt(timeNow) - timeString;
-  let yearInSecond = 31536000;
-  let monthInSecond = 2592000;
-  let weekInSecond = 604800;
-  let dayInSecond = 86400;
-  let hourInsecond = 3600;
-  let minuteInSecond = 60;
-  if (distanceTime > yearInSecond) {
-    return parseInt(distanceTime / yearInSecond) + " năm";
-  } else if (distanceTime > monthInSecond) {
-    return parseInt(distanceTime / monthInSecond) + " tháng";
-  } else if (distanceTime > weekInSecond) {
-    return parseInt(distanceTime / weekInSecond) + " tuần";
-  } else if (distanceTime > dayInSecond) {
-    return parseInt(distanceTime / dayInSecond) + " ngày";
-  } else if (distanceTime > hourInsecond) {
-    return parseInt(distanceTime / hourInsecond) + " giờ";
-  } else if (distanceTime > minuteInSecond) {
-    return parseInt(distanceTime / minuteInSecond) + " phút";
-  } else {
-    return parseInt(distanceTime) + " giây";
+    }
   }
-}
+};
 </script>

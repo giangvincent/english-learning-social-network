@@ -2,6 +2,7 @@
   <div>
     <main-navigation></main-navigation>
     <side-panel-left></side-panel-left>
+    <side-panel-right></side-panel-right>
     <div class="flex">
       <div class="hidden md:block md:w-1/5"></div>
       <div class="w-full px-4 my-10 md:my-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
@@ -120,10 +121,6 @@
 <script>
 // @ is an alias to /src
 import { mapState, mapMutations } from "vuex";
-import MainNavigation from "@/components/MainNavigation.vue";
-import SidePanelLeft from "@/components/Navigator/SidePanelLeft.vue";
-import ToCreator from "@/components/Navigator/ToCreationBtn.vue";
-
 import SavedPost from "@/components/User/SavedPost.vue";
 import UserCreated from "@/components/User/UserCreated.vue";
 import Setting from "@/components/User/Setting.vue";
@@ -131,9 +128,6 @@ import Setting from "@/components/User/Setting.vue";
 export default {
   name: "home",
   components: {
-    MainNavigation,
-    ToCreator,
-    SidePanelLeft,
     SavedPost,
     UserCreated,
     Setting

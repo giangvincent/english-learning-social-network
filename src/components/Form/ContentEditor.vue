@@ -16,18 +16,18 @@ export default {
   props: {
     paraIndex: String,
     contentHtml: String,
-    contentOrigin: Object,
+    contentOrigin: Object
   },
   data() {
     return {
-      editor: null,
+      editor: null
     };
   },
   watch: {
-    paraIndex: function (newVal, oldVal) {
+    paraIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
-    },
+    }
   },
   mounted() {
     console.log("para index: ", this.paraIndex);
@@ -52,23 +52,23 @@ export default {
         [{ font: [] }],
         [{ align: [] }],
 
-        ["clean"], // remove formatting button
+        ["clean"] // remove formatting button
       ];
 
       this.editor = new Quill("#editor-" + this.paraIndex, {
         modules: {
-          toolbar: toolbarOptions,
+          toolbar: toolbarOptions
         },
         scrollingContainer: "#editor-container-" + this.paraIndex,
         theme: "snow",
-        height: 200,
+        height: 200
       });
 
       const importContent = this.editor.clipboard.convert(this.contentHtml);
       console.log(this.contentOrigin);
       this.editor.setContents(importContent);
       var self = this;
-      this.editor.on("text-change", function (delta, oldDelta, source) {
+      this.editor.on("text-change", function(delta, oldDelta, source) {
         /* if (source == "api") {
           console.log("An API call triggered this change.");
         } else if (source == "user") {
@@ -76,12 +76,20 @@ export default {
         } */
         let contentChanged = {
           html: self.editor.root.innerHTML,
-          origin: self.editor.getContents(),
+          origin: self.editor.getContents()
         };
         // console.log(delta, self.editor.root.innerHTML);
         self.$emit("updateContent", contentChanged, self.paraIndex);
       });
-    },
-  },
+
+      changeHeightEleByClass(document.getElementsByClassName("editor"));
+      changeHeightEleByClass(document.getElementsByClassName("ql-editor"));
+    }
+  }
 };
+function changeHeightEleByClass(elements) {
+  for (var i = 0, len = elements.length; i < len; i++) {
+    elements[i].style["height"] = "auto";
+  }
+}
 </script>

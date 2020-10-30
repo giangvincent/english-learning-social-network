@@ -145,6 +145,10 @@ export default {
     if (!this.user_token || !this.user.id) {
       this.$router.push("/auth/login");
     }
+    console.log(this.$route.query);
+    if (!this.$route.query.reloaded) {
+      location.replace("/creator?reloaded=1");
+    }
   },
   methods: {
     ...mapMutations(),
