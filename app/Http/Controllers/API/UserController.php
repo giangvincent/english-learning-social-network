@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\userInteract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -82,9 +83,9 @@ class UserController extends Controller
 
     public function baggedPosts()
     {
-        $postsBagged = Auth::user()->where('interact', 'bagged')->orderBy('id', 'desc')->select(['post_id'])->get()->toArray();
+        $postsBagged = userInteract::where('user_id', Auth::user()->id)->where('interact', 'bagged')->orderBy('id', 'desc')->select(['post_id'])->get()->toArray();
 
-        $posts = Post::whereIn($postsBagged)->select(['id', 'pid', 'type'])->simplePaginate(10);
+        $posts = Post::whereIn('id', $postsBagged)->select(['id', 'pid', 'type'])->simplePaginate(10);
         return response()->json($posts, $this->successStatus);
     }
 }
