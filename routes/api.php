@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('uploaded-posts', 'UserController@uploadedPosts');
     Route::get('bagged-posts', 'UserController@baggedPosts');
 
+    Route::post('req-interact', 'UserController@interactPost');
 });
 
 Route::get('feed-home', 'FeedController@home');

@@ -71,7 +71,30 @@ class UserController extends Controller
 
     public function interactPost(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'post_id' => 'required|exists:posts,id',
+            'interact' => 'required|in:bagged,good,bad,report,un-bagged,un-good,un-bad'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        if (strpos($request->interact, 'un-') !== false) {
+            $interact = str_replace('un-', '', $request->interact);
+            $success = userInteract::where([
+                ['post_id', $request->post_id],
+                ['user_id', Auth::user()->id],
+                ['interact', $interact]
+            ])->delete();
+            return response()->json(['success' => $success], $this->successStatus);
+        } else {
+            $newInteract = new userInteract();
+            $newInteract->post_id = $request->post_id;
+            $newInteract->user_id = Auth::user()->id;
+            $newInteract->interact = $request->interact;
+            $newInteract->save();
+            return response()->json(['success' => $newInteract], $this->successStatus);
+        }
     }
 
     public function uploadedPosts()
