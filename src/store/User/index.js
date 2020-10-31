@@ -4,7 +4,9 @@ import actions from "./actions";
 export default {
   state: {
     token: null,
-    user: {}
+    user: {},
+    uploadedPosts: [],
+    baggedPosts: []
   },
   mutations: mutations,
   actions: actions

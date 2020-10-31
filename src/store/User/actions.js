@@ -1,5 +1,5 @@
 export default {
-  LOGIN: function({ rootState, state, commit }, payload) {
+  LOGIN: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);
     data.append("password", payload.password);
@@ -8,10 +8,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
@@ -27,7 +27,7 @@ export default {
         });
     });
   },
-  REGISTER: function({ rootState, state, commit }, payload) {
+  REGISTER: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("nick_name", payload.nick_name);
     data.append("full_name", payload.full_name);
@@ -40,10 +40,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           let successData = data;
           commit("SET_TOKEN", successData.token);
@@ -54,5 +54,44 @@ export default {
           rej(err);
         });
     });
-  }
+  },
+  GetUploadedPosts: function ({ rootState, state, commit }, payload) {
+    fetch(rootState.apiUrl + "/uploaded-posts", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + rootState.user.token
+      }
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (res) {
+
+        commit("setUploadedPosts", res.data);
+
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  },
+
+  GetBaggedPosts: function ({ rootState, state, commit }, payload) {
+    fetch(rootState.apiUrl + "/bagged-posts", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + rootState.user.token
+      }
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (res) {
+        commit("setBaggedPosts", res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
 };
