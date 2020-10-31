@@ -94,4 +94,27 @@ export default {
         console.log(err);
       });
   },
+  ReqInteract: function ({ rootState, state, commit }, payload) {
+    var data = new FormData();
+    data.append("post_id", payload.post_id);
+    data.append("interact", payload.interact);
+    fetch(rootState.apiUrl + "/req-interact", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + rootState.user.token
+      },
+      body: data
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (res) {
+        console.log(res)
+        // TODO: Add interact data to current post
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  }
 };

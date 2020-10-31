@@ -55,7 +55,7 @@
       </div>
       <!-- End media -->
       <section>
-        <div class="ql-container ql-snow" style="height: auto;border: none">
+        <div class="ql-container ql-snow" style="height: auto; border: none">
           <div
             class="ql-editor"
             v-html="postData.content[currentCardIndex].contentHtml"
@@ -138,7 +138,7 @@
       >
     </div>
     <!-- End relation label -->
-    <interaction-pack></interaction-pack>
+    <interaction-pack :post_id="postData.id"></interaction-pack>
   </div>
 </template>
 
@@ -150,10 +150,10 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "Feed-flash-card",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
-    interactionPack
+    interactionPack,
   },
   data() {
     return {
@@ -162,44 +162,45 @@ export default {
       currentBackCard: false,
       currentAnswer: null,
       postData: {
+        id: 0,
         author: {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         content: [
           {
             contentHtml: "",
             images: [],
             flipContentHtml: "",
-            flipImages: []
-          }
+            flipImages: [],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
-        tags: []
-      }
+        tags: [],
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         console.log(res);
         self.postData = res[0];
         self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   },
   methods: {
     reviewBackCard() {
@@ -212,7 +213,7 @@ export default {
         this.currentCardIndex < this.postData.content.length - 1
           ? this.currentCardIndex + 1
           : this.currentCardIndex;
-    }
-  }
+    },
+  },
 };
 </script>

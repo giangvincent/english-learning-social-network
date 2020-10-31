@@ -62,7 +62,7 @@
           'border-red-700 bg-red-400':
             reviewCorrectAns &&
             !postData.content[0].correctAnswers.includes(numAnswer) &&
-            numAnswer !== index
+            numAnswer !== index,
         }"
         v-for="(answer, index) in postData.content[0].answers"
         :key="'answers-' + index"
@@ -87,7 +87,7 @@
       >
     </div>
     <!-- End relation label -->
-    <interaction-pack></interaction-pack>
+    <interaction-pack :post_id="postData.id"></interaction-pack>
   </div>
 </template>
 
@@ -97,10 +97,10 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
-    interactionPack
+    interactionPack,
   },
   data() {
     return {
@@ -109,11 +109,12 @@ export default {
       numAnswer: null,
       shortTimer: "",
       postData: {
+        id: 0,
         author: {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         content: [
           {
@@ -121,33 +122,33 @@ export default {
 
             images: [],
             answers: [],
-            correctAnswers: []
-          }
+            correctAnswers: [],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
-        tags: []
-      }
+        tags: [],
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         console.log(res);
         self.postData = res[0];
         self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   },
   methods: {
     pickAnswer(index) {
@@ -159,7 +160,7 @@ export default {
           self.reviewCorrectAns = true;
         }, 1000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
