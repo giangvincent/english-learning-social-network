@@ -64,7 +64,10 @@
       >
     </div>
     <!-- End relation label -->
-    <interaction-pack :post_id="postData.id"></interaction-pack>
+    <interaction-pack
+      :post_id="postData.id"
+      :indicatorNum="interactIndicatorNumber"
+    ></interaction-pack>
   </div>
   <!-- END post -->
 </template>
@@ -104,6 +107,14 @@ export default {
           slug: "loading",
         },
         tags: [],
+        nums_bagged: 0,
+        nums_good: 0,
+        nums_bad: 0,
+      },
+      interactIndicatorNumber: {
+        nums_bagged: 0,
+        nums_good: 0,
+        nums_bad: 0,
       },
     };
   },
@@ -111,6 +122,19 @@ export default {
     ...mapState({
       rootUrl: (state) => state.rootUrl,
     }),
+  },
+  watch: {
+    postData: {
+      handler: function (val) {
+        this.interactIndicatorNumber.nums_bagged =
+          this.postData.nums_bagged !== null ? this.postData.nums_bagged : 0;
+        this.interactIndicatorNumber.nums_good =
+          this.postData.nums_good !== null ? this.postData.nums_good : 0;
+        this.interactIndicatorNumber.nums_bad =
+          this.postData.nums_bad !== null ? this.postData.nums_bad : 0;
+      },
+      deep: true,
+    },
   },
   mounted() {
     var self = this;

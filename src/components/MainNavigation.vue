@@ -38,7 +38,7 @@
           @click="toggle_right_panel"
         >
           <label
-            class="-m-2 absolute bg-color-blue font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6"
+            class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
             >9+</label
           >
           <svg
@@ -102,29 +102,29 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav
+    DesktopNav,
   },
   data() {
     return {
-      userNavigateUrl: "/auth/login"
+      userNavigateUrl: "/auth/login",
     };
   },
   watch: {
     user: {
-      handler: function(val) {
+      handler: function (val) {
         if (this.user.id) {
           this.userNavigateUrl = "/u/" + this.user.id;
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
     ...mapState({
-      currentTab: state => state.currentTab,
-      user: state => state.user.user,
-      categories: state => state.categories
-    })
+      currentTab: (state) => state.currentTab,
+      user: (state) => state.user.user,
+      categories: (state) => state.categories,
+    }),
   },
   mounted() {
     if (this.user.id) {
@@ -142,7 +142,7 @@ export default {
     navigate(goto) {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
-    }
-  }
+    },
+  },
 };
 </script>

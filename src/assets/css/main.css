@@ -111,3 +111,10 @@ html {
     column-gap: 1rem;
   }
 }
+
+.numberIndicator {
+  padding: 5px;
+  line-height: normal;
+  min-height: 20px;
+  min-width: 25px;
+}

@@ -110,7 +110,7 @@ export default {
         return res.json();
       })
       .then(function (res) {
-        console.log(res)
+        // console.log(res)
         // TODO: Add interact data to current post
       })
       .catch(err => {
