@@ -141,6 +141,7 @@ class PostController extends Controller
     {
         $this->CreateContentFol();
         // $authorData = $post->user()->first()->toArray();
+        
         $exportData = array([
             'id' => $post->id,
             'url' => $post->pid,
@@ -149,11 +150,13 @@ class PostController extends Controller
             'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
             'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
             'datetime' => $post->updated_at,
-            'nums_pocket' => $post->nums_pocket,
+            'nums_bagged' => $post->nums_bagged,
             'nums_good' => $post->nums_good,
             'nums_bad' => $post->nums_bad,
             'nums_share' => $post->nums_share,
             'nums_comment' => $post->nums_comment,
+            'interact' => array('bagged' => [], 'good' => [], 'bad' => []),
+            'comments' => array()
         ]);
         return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }

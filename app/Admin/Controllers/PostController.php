@@ -60,7 +60,7 @@ class PostController extends AdminController
         $show->field('type', __('Type'));
         $show->field('author', __('Author'));
         $show->field('category', __('Category'));
-        $show->field('nums_pocket', __('Nums pocket'));
+        $show->field('nums_bagged', __('Nums bagged'));
         $show->field('nums_good', __('Nums good'));
         $show->field('nums_bad', __('Nums bad'));
         $show->field('nums_share', __('Nums share'));
@@ -107,11 +107,13 @@ class PostController extends AdminController
             'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
             'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
             'datetime' => $post->updated_at,
-            'nums_pocket' => $post->nums_pocket,
+            'nums_bagged' => $post->nums_bagged,
             'nums_good' => $post->nums_good,
             'nums_bad' => $post->nums_bad,
             'nums_share' => $post->nums_share,
             'nums_comment' => $post->nums_comment,
+            'interact' => array('bagged' => [], 'good' => [], 'bad' => []),
+            'comments' => array()
         ]);
         return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }

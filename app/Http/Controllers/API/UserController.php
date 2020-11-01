@@ -71,30 +71,70 @@ class UserController extends Controller
 
     public function interactPost(Request $request)
     {
+        $allowInteract = array("bagged", "good", "bad", "report", "un-bagged","un-good", "un-bad");
         $validator = Validator::make($request->all(), [
             'post_id' => 'required|exists:posts,id',
-            'interact' => 'required|in:bagged,good,bad,report,un-bagged,un-good,un-bad'
+            'interact' => 'required|in:'.implode(',', $allowInteract)
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
 
+        $post = Post::where('id', $request->post_id)->first();
+
         if (strpos($request->interact, 'un-') !== false) {
-            $interact = str_replace('un-', '', $request->interact);
-            $success = userInteract::where([
+            $success = $this->handleRemoveInteract($request);
+            $this->impactPostData($post, 'decrement', $request->interact);
+            return response()->json(['success' => $success], $this->successStatus);
+        } else {
+            $newInteract = $this->handleAddInteract($request);
+            $this->impactPostData($post, 'increment', $request->interact);
+            return response()->json(['success' => $newInteract], $this->successStatus);
+        }
+    }
+
+    public function handleRemoveInteract($request)
+    {
+        $interact = str_replace('un-', '', $request->interact);
+        $success = userInteract::where([
                 ['post_id', $request->post_id],
                 ['user_id', Auth::user()->id],
                 ['interact', $interact]
             ])->delete();
-            return response()->json(['success' => $success], $this->successStatus);
-        } else {
-            $newInteract = new userInteract();
-            $newInteract->post_id = $request->post_id;
-            $newInteract->user_id = Auth::user()->id;
-            $newInteract->interact = $request->interact;
-            $newInteract->save();
-            return response()->json(['success' => $newInteract], $this->successStatus);
+        
+        return $success;
+    }
+
+    public function handleAddInteract($request)
+    {
+        $newInteract = new userInteract();
+        $newInteract->post_id = $request->post_id;
+        $newInteract->user_id = Auth::user()->id;
+        $newInteract->interact = $request->interact;
+        $newInteract->save();
+        
+        return $newInteract;
+    }
+
+    public function impactPostData($post, $impactType, $reqInteract)
+    {
+        $interact = str_replace('un-', '', $reqInteract);
+        $postJsonData = file_get_contents(public_path('content/posts') . '/' . $post->pid . '.json');
+        $postJsonData = json_decode($postJsonData, true);
+
+        if ($impactType === 'decrement') {
+            $dbSaved = $post->decrement('nums_'. $interact);
+            $postJsonData[0]['nums_'. $interact] = ($postJsonData[0]['nums_'. $interact] > 1) ? $postJsonData[0]['nums_'. $interact]-- : 0;
+            array_diff($postJsonData[0]['interact'][$interact], array(Auth::user()->id));
         }
+
+        if ($impactType === 'increment') {
+            $dbSaved = $post->increment('nums_'. $interact);
+            $postJsonData[0]['nums_'. $interact] = ($postJsonData[0]['nums_'. $interact] !== null) ? $postJsonData[0]['nums_'. $interact]++ : 1;
+            array_push($postJsonData[0]['interact'][$interact], Auth::user()->id);
+        }
+
+        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($postJsonData));
     }
 
     public function uploadedPosts()
