@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'author');
     }
+
+    public function interacts()
+    {
+        return $this->hasMany(userInteract::class);
+    }
 }
