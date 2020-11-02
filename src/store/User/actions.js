@@ -1,5 +1,5 @@
 export default {
-  LOGIN: function({ rootState, state, commit }, payload) {
+  LOGIN: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);
     data.append("password", payload.password);
@@ -8,10 +8,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
@@ -27,7 +27,7 @@ export default {
         });
     });
   },
-  REGISTER: function({ rootState, state, commit }, payload) {
+  REGISTER: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("nick_name", payload.nick_name);
     data.append("full_name", payload.full_name);
@@ -40,10 +40,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           let successData = data;
           commit("SET_TOKEN", successData.token);
@@ -55,7 +55,7 @@ export default {
         });
     });
   },
-  GetUploadedPosts: function({ rootState, state, commit }, payload) {
+  GetUploadedPosts: function ({ rootState, state, commit }, payload) {
     return new Promise((response, reject) => {
       fetch(
         rootState.apiUrl + "/uploaded-posts?page=" + rootState.currentPage,
@@ -67,10 +67,10 @@ export default {
           }
         }
       )
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(res) {
+        .then(function (res) {
           response(res);
         })
         .catch(err => {
@@ -79,7 +79,7 @@ export default {
     });
   },
 
-  GetBaggedPosts: function({ rootState, state, commit }, payload) {
+  GetBaggedPosts: function ({ rootState, state, commit }, payload) {
     return new Promise((response, reject) => {
       fetch(rootState.apiUrl + "/bagged-posts?page=" + rootState.currentPage, {
         method: "GET",
@@ -88,10 +88,10 @@ export default {
           Authorization: "Bearer " + rootState.user.token
         }
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(res) {
+        .then(function (res) {
           response(res);
         })
         .catch(err => {
@@ -99,7 +99,7 @@ export default {
         });
     });
   },
-  ReqInteract: function({ rootState, state, commit }, payload) {
+  ReqInteract: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("post_id", payload.post_id);
     data.append("interact", payload.interact);
@@ -111,10 +111,10 @@ export default {
       },
       body: data
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
-      .then(function(res) {
+      .then(function (res) {
         // console.log(res)
         // TODO: Add interact data to current post
       })
@@ -122,7 +122,40 @@ export default {
         console.log(err);
       });
   },
-  LoadUserInfo: function({ rootState, state, commit }) {
-    return new Promise((res, rej) => {});
+  LoadUserInfo: function ({ rootState, state, commit }) {
+    return new Promise((res, rej) => {
+      fetch(
+        rootState.apiUrl + "/user-detail",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + rootState.user.token
+          }
+        }
+      )
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (res) {
+          response(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  ChangeAvatar: function () {
+
+  },
+  ChangeCover: function () {
+
+  },
+  UpdateInfo: function () {
+
+  },
+  ChangePassword: function () { },
+  UpdateNotificationConn: function () {
+
   }
 };
