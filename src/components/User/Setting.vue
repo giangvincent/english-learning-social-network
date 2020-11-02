@@ -8,16 +8,9 @@
             Đổi thông tin cơ bản
           </legend>
           <div class="py-1">
-            <span class="px-1 text-sm text-gray-600">Tên đăng nhập</span>
-            <input
-              placeholder
-              type="text"
-              class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-            />
-          </div>
-          <div class="py-1">
             <span class="px-1 text-sm text-gray-600">Tên đầy đủ</span>
             <input
+              v-model="user.full_name"
               placeholder
               type="text"
               class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
@@ -26,6 +19,7 @@
           <div class="py-1">
             <span class="px-1 text-sm text-gray-600">Tên hiển thị</span>
             <input
+              v-model="user.nick_name"
               placeholder
               type="text"
               class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
@@ -34,6 +28,7 @@
           <div class="py-1">
             <span class="px-1 text-sm text-gray-600">Email</span>
             <input
+              v-model="user.email"
               placeholder
               readonly
               type="text"
@@ -118,6 +113,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "user-setting",
   data() {
@@ -125,6 +121,12 @@ export default {
       password: "",
       password_confirm: ""
     };
-  }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
+  },
+  mounted() {}
 };
 </script>

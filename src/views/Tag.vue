@@ -5,6 +5,11 @@
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
       <main-feed :itemArray="currentFeed"></main-feed>
+      <infinite-loading @infinite="infiniteHandler">
+        <div slot="spinner">Loading...</div>
+        <div slot="no-more">No more message</div>
+        <div slot="no-results">No results message</div>
+      </infinite-loading>
     </div>
     <to-creator></to-creator>
   </div>
@@ -13,12 +18,14 @@
 <script>
 // @ is an alias to /src
 import MainFeed from "@/components/Feed/Main.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default {
   name: "tag-feed",
   components: {
-    MainFeed
+    MainFeed,
+    InfiniteLoading
   },
   data() {
     return {
@@ -26,18 +33,36 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentFeed"])
+    ...mapState(["currentFeed", "currentPage"])
   },
   watch: {
     "$route.params.name": function(val, oldVal) {
-      this.LOAD_FEED_TAG(val);
+      this.SET_CURRENTFEED([]);
+      this.SET_PAGE(1);
+      this.infiniteHandler();
     }
   },
   mounted() {
-    this.LOAD_FEED_TAG(this.$route.params.name);
+    this.SET_CURRENTFEED([]);
+    this.SET_PAGE(1);
   },
   methods: {
-    ...mapActions(["LOAD_FEED_TAG"])
+    ...mapActions(["LOAD_FEED_TAG"]),
+    ...mapMutations(["SET_PAGE", "SET_CURRENTFEED"]),
+    infiniteHandler($state) {
+      var self = this;
+      this.LOAD_FEED_TAG(this.$route.params.name).then(content => {
+        var feedData = self.currentFeed;
+        feedData.push(...content.data);
+        self.SET_CURRENTFEED(feedData);
+        self.SET_PAGE(self.currentPage++);
+        if (content.data.length >= 10) {
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      });
+    }
   }
 };
 </script>
