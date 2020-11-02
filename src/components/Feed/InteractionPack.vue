@@ -71,7 +71,7 @@
     <!-- Share icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
     >
       <svg
         class="w-8 sm:w-12 md:w-10 mx-auto"
@@ -88,6 +88,7 @@
         />
       </svg>
       <span>Khác</span>
+      <div class="shareHolder absolute"></div>
     </div>
     <!-- More icon -->
   </div>
