@@ -3,7 +3,10 @@
     <main-navigation></main-navigation>
     <side-panel-left></side-panel-left>
     <side-panel-right></side-panel-right>
-    <main-feed :itemArray="currentFeed"></main-feed>
+    <div class="py-24 md:py-16">
+      <main-feed :itemArray="currentFeed"></main-feed>
+    </div>
+
     <to-creator></to-creator>
   </div>
 </template>

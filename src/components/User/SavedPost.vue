@@ -1,5 +1,5 @@
 <template>
-  <div class="-mt-16"><main-feed :itemArray="baggedPosts"></main-feed></div>
+  <main-feed :itemArray="baggedPosts"></main-feed>
 </template>
 
 <script>
@@ -9,23 +9,23 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "user-post-saved",
   components: {
-    MainFeed,
+    MainFeed
   },
   data() {
     return {
-      items: [],
+      items: []
     };
   },
   computed: {
     ...mapState({
-      baggedPosts: (state) => state.user.baggedPosts,
-    }),
+      baggedPosts: state => state.user.baggedPosts
+    })
   },
   mounted() {
     this.GetBaggedPosts();
   },
   methods: {
-    ...mapActions(["GetBaggedPosts"]),
-  },
+    ...mapActions(["GetBaggedPosts"])
+  }
 };
 </script>

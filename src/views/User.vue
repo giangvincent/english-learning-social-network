@@ -33,7 +33,11 @@
           <div class="flex justify-center -mt-8">
             <div class="-mt-3 relative">
               <img
-                src="@/assets/images/default_avatar.jpg"
+                :src="
+                  user.avatar
+                    ? user.avatar
+                    : '/assets/images/default_avatar.jpg'
+                "
                 class="rounded-full border-solid border-white border-2"
               />
               <label
@@ -56,7 +60,10 @@
           </div>
           <!-- End avatar image -->
           <div class="text-center px-3 pb-6 pt-2">
-            <h3 class="font-bold text-2xl">Olivia Dunham</h3>
+            <h3 class="font-bold text-2xl inline">{{ user.full_name }}</h3>
+            <span class="inline" v-if="user.nick_name"
+              >({{ user.nick_name }})</span
+            >
             <p class="mt-2 text-grey-dark">
               Hello, i'm from another the other side!
             </p>
@@ -136,6 +143,11 @@ export default {
     return {
       items: []
     };
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
   },
   mounted() {
     this.SET_PAGE("user");

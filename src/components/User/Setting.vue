@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <div class="hidden md:block md:w-1/5"></div>
-    <div class=" w-full px-4 my-10 md:my-6 md:px-6 lg:px-8 md:w-4/5 ">
+    <div class=" w-full px-4 mb-10 md:my-6 md:px-6 lg:px-8 md:w-4/5 ">
       <div class="p-4 md:p-6 rounded shadow bg-white">
         <fieldset class="relative my-2 p-3 border-2 border-blue-900 rounded-lg">
           <legend class="mx-2 font-bold rounded-lg bg-blue-900 text-white p-2">

@@ -25,5 +25,23 @@ export default {
         commit("SET_CURRENTFEED", res.data);
       })
       .catch(err => console.log(err));
+  },
+  LOAD_FEED_CAT: function({ state, commit }, cat) {
+    fetch(state.apiUrl + "/feed-category/" + cat)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.data);
+        commit("SET_CURRENTFEED", res.data);
+      })
+      .catch(err => console.log(err));
+  },
+  LOAD_FEED_TAG: function({ state, commit }, tag) {
+    fetch(state.apiUrl + "/feed-tag/" + tag)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.data);
+        commit("SET_CURRENTFEED", res.data);
+      })
+      .catch(err => console.log(err));
   }
 };

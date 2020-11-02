@@ -3,7 +3,9 @@
     <main-navigation></main-navigation>
     <side-panel-left></side-panel-left>
     <side-panel-right></side-panel-right>
-    <main-feed :itemArray="items"></main-feed>
+    <div class="py-24 md:py-16">
+      <main-feed :itemArray="currentFeed"></main-feed>
+    </div>
     <to-creator></to-creator>
   </div>
 </template>
@@ -11,6 +13,7 @@
 <script>
 // @ is an alias to /src
 import MainFeed from "@/components/Feed/Main.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "tag-feed",
@@ -22,26 +25,19 @@ export default {
       items: []
     };
   },
+  computed: {
+    ...mapState(["currentFeed"])
+  },
   watch: {
     "$route.params.name": function(val, oldVal) {
-      this.resetContent();
+      this.LOAD_FEED_TAG(val);
     }
   },
   mounted() {
-    this.resetContent();
+    this.LOAD_FEED_TAG(this.$route.params.name);
   },
   methods: {
-    resetContent() {
-      var self = this;
-      this.$set(this, "items", []);
-      setTimeout(() => {
-        var rand = Math.floor(Math.random() * 20 + 1);
-        console.log(rand);
-        for (let i = 0; i < rand; i++) {
-          self.items.push(i);
-        }
-      }, 500);
-    }
+    ...mapActions(["LOAD_FEED_TAG"])
   }
 };
 </script>
