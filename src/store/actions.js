@@ -18,12 +18,35 @@ export default {
       .catch(err => console.log(err));
   },
   LOAD_HOME: function({ state, commit }) {
-    fetch(state.apiUrl + "/feed-home")
-      .then(res => res.json())
-      .then(res => {
-        console.log(res.data);
-        commit("SET_CURRENTFEED", res.data);
-      })
-      .catch(err => console.log(err));
+    return new Promise((response, reject) => {
+      fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
+        .then(res => res.json())
+        .then(res => {
+          response(res);
+        })
+        .catch(err => reject(err));
+    });
+  },
+  LOAD_FEED_CAT: function({ state, commit }, cat) {
+    return new Promise((response, reject) => {
+      fetch(
+        state.apiUrl + "/feed-category/" + cat + "?page=" + state.currentPage
+      )
+        .then(res => res.json())
+        .then(res => {
+          response(res);
+        })
+        .catch(err => reject(err));
+    });
+  },
+  LOAD_FEED_TAG: function({ state, commit }, tag) {
+    return new Promise((response, reject) => {
+      fetch(state.apiUrl + "/feed-tag/" + tag + "?page=" + state.currentPage)
+        .then(res => res.json())
+        .then(res => {
+          response(res);
+        })
+        .catch(err => reject(err));
+    });
   }
 };

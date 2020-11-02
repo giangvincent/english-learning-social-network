@@ -118,3 +118,8 @@ html {
   min-height: 20px;
   min-width: 25px;
 }
+
+.ql-video {
+  min-width: 100%;
+  min-height: 25rem;
+}
