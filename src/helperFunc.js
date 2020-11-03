@@ -25,6 +25,18 @@ const evaluateTime = function(beginTime) {
   }
 };
 
+const isLocalStorage = function() {
+  var mod = "modernizr";
+  try {
+    localStorage.setItem(mod, mod);
+    localStorage.removeItem(mod);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 export default {
-  evaluateTime
+  evaluateTime,
+  isLocalStorage
 };

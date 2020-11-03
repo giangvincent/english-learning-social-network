@@ -10,7 +10,7 @@ import helperFunc from "./helperFunc";
 
 Vue.config.productionTip = false;
 
-if (isLocalStorage()) {
+if (helperFunc.isLocalStorage()) {
   try {
     let user_token = JSON.parse(localStorage.getItem("user_token"));
     let user = JSON.parse(localStorage.getItem("user"));
@@ -46,14 +46,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
-
-function isLocalStorage() {
-  var mod = "modernizr";
-  try {
-    localStorage.setItem(mod, mod);
-    localStorage.removeItem(mod);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}

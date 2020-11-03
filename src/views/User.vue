@@ -12,7 +12,7 @@
             style="background-image: url(/assets/images/default.jpg)"
           >
             <label
-              class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6"
+              class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@
                 class="rounded-full border-solid border-white border-2"
               />
               <label
-                class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6"
+                class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +127,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import SavedPost from "@/components/User/SavedPost.vue";
 import UserCreated from "@/components/User/UserCreated.vue";
 import Setting from "@/components/User/Setting.vue";
@@ -151,9 +151,16 @@ export default {
   },
   mounted() {
     this.SET_PAGE("user");
+    let self = this;
+    this.LoadUserInfo().then(userInfo => {
+      if (self.isLocalStorage()) {
+        localStorage.setItem("user", JSON.stringify(userInfo.success));
+      }
+    });
   },
   methods: {
-    ...mapMutations(["SET_PAGE"])
+    ...mapMutations(["SET_PAGE"]),
+    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"])
   }
 };
 </script>

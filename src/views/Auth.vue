@@ -171,7 +171,7 @@
                   'bg-green-200 text-green-700':
                     password == password_confirm && password.length > 0,
                   'bg-red-200 text-red-700':
-                    password != password_confirm || password.length == 0,
+                    password != password_confirm || password.length == 0
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -202,7 +202,7 @@
                   'text-green-700':
                     password == password_confirm && password.length > 0,
                   'text-red-700':
-                    password != password_confirm || password.length == 0,
+                    password != password_confirm || password.length == 0
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password == password_confirm && password.length > 0 ? 'Passwords match' : 'Passwords do not match' "
@@ -212,7 +212,7 @@
               <div
                 :class="{
                   'bg-green-200 text-green-700': password.length > 7,
-                  'bg-red-200 text-red-700': password.length < 7,
+                  'bg-red-200 text-red-700': password.length < 7
                 }"
                 class="rounded-full p-1 fill-current"
               >
@@ -241,7 +241,7 @@
               <span
                 :class="{
                   'text-green-700': password.length > 7,
-                  'text-red-700': password.length < 7,
+                  'text-red-700': password.length < 7
                 }"
                 class="font-medium text-sm ml-3"
                 x-text="password.length > 7 ? 'The minimum length is reached' : 'At least 8 characters required' "
@@ -295,16 +295,7 @@ function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
-function isLocalStorage() {
-  var mod = "modernizr";
-  try {
-    localStorage.setItem(mod, mod);
-    localStorage.removeItem(mod);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
+
 export default {
   name: "Authenticate",
   data() {
@@ -317,22 +308,22 @@ export default {
       password_confirm: "",
       page: "login",
       keepLogin: true,
-      loading: false,
+      loading: false
     };
   },
   watch: {
-    email: function (newVal, oldVal) {
+    email: function(newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
         console.log(checkEmail);
       }
-    },
+    }
   },
   computed: {
     ...mapState({
-      user: (state) => state.user.user,
-      user_token: (state) => state.user.token,
-    }),
+      user: state => state.user.user,
+      user_token: state => state.user.token
+    })
   },
   created() {
     if (
@@ -343,7 +334,7 @@ export default {
     } else this.page = "login";
   },
   mounted() {
-    if (isLocalStorage() && !this.user_token) {
+    if (this.isLocalStorage() && !this.user_token) {
       let user_token = localStorage.getItem("user_token");
       let user = localStorage.getItem("user");
       console.log(JSON.parse(user_token), JSON.parse(user));
@@ -366,8 +357,8 @@ export default {
     sendLogin() {
       this.loading = true;
       var self = this;
-      this.LOGIN({ email: this.email, password: this.password }).then((res) => {
-        if (self.keepLogin && isLocalStorage()) {
+      this.LOGIN({ email: this.email, password: this.password }).then(res => {
+        if (self.keepLogin && self.isLocalStorage()) {
           localStorage.setItem("user", JSON.stringify(res.user));
           localStorage.setItem("user_token", JSON.stringify(res.token));
         }
@@ -375,18 +366,21 @@ export default {
       });
     },
     sendRegister() {
+      let self = this;
       this.REGISTER({
         full_name: this.full_name,
         nick_name: this.nickname,
         email: this.email,
         password: this.password,
-        c_password: this.c_password,
+        c_password: this.c_password
       }).then(() => {
-        localStorage.setItem("user", res.success.token);
-        localStorage.setItem("user_token", res.success.user);
+        if (self.isLocalStorage()) {
+          localStorage.setItem("user", JSON.stringify(res.success.user));
+          localStorage.setItem("user_token", JSON.stringify(res.success.token));
+        }
         self.$router.go(-1);
       });
-    },
-  },
+    }
+  }
 };
 </script>

@@ -50,7 +50,8 @@
     <!-- bad icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
+      @click="shareClicked = !shareClicked"
     >
       <svg
         class="w-8 sm:w-12 md:w-10 mx-auto"
@@ -67,11 +68,26 @@
         />
       </svg>
       <span>Share</span>
+      <div
+        class="bg-white absolute top-0 -mt-16  p-2 shadow-2xl rounded-lg"
+        v-show="shareClicked"
+      >
+        <ul class="flex">
+          <li
+            class="m-1  w-10 h-10"
+            v-for="(shareIcon, index) in socialShareIcons"
+            :key="'social-icon-' + index"
+          >
+            <img :src="shareIcon" class="w-full rounded-lg" />
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- Share icon -->
 
     <div
       class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
+      @click="showModal = true"
     >
       <svg
         class="w-8 sm:w-12 md:w-10 mx-auto"
@@ -91,6 +107,39 @@
       <div class="shareHolder absolute"></div>
     </div>
     <!-- More icon -->
+
+    <div
+      v-show="showModal"
+      class="modal-bg transition-all duration-500 fixed left-0 overflow-auto z-50 top-0 bottom-0 right-0 flex"
+    >
+      <div
+        class="absolute w-full h-full bg-opacity-25 bg-black"
+        @click="showModal = false"
+      ></div>
+      <div
+        class="modal-content bg-white relative m-auto w-4/5 shadow-lg rounded-lg"
+      >
+        <div
+          class="closeBtn absolute right-0 top-0 font-bold hover:text-gray-500 no-underline cursor-pointer text-4xl p-1 leading-none w-10 h-10 flex text-center justify-center items-center"
+          @click="showModal = false"
+        >
+          &times;
+        </div>
+        <div class="p-6">
+          <p>Some text in the Modal Body</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+          <p>Some other text...</p>
+        </div>
+      </div>
+    </div>
+    <!-- Modal other interaction -->
   </div>
   <!-- End interaction for user -->
 </template>
@@ -104,18 +153,25 @@ export default {
   name: "interaction-pack",
   props: {
     post_id: Number,
-    indicatorNum: Object,
+    indicatorNum: Object
   },
   components: {
     BadVoted,
     GoodVoted,
-    BaggedIcon,
+    BaggedIcon
   },
   data() {
     return {
       saved: false,
       goodVoted: false,
       badVoted: false,
+      socialShareIcons: [
+        "/assets/icons/fb_share.png",
+        "/assets/icons/twittershare.png",
+        "/assets/icons/zalo_share.png"
+      ],
+      shareClicked: false,
+      showModal: false
     };
   },
   methods: {
@@ -127,24 +183,24 @@ export default {
         return;
       }
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "bagged" });
       }, 500);
     },
     goodClick() {
       this.goodVoted = !this.goodVoted;
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "good" });
       }, 500);
     },
     badClick() {
       this.badVoted = !this.badVoted;
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "bad" });
       }, 500);
-    },
-  },
+    }
+  }
 };
 </script>
