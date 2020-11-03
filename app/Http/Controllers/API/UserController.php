@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\UserInfo;
 use App\Models\userInteract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,34 +69,80 @@ class UserController extends Controller
         $userInfo = Auth::user()->info()->first()->toArray();
         unset($userInfo['id']);
         unset($userInfo['user_id']);
-        
+
         return response()->json(['success' => array_merge($user, $userInfo)], $this->successStatus);
     }
 
     public function updateInfo(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'nick_name' => 'required',
-            'bio' => 'required',
-            'birthday' => 'required',
+            'full_name' => 'required|max:200',
+            'nick_name' => 'required|max:200',
+            'bio' => 'required|max:500',
+            'birthday' => 'required|date',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
+
+        $user = Auth::user();
+
+        $user->full_name = $request->full_name;
+        $user->nick_name = $request->nick_name;
+        $user->birthday = $request->birthday;
+        $user->save();
+
+        $userInfo = Auth::user()->info()->first();
+        $userInfo->bio = $request->bio;
+        $userInfo->save();
+
+        return response()->json(['success' => 1], $this->successStatus);
     }
 
-    public function changeAvatar()
+    public function changeAvatar(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'avatar' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $user = Auth::user();
+        $user->avatar = $request->avatar;
+        $user->save();
+
+        return response()->json(['success' => 1], $this->successStatus);
     }
-    public function changeCover()
+    public function changeCover(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'cover_image' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $userInfo = Auth::user()->info()->first();
+        $userInfo->cover_image = $request->cover_image;
+        $userInfo->save();
+
+        return response()->json(['success' => 1], $this->successStatus);
     }
-    public function changePassword()
+    public function changePassword(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'cur_password' => 'required',
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $newPassword = bcrypt($request->password);
+        $user = Auth::user();
+        $user->password = $newPassword;
+        $user->save();
+        return response()->json(['success' => 1], $this->successStatus);
     }
 
     public function updateNotificationConn()
@@ -107,10 +152,10 @@ class UserController extends Controller
 
     public function interactPost(Request $request)
     {
-        $allowInteract = array("bagged", "good", "bad", "report", "un-bagged","un-good", "un-bad");
+        $allowInteract = array("bagged", "good", "bad", "report", "un-bagged", "un-good", "un-bad");
         $validator = Validator::make($request->all(), [
             'post_id' => 'required|exists:posts,id',
-            'interact' => 'required|in:'.implode(',', $allowInteract)
+            'interact' => 'required|in:' . implode(',', $allowInteract),
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
@@ -133,11 +178,11 @@ class UserController extends Controller
     {
         $interact = str_replace('un-', '', $request->interact);
         $success = userInteract::where([
-                ['post_id', $request->post_id],
-                ['user_id', Auth::user()->id],
-                ['interact', $interact]
-            ])->delete();
-        
+            ['post_id', $request->post_id],
+            ['user_id', Auth::user()->id],
+            ['interact', $interact],
+        ])->delete();
+
         return $success;
     }
 
@@ -148,7 +193,7 @@ class UserController extends Controller
         $newInteract->user_id = Auth::user()->id;
         $newInteract->interact = $request->interact;
         $newInteract->save();
-        
+
         return $newInteract;
     }
 
@@ -159,14 +204,14 @@ class UserController extends Controller
         $postJsonData = json_decode($postJsonData, true);
 
         if ($impactType === 'decrement') {
-            $dbSaved = $post->decrement('nums_'. $interact);
-            $postJsonData[0]['nums_'. $interact] = ($postJsonData[0]['nums_'. $interact] > 1) ? $postJsonData[0]['nums_'. $interact]-- : 0;
+            $dbSaved = $post->decrement('nums_' . $interact);
+            $postJsonData[0]['nums_' . $interact] = ($postJsonData[0]['nums_' . $interact] > 1) ? $postJsonData[0]['nums_' . $interact]-- : 0;
             array_diff($postJsonData[0]['interact'][$interact], array(Auth::user()->id));
         }
 
         if ($impactType === 'increment') {
-            $dbSaved = $post->increment('nums_'. $interact);
-            $postJsonData[0]['nums_'. $interact] = ($postJsonData[0]['nums_'. $interact] !== null) ? $postJsonData[0]['nums_'. $interact]++ : 1;
+            $dbSaved = $post->increment('nums_' . $interact);
+            $postJsonData[0]['nums_' . $interact] = ($postJsonData[0]['nums_' . $interact] !== null) ? $postJsonData[0]['nums_' . $interact]++ : 1;
             array_push($postJsonData[0]['interact'][$interact], Auth::user()->id);
         }
 

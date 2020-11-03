@@ -22,6 +22,11 @@ Route::post('register', 'UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user-detail', 'UserController@details');
+    Route::post('update-info', 'UserController@updateInfo');
+    Route::post('change-password', 'UserController@changePassword');
+    Route::post('change-avatar', 'UserController@changeAvatar');
+    Route::post('change-cover', 'UserController@changeCover');
+
     Route::post('create-post', 'PostController@CreatePost');
     Route::post('upload-image', 'TempController@uploadTempImg');
 
