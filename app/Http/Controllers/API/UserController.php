@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\UserInfo;
 use App\Models\userInteract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,8 +66,43 @@ class UserController extends Controller
      */
     public function details()
     {
-        $user = Auth::user();
-        return response()->json(['success' => $user], $this->successStatus);
+        $user = Auth::user()->toArray();
+        $userInfo = Auth::user()->info()->first()->toArray();
+        unset($userInfo['id']);
+        unset($userInfo['user_id']);
+        
+        return response()->json(['success' => array_merge($user, $userInfo)], $this->successStatus);
+    }
+
+    public function updateInfo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required',
+            'nick_name' => 'required',
+            'bio' => 'required',
+            'birthday' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+    }
+
+    public function changeAvatar()
+    {
+        # code...
+    }
+    public function changeCover()
+    {
+        # code...
+    }
+    public function changePassword()
+    {
+        # code...
+    }
+
+    public function updateNotificationConn()
+    {
+        # code...
     }
 
     public function interactPost(Request $request)
