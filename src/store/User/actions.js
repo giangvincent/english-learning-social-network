@@ -31,6 +31,7 @@ export default {
     var data = new FormData();
     data.append("nick_name", payload.nick_name);
     data.append("full_name", payload.full_name);
+    data.append("birthday", payload.birthday);
     data.append("email", payload.email);
     data.append("password", payload.password);
     data.append("c_password", payload.c_password);
@@ -134,7 +135,7 @@ export default {
         .then(function(res) {
           return res.json();
         })
-        .then(function(res) {
+        .then(function(data) {
           if (typeof data.success !== "undefined") {
             let successData = data.success;
             commit("SET_USER", successData);
@@ -144,7 +145,7 @@ export default {
           }
         })
         .catch(err => {
-          reject(err);
+          rej(err);
         });
     });
   },
@@ -226,10 +227,10 @@ export default {
           return res.json();
         })
         .then(function(data) {
-          if (result.success) {
-            res(result.data);
+          if (data.success) {
+            res(data);
           } else {
-            rej(result.message);
+            rej(data);
           }
         })
         .catch(err => {
@@ -257,9 +258,9 @@ export default {
         })
         .then(function(result) {
           if (result.success) {
-            res(result.data);
+            res(result);
           } else {
-            rej(result.message);
+            rej(result);
           }
         })
         .catch(err => {

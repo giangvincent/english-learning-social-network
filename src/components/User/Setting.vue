@@ -99,7 +99,7 @@
           <input
             placeholder
             type="password"
-            V-model="password"
+            v-model="password"
             class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
           />
         </div>
@@ -114,8 +114,12 @@
         </div>
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="callChangePassword"
         >
-          Lưu thay đổi
+          <span v-if="!processUpload">Lưu thay đổi</span>
+          <div v-if="processUpload">
+            <loading-icon></loading-icon>
+          </div>
         </button>
       </fieldset>
     </div>
