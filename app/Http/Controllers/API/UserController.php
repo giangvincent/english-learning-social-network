@@ -39,9 +39,11 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
+            'full_name' => 'required|max:255',
+            'nick_name' => 'max:255',
+            'birthday' => 'date',
+            'email' => 'required|email|max:191',
+            'password' => 'required|max:191',
             'c_password' => 'required|same:password',
         ]);
         if ($validator->fails()) {
@@ -52,6 +54,7 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
 
         $user = User::create($input);
+        $userInfo = $user->info()->create();
 
         $success['token'] = $user->createToken(env('APP_NAME'))->accessToken;
         $success['user'] = $user;
@@ -77,9 +80,9 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|max:200',
-            'nick_name' => 'required|max:200',
-            'bio' => 'required|max:500',
-            'birthday' => 'required|date',
+            'nick_name' => 'max:200',
+            'bio' => 'max:500',
+            'birthday' => 'date',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);

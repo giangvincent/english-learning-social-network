@@ -16,11 +16,11 @@ class CreateUserInfosTable extends Migration
         Schema::create('user_infos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->text('bio');
+            $table->text('bio')->default("");
             // facebook, zalo, google, instagram,
-            $table->text('socials_conn');
-            $table->text('notification_conn');
-            $table->text('others');
+            $table->text('socials_conn')->default("{}");
+            $table->text('notification_conn')->default("{}");
+            $table->text('others')->default("{}");
             $table->string('cover_image')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
