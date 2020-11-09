@@ -15,7 +15,7 @@ const router = new Router({
       component: Home
     },
     {
-      path: "/p/:slug",
+      path: "/p/:type/:slug",
       name: "detail",
       component: () => import("./views/Detail.vue")
     },

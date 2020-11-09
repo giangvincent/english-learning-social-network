@@ -25,7 +25,7 @@
         </router-link>
       </div>
       <router-link
-        :to="`/p/${pid}`"
+        :to="`/p/quiz/${pid}`"
         class="flex text-xs cursor-pointer content-center flex-wrap text-gray-500"
       >
         {{ shortTimer }} trước
@@ -62,7 +62,7 @@
           'border-red-700 bg-red-400':
             reviewCorrectAns &&
             !postData.content[0].correctAnswers.includes(numAnswer) &&
-            numAnswer !== index,
+            numAnswer !== index
         }"
         v-for="(answer, index) in postData.content[0].answers"
         :key="'answers-' + index"
@@ -100,10 +100,10 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "feed-quiz",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
-    interactionPack,
+    interactionPack
   },
   data() {
     return {
@@ -117,7 +117,7 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         content: [
           {
@@ -125,51 +125,51 @@ export default {
 
             images: [],
             answers: [],
-            correctAnswers: [],
-          },
+            correctAnswers: []
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
+        nums_bad: 0
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
-      },
+        nums_bad: 0
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   watch: {
     postData: {
-      handler: function (val) {
+      handler: function(val) {
         this.interactIndicatorNumber.nums_bagged = this.postData.nums_bagged;
         this.interactIndicatorNumber.nums_good = this.postData.nums_good;
         this.interactIndicatorNumber.nums_bad = this.postData.nums_bad;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
         self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     pickAnswer(index) {
@@ -181,7 +181,7 @@ export default {
           self.reviewCorrectAns = true;
         }, 1000);
       }
-    },
-  },
+    }
+  }
 };
 </script>

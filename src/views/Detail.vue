@@ -3,9 +3,18 @@
     <simpleTopNav></simpleTopNav>
     <div class="my-6 md:px-6 lg:px-8 pb-20 mx-auto px-3">
       <div class="mx-auto max-w-lg">
-        <post v-if="item.type == 'normalPost'"></post>
-        <flash-card v-if="item.type == 'flashCard'"></flash-card>
-        <quiz v-if="item.type == 'quiz'"></quiz>
+        <post
+          :pid="$route.params.slug"
+          v-if="$route.params.type == 'post'"
+        ></post>
+        <flash-card
+          :pid="$route.params.slug"
+          v-if="$route.params.type == 'flash-card'"
+        ></flash-card>
+        <quiz
+          :pid="$route.params.slug"
+          v-if="$route.params.type == 'quiz'"
+        ></quiz>
         <comment></comment>
       </div>
     </div>

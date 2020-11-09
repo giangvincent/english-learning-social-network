@@ -16,7 +16,8 @@ export default {
   props: {
     paraIndex: String,
     contentHtml: String,
-    contentOrigin: Object
+    contentOrigin: Object,
+    toolbar: Boolean
   },
   data() {
     return {
@@ -49,15 +50,13 @@ export default {
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-        [{ font: [] }],
         [{ align: [] }],
 
         ["clean"] // remove formatting button
       ];
-
       this.editor = new Quill("#editor-" + this.paraIndex, {
         modules: {
-          toolbar: toolbarOptions
+          toolbar: this.toolbar || toolbarOptions
         },
         scrollingContainer: "#editor-container-" + this.paraIndex,
         theme: "snow",
@@ -93,3 +92,5 @@ function changeHeightEleByClass(elements) {
   }
 }
 </script>
+
+<style></style>

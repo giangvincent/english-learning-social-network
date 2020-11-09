@@ -31,7 +31,7 @@
           Card {{ currentCardIndex + 1 }}/{{ postData.content.length }}
         </div>
         <router-link
-          :to="`/p/${pid}`"
+          :to="`/p/flash-card/${pid}`"
           class="flex text-xs cursor-pointer content-center flex-wrap text-gray-500"
         >
           {{ shortTimer }} trước
@@ -55,7 +55,7 @@
       </div>
       <!-- End media -->
       <section>
-        <div class="ql-container ql-snow" style="height: auto; border: none">
+        <div class="ql-snow" style="height: auto; border: none">
           <div
             class="ql-editor"
             v-html="postData.content[currentCardIndex].contentHtml"
@@ -65,13 +65,13 @@
       </section>
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
-        <textarea
+        <input
           placeholder="Nội dung mặt sau"
           type="text"
           class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
           v-model="currentAnswer"
           @keydown.enter="reviewBackCard"
-        ></textarea>
+        />
         <button
           class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="reviewBackCard()"
@@ -116,7 +116,7 @@
           class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="toNextCard()"
         >
-          Next Card
+          Next
         </button>
       </div>
       <!-- Review back card -->
@@ -126,7 +126,7 @@
     <div class="px-3 pb-4">
       <router-link
         :to="`/${postData.category.slug}`"
-        class="inline-block rounded-min text-gray-600 bg-gray-100 px-2 py-1 text-xs font-bold mr-3"
+        class="inline-block rounded text-gray-800 bg-gray-300 px-2 py-1 font-bold mr-3"
         >{{ postData.category.name }}</router-link
       >
       <router-link
@@ -134,7 +134,7 @@
         v-for="(tag, tagIndex) in postData.tags"
         :key="`tag-${tagIndex}`"
         class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >{{ tag.name }}</router-link
+        ># {{ tag.name }}</router-link
       >
     </div>
     <!-- End relation label -->
@@ -153,10 +153,10 @@ import interactionPack from "./InteractionPack";
 export default {
   name: "Feed-flash-card",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
-    interactionPack,
+    interactionPack
   },
   data() {
     return {
@@ -170,58 +170,58 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         content: [
           {
             contentHtml: "",
             images: [],
             flipContentHtml: "",
-            flipImages: [],
-          },
+            flipImages: []
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
+        nums_bad: 0
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
-      },
+        nums_bad: 0
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   watch: {
     postData: {
-      handler: function (val) {
+      handler: function(val) {
         this.interactIndicatorNumber.nums_bagged = this.postData.nums_bagged;
         this.interactIndicatorNumber.nums_good = this.postData.nums_good;
         this.interactIndicatorNumber.nums_bad = this.postData.nums_bad;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
         self.shortTimer = this.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     reviewBackCard() {
@@ -234,7 +234,7 @@ export default {
         this.currentCardIndex < this.postData.content.length - 1
           ? this.currentCardIndex + 1
           : this.currentCardIndex;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,12 +1,12 @@
 <template>
   <div>
     <fieldset
-      class="relative my-2 p-3 border-2 border-blue-900 rounded-lg"
+      class="relative my-2 p-3 border-2 border-blue-900 rounded-lg bg-white"
       v-for="(paragraph, index) in paragraphs"
       :key="'paragraph-' + index"
     >
       <legend class="mx-2 font-bold rounded-lg bg-blue-900 text-white p-2">
-        Paragraph {{ index + 1 }}
+        Đoạn {{ index + 1 }}
       </legend>
       <div
         class="absolute right-0 rounded-full w-10 -mr-3 -mt-10"
@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1 text-sm text-gray-600">Nội dung</span>
+        <span class="px-1  text-gray-600">Nội dung</span>
         <content-editor
           :contentHtml="paragraph.contentHtml"
           :contentOrigin="paragraph.contentOrigin"

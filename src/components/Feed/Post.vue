@@ -25,7 +25,7 @@
         </router-link>
       </div>
       <router-link
-        :to="`/p/${pid}`"
+        :to="`/p/post/${pid}`"
         class="flex text-sm cursor-pointer content-center flex-wrap text-gray-500"
       >
         {{ shortTime }} trước

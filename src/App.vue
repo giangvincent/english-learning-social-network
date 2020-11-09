@@ -1,11 +1,5 @@
 <template>
-  <div
-    id="app"
-    :class="{
-      'overflow-y-hidden h-screen':
-        popupEditor || showPanelLeft || showPanelRight
-    }"
-  >
+  <div id="app">
     <router-view />
   </div>
 </template>
@@ -24,6 +18,17 @@ export default {
   mounted() {
     this.LOAD_TAGS();
     this.LOAD_CATEGORIES();
+  },
+  watch: {
+    popupEditor: function(val) {
+      document.body.style.overflowY = val ? "hidden" : "unset";
+    },
+    showPanelLeft: function(val) {
+      document.body.style.overflowY = val ? "hidden" : "unset";
+    },
+    showPanelRight: function(val) {
+      document.body.style.overflowY = val ? "hidden" : "unset";
+    }
   },
   methods: {
     ...mapMutations(["SET_USER", "SET_TOKEN"]),

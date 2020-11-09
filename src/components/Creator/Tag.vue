@@ -1,6 +1,6 @@
 <template>
   <div class="py-1">
-    <span class="px-1 text-sm text-gray-600">Tag</span>
+    <span class="px-1  text-gray-600">Tag</span>
     <input
       placeholder="Tên của Tag"
       type="text"
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       curTag: "",
-      tags: [],
+      tags: []
     };
   },
   mounted() {},
@@ -65,7 +65,7 @@ export default {
         this.curTag = "";
         this.$emit("updateTags", this.tags);
       }
-    },
-  },
+    }
+  }
 };
 </script>

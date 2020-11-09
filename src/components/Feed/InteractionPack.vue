@@ -54,7 +54,7 @@
       @click="shareClicked = !shareClicked"
     >
       <svg
-        class="w-8 sm:w-12 md:w-10 mx-auto"
+        class="w-8 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -90,7 +90,7 @@
       @click="showModal = true"
     >
       <svg
-        class="w-8 sm:w-12 md:w-10 mx-auto"
+        class="w-8 mx-auto"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

@@ -2,7 +2,7 @@
   <div>
     <svg
       v-if="goodVoted"
-      class="w-8 sm:w-12 md:w-10 mx-auto color-blue"
+      class="w-8 mx-auto color-blue"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
     >
@@ -60,7 +60,7 @@
 
     <svg
       v-if="!goodVoted"
-      class="w-8 sm:w-12 md:w-10 mx-auto color-blue"
+      class="w-8 mx-auto color-blue"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
     >
@@ -84,7 +84,7 @@
 <script>
 export default {
   props: {
-    goodVoted: Boolean,
-  },
+    goodVoted: Boolean
+  }
 };
 </script>

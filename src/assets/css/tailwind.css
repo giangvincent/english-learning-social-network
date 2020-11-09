@@ -1,3 +1,62 @@
 @tailwind base;
+h1 {
+  @apply text-3xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+
+h5 {
+  @apply text-sm;
+}
+h6 {
+  @apply text-xs;
+}
+html {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  color: #303a52;
+}
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/Montserrat-Black.ttf) format("truetype");
+  }
+
+  @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../fonts/Montserrat-Bold.ttf) format("truetype");
+  }
+
+  @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/Montserrat-Regular.ttf) format("truetype");
+  }
+
+  @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(../fonts/Montserrat-Light.ttf) format("truetype");
+  }
+}

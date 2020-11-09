@@ -5,7 +5,7 @@
     <div class="my-6 md:px-6 lg:px-8 pb-20 mx-auto px-3">
       <div class="mx-auto max-w-lg">
         <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Danh mục</span>
+          <span class="px-1  text-gray-600">Danh mục</span>
           <form-select
             :selectData="categories"
             @changeSelectData="changeCategory"
@@ -13,8 +13,8 @@
         </div>
         <!-- pickup category -->
         <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Loại bài viết</span>
-          <div class="sm:rounded shadow">
+          <span class="px-1 text-gray-600">Loại bài viết</span>
+          <div class="sm:rounded shadow bg-white">
             <div class="w-full mx-auto flex text-center font-bold">
               <div
                 @click="changePostType('normalPost')"

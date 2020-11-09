@@ -2,7 +2,7 @@
   <div>
     <svg
       v-if="!saved"
-      class="w-8 sm:w-12 md:w-10 mx-auto text-green-500"
+      class="w-8 mx-auto text-green-500"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -17,7 +17,7 @@
     </svg>
     <svg
       v-if="saved"
-      class="w-8 sm:w-12 md:w-10 mx-auto text-red-500"
+      class="w-8 mx-auto text-red-500"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
@@ -34,7 +34,7 @@
 <script>
 export default {
   props: {
-    saved: Boolean,
-  },
+    saved: Boolean
+  }
 };
 </script>

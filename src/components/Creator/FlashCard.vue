@@ -1,7 +1,7 @@
 <template>
   <div>
     <fieldset
-      class="relative my-2 p-3 border-2 border-blue-900 rounded-lg"
+      class="relative my-2 p-3 border-2 border-blue-900 rounded-lg bg-white"
       v-for="(card, index) in flashCards"
       :key="'flash-card-' + index"
     >
@@ -25,12 +25,13 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1 text-sm text-gray-600">Nội dung gợi ý</span>
+        <span class="px-1  text-gray-600">Nội dung gợi ý</span>
         <content-editor
           :contentHtml="card.contentHtml"
           :contentOrigin="card.contentOrigin"
           :paraIndex="index.toString()"
           @updateContent="updateContent"
+          :toolbar="true"
         ></content-editor>
       </div>
       <!-- text content editor -->
@@ -41,12 +42,13 @@
       ></image-preview>
 
       <div class="py-1">
-        <span class="px-1 text-sm text-gray-600">Kết quả</span>
+        <span class="px-1  text-gray-600">Kết quả</span>
         <content-editor
           :paraIndex="'-flip-content-' + index"
           :contentHtml="card.flipContentHtml"
           :contentOrigin="card.flipContentOrigin"
           @updateContent="updateFlipContent"
+          :toolbar="true"
         ></content-editor>
       </div>
       <!-- text content editor -->
