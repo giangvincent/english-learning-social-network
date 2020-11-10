@@ -225,7 +225,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $posts = $user->posts()->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
-        
+
         return response()->json($posts, $this->successStatus);
     }
 
@@ -236,5 +236,15 @@ class UserController extends Controller
         $posts = Post::whereIn('id', $postsBagged)->select(['id', 'pid', 'type'])->simplePaginate(10);
 
         return response()->json($posts, $this->successStatus);
+    }
+
+    public function AddLearningProcess(Request $request)
+    {
+        # code...
+    }
+
+    public function calculateNextLearningDay()
+    {
+        # code...
     }
 }
