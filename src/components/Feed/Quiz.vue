@@ -2,36 +2,10 @@
   <div
     class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
   >
-    <div class="w-full flex justify-between p-3">
-      <div class="flex">
-        <router-link
-          :to="`/u/${postData.author.id}`"
-          class="rounded-full h-8 w-8 flex overflow-hidden"
-        >
-          <img
-            :src="
-              postData.author.avatar
-                ? postData.author.avatar
-                : '/assets/images/default_avatar.jpg'
-            "
-            alt="profilepic"
-          />
-        </router-link>
-        <router-link
-          :to="`/u/${postData.author.id}`"
-          class="ml-2 font-bold flex content-center flex-wrap"
-        >
-          {{ postData.author.full_name }}
-        </router-link>
-      </div>
-      <router-link
-        :to="`/p/quiz/${pid}`"
-        class="flex text-xs cursor-pointer content-center flex-wrap text-gray-500"
-      >
-        {{ shortTimer }} trước
-      </router-link>
+    <div class="w-full p-3 font-bold">
+      <h2>{{ postData.subject }}</h2>
     </div>
-    <!-- End author info parts -->
+    <CatsAndTags :postData="postData"></CatsAndTags>
 
     <div class="px-3 pb-4" v-html="postData.content[0].contentHtml"></div>
     <!-- End content text -->
@@ -72,21 +46,13 @@
       </div>
     </div>
 
-    <div class="px-3 pb-4">
-      <router-link
-        :to="`/${postData.category.slug}`"
-        class="inline-block rounded-min text-gray-600 bg-gray-100 px-2 py-1 text-xs font-bold mr-3"
-        >{{ postData.category.name }}</router-link
-      >
-      <router-link
-        :to="`/tag/${tag.slug}`"
-        v-for="(tag, tagIndex) in postData.tags"
-        :key="`tag-${tagIndex}`"
-        class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
-        >{{ tag.name }}</router-link
-      >
-    </div>
-    <!-- End relation label -->
+    <author
+      :postData="postData"
+      :shortTimer="shortTimer"
+      detailPostType="quiz"
+      :pid="pid"
+    ></author>
+    <!-- End author info parts -->
     <interaction-pack
       :post_id="postData.id"
       :indicatorNum="interactIndicatorNumber"
@@ -97,13 +63,17 @@
 <script>
 import { mapState } from "vuex";
 import interactionPack from "./InteractionPack";
+import CatsAndTags from "./CatsAndTags";
+import Author from "./AuthorPart";
 export default {
   name: "feed-quiz",
   props: {
     pid: String
   },
   components: {
-    interactionPack
+    interactionPack,
+    CatsAndTags,
+    Author
   },
   data() {
     return {
@@ -119,6 +89,7 @@ export default {
           nick_name: "loading",
           avatar: ""
         },
+        subject: "",
         content: [
           {
             contentHtml: "",
@@ -167,7 +138,7 @@ export default {
       .then(res => {
         console.log(res);
         self.postData = res[0];
-        self.shortTimer = this.evaluateTime(self.postData.datetime);
+        self.shortTimer = self.evaluateTime(self.postData.datetime);
       })
       .catch(err => console.log(err));
   },

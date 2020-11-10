@@ -1,6 +1,6 @@
 <template>
   <div class="py-1">
-    <span class="px-1  text-gray-600">Tag</span>
+    <span class="px-1  text-gray-600">Gắn Tag</span>
     <input
       placeholder="Tên của Tag"
       type="text"

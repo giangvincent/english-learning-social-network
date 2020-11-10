@@ -46,6 +46,16 @@
           </div>
         </div>
         <!-- Choose post type -->
+        <div class="py-1">
+          <span class="px-1  text-gray-600">Chủ đề</span>
+          <input
+            placeholder="Chủ đề được giới hạn trong 250 ký tự"
+            type="text"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            v-model="subject"
+          />
+        </div>
+        <!-- Subject of this post -->
 
         <normalPost
           v-if="postType == 'normalPost'"
@@ -120,6 +130,7 @@ export default {
     return {
       postType: "normalPost",
       category: 0,
+      subject: "",
       postContent: null,
       tags: [],
       processPost: false,
@@ -173,6 +184,7 @@ export default {
       let postData = {
         cat_id: this.categories[this.category].id,
         postType: this.postType,
+        subject: this.subject,
         postContent: this.postContent,
         user: JSON.stringify(this.user),
         tags: JSON.stringify(this.tags)

@@ -32,6 +32,7 @@ export default {
     var data = new FormData();
     data.append("cat_id", payload.cat_id);
     data.append("post_type", payload.postType);
+    data.append("subject", payload.subject);
     data.append("content", payload.postContent);
     data.append("user", payload.user);
     data.append("tags", payload.tags);
