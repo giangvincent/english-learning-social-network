@@ -3,7 +3,7 @@
     class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white"
   >
     <div class="w-full p-3 font-bold">
-      <h2>{{ postData.subject }}</h2>
+      <h4>{{ postData.subject }}</h4>
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
     <!-- End relation label -->

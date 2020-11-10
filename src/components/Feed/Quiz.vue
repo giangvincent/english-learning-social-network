@@ -3,14 +3,10 @@
     class="md:mx-2 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
   >
     <div class="w-full p-3 font-bold">
-      <h2>{{ postData.subject }}</h2>
+      <h4>{{ postData.subject }}</h4>
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
-    <div
-      ref="frontCard"
-      class="flex flex-col m-2 shadow rounded"
-      :class="{ block: !currentBackCard, hidden: currentBackCard }"
-    >
+    <div ref="quizContent" class="flex flex-col m-2 shadow rounded">
       <section>
         <div class="ql-snow" style="height: auto; border: none">
           <div

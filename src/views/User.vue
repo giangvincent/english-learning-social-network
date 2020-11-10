@@ -5,7 +5,7 @@
     <side-panel-right></side-panel-right>
     <div class="flex">
       <div class="hidden md:block md:w-1/5"></div>
-      <div class="w-full px-4 my-10 md:my-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
+      <div class="w-full px-4 mt-10 md:mt-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
         <div class="sm:rounded sm:rounded-t-lg shadow bg-white">
           <div
             class="h-40 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
