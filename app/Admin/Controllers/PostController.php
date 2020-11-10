@@ -80,13 +80,27 @@ class PostController extends AdminController
     {
         $form = new Form(new Post());
 
-        $form->text('pid', __('Pid'));
-        $form->text('status', __('Status'))->default('pending');
+        $form->text('pid', __('Pid'))->readonly();
+        $states = [
+            'on' => ['value' => 'publish', 'text' => 'Publish', 'color' => 'success'],
+            'off' => ['value' => 'pending', 'text' => 'Pending', 'color' => 'default'],
+        ];
+        $form->switch('status', __('Status'))->states($states);
+
+        $form->text('subject', __('Subject'))->autofocus();
         $form->textarea('content', __('Content'));
+
         $form->textarea('answer_list', __('Answer list'));
-        $form->text('type', __('Type'));
-        $form->number('author', __('Author'));
-        $form->number('category', __('Category'));
+
+        $form->radio('type', __('Type'))->options([
+            'normalPost' => 'Normal Post',
+            'flashCard' => 'Flash Card',
+            'quiz' => 'Quiz',
+        ])->default('normalPost');
+
+        $form->display('author', __('Author ID'));
+
+        $form->display('category', __('Category ID'));
 
         $form->saved(function (Form $form) {
             $post = Post::find($form->model()->id);
@@ -102,8 +116,9 @@ class PostController extends AdminController
         $exportData = array([
             'id' => $post->id,
             'url' => $post->pid,
+            'subject' => $post->subject,
             'content' => json_decode($post->content, true),
-            'author' => $post->user()->select(['id','nick_name', 'full_name', 'avatar'])->first()->toArray(),
+            'author' => $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
             'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
             'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
             'datetime' => $post->updated_at,
@@ -113,7 +128,7 @@ class PostController extends AdminController
             'nums_share' => $post->nums_share,
             'nums_comment' => $post->nums_comment,
             'interact' => array('bagged' => [], 'good' => [], 'bad' => []),
-            'comments' => array()
+            'comments' => array(),
         ]);
         return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }

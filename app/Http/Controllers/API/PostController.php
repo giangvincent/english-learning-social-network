@@ -19,6 +19,7 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
             'cat_id' => 'required',
             'post_type' => 'required',
+            'subject' => 'required|max:255',
             'content' => 'required',
             'user' => 'required',
             'tags' => '',
@@ -41,6 +42,7 @@ class PostController extends Controller
             'pid' => 'required',
             'cat_id' => 'required',
             'post_type' => 'required',
+            'subject' => 'required|max:255',
             'content' => 'required',
             'tags' => '',
         ]);
@@ -102,6 +104,7 @@ class PostController extends Controller
         $pid = (string) Str::uuid();
         $newPost = new Post();
         $newPost->pid = $pid;
+        $newPost->subject = $request->subject;
         $newPost->content = $request->content;
         $newPost->type = $request->post_type;
         $newPost->category = $request->cat_id;
@@ -112,6 +115,7 @@ class PostController extends Controller
 
     private function changePostDB($request, $post)
     {
+        $post->subject = $request->subject;
         $post->content = $request->content;
         $post->type = $request->post_type;
         $post->category = $request->cat_id;
@@ -142,12 +146,13 @@ class PostController extends Controller
     {
         $this->CreateContentFol();
         // $authorData = $post->user()->first()->toArray();
-        
+
         $exportData = array([
             'id' => $post->id,
             'url' => $post->pid,
+            'subject' => $post->subject,
             'content' => json_decode($post->content, true),
-            'author' => $post->user()->select(['id','nick_name', 'full_name', 'avatar'])->first()->toArray(),
+            'author' => $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
             'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
             'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
             'datetime' => $post->updated_at,
@@ -157,7 +162,7 @@ class PostController extends Controller
             'nums_share' => $post->nums_share,
             'nums_comment' => $post->nums_comment,
             'interact' => array('bagged' => [], 'good' => [], 'bad' => []),
-            'comments' => array()
+            'comments' => array(),
         ]);
         return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }
@@ -166,7 +171,7 @@ class PostController extends Controller
     {
         $data = Tag::find($tag);
         $data = $data->toArray();
-        
+
         file_put_contents(public_path() . '/content/tags/' . $tag->slug . '.json', json_encode($data));
     }
 

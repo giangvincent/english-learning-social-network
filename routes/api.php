@@ -26,14 +26,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('change-password', 'UserController@changePassword');
     Route::post('change-avatar', 'UserController@changeAvatar');
     Route::post('change-cover', 'UserController@changeCover');
+    Route::get('uploaded-posts', 'UserController@uploadedPosts');
+    Route::get('bagged-posts', 'UserController@baggedPosts');
+    Route::post('req-interact', 'UserController@interactPost');
 
     Route::post('create-post', 'PostController@CreatePost');
     Route::post('upload-image', 'TempController@uploadTempImg');
 
-    Route::get('uploaded-posts', 'UserController@uploadedPosts');
-    Route::get('bagged-posts', 'UserController@baggedPosts');
-
-    Route::post('req-interact', 'UserController@interactPost');
 });
 
 Route::get('feed-home', 'FeedController@home');
