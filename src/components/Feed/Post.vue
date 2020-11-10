@@ -59,7 +59,7 @@ export default {
   },
   data() {
     return {
-      shortTime: "",
+      shortTimer: "",
       postData: {
         id: 0,
         author: {

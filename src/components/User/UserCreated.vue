@@ -44,7 +44,7 @@ export default {
         var feedData = self.uploadedPosts;
         feedData.push(...content.data);
         self.setUploadedPosts(feedData);
-        self.SET_PAGE(self.currentPage++);
+        self.SET_PAGE(self.currentPage + 1);
         if (content.data.length >= 10) {
           $state.loaded();
         } else {

@@ -14,7 +14,7 @@ export default new Vuex.Store({
     apiUrl: "http://thatsgood-backend.local/api",
     popupEditor: false,
     currentTab: "home",
-    currentPage: "",
+    currentPage: 1,
     currentFeed: [],
     tags: [],
     categories: [],

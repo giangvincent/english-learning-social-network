@@ -51,7 +51,7 @@ export default {
         var feedData = self.currentFeed;
         feedData.push(...content.data);
         self.SET_CURRENTFEED(feedData);
-        self.SET_PAGE(self.currentPage++);
+        self.SET_PAGE(self.currentPage + 1);
         if (content.data.length >= 10) {
           $state.loaded();
         } else {

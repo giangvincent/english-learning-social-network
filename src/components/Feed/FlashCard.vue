@@ -10,6 +10,7 @@
     <!-- card indicator -->
     <div
       ref="frontCard"
+      class="flex flex-col m-2 shadow rounded"
       :class="{ block: !currentBackCard, hidden: currentBackCard }"
     >
       <div class="mx-auto bg-color-black">
@@ -31,16 +32,16 @@
         </div>
       </section>
       <!-- End content text -->
-      <div class="px-3 pb-4 flex flex-row">
+      <div class="px-3 pb-4 flex w-full">
         <input
           placeholder="Nội dung mặt sau"
           type="text"
-          class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+          class="text-md block px-3 py-2 rounded-lg border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none w-3/4"
           v-model="currentAnswer"
           @keydown.enter="reviewBackCard"
         />
         <button
-          class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center"
           @click="reviewBackCard()"
         >
           Review
@@ -52,6 +53,7 @@
 
     <div
       ref="backCard"
+      class="flex flex-col m-2 shadow rounded"
       :class="{ block: currentBackCard, hidden: !currentBackCard }"
     >
       <div class="mx-auto bg-color-black">
@@ -75,12 +77,12 @@
       <!-- End content text -->
       <div class="px-3 pb-4 flex flex-row">
         <div
-          class="flex flex-wrap content-center justify-center text-md px-3 py-2 rounded-lg w-full border-2 bg-white border-gray-600 focus:outline-none"
+          class="flex flex-wrap content-center justify-center text-md md:text-lg font-semibold py-2 border-gray-600 focus:outline-none rounded-lg border-2 w-3/4"
         >
           {{ currentAnswer }}
         </div>
         <button
-          class="flex-1 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center"
           @click="toNextCard()"
         >
           Next

@@ -2,7 +2,7 @@
   <div class="flex">
     <div class="hidden md:block md:w-1/5"></div>
     <div
-      class="w-full md:w-4/5 lg:-mx-2 my-6 md:px-6 lg:px-8 columns mx-1 md:mx-0"
+      class="w-full md:w-4/5 lg:-mx-2 my-6 md:px-6 lg:px-8 columns mx-2 md:mx-0"
     >
       <div
         class="inline-block w-full"
