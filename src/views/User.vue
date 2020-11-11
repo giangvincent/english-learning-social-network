@@ -154,7 +154,7 @@ export default {
     let self = this;
     this.LoadUserInfo().then(userInfo => {
       if (self.isLocalStorage()) {
-        localStorage.setItem("user", JSON.stringify(userInfo.success));
+        localStorage.setItem("user", JSON.stringify(userInfo.success.user));
       }
     });
   },
