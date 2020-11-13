@@ -74,7 +74,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 }
+                params: { id: user.id }
               }"
               class="w-1/3 py-3"
               replace
@@ -87,7 +87,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 },
+                params: { id: user.id },
                 query: { cur: 'saved' }
               }"
               replace
@@ -100,7 +100,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 },
+                params: { id: user.id },
                 query: { cur: 'setting' }
               }"
               class="w-1/3 py-3"

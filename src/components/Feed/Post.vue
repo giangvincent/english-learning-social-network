@@ -33,9 +33,15 @@
     ></author>
     <!-- End author info parts -->
     <interaction-pack
+      v-if="$route.name !== 'user-page' && $route.query.cur !== 'saved'"
       :post_id="postData.id"
       :indicatorNum="interactIndicatorNumber"
     ></interaction-pack>
+
+    <process-bar
+      v-if="$route.name === 'user-page' && $route.query.cur === 'saved'"
+      :post_id="postData.id"
+    ></process-bar>
   </div>
   <!-- END post -->
 </template>
@@ -44,6 +50,7 @@
 import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
 import interactionPack from "./InteractionPack";
+import ProcessBar from "./ProcessBar";
 import CatsAndTags from "./CatsAndTags";
 import Author from "./AuthorPart";
 
@@ -53,6 +60,7 @@ export default {
     pid: String
   },
   components: {
+    ProcessBar,
     interactionPack,
     CatsAndTags,
     Author
