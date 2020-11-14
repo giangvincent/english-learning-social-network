@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -26,18 +28,71 @@ class PostController extends AdminController
     {
         $grid = new Grid(new Post());
 
-        $grid->column('id', __('Id'));
-        $grid->column('pid', __('Pid'));
+        $grid->model()->orderBy('id', 'desc');
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('subject', __('Subject'));
+        $grid->column('content', __('Content'))->display(function ($content) {
+            $contentArr = json_decode($content, true);
+            $contentDisplay = '';
+            $numParagraph = count($contentArr);
+            $contentDisplay .= "<p>Số para: $numParagraph</p>";
 
-        $grid->column('status', __('Status'));
-        $grid->column('content', __('Content'));
-        $grid->column('answer_list', __('Answer list'));
-        $grid->column('type', __('Type'));
-        $grid->column('author', __('Author'));
-        $grid->column('category', __('Category'));
+            return $contentDisplay;
+        })->width(300);
+        $grid->column('type', __('Type'))->filter([
+            'flashCard' => 'flashCard',
+            'quiz' => 'quiz',
+            'normalPost' => 'Post'
+        ]);
 
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('author', __('Author'))->display(function ($user_id) {
+            if ($user_id !== 0) {
+                return User::findOrFail($user_id)->full_name;
+            } else {
+                return "";
+            }
+        });
+        $categories = Category::select('name', 'id')->get()->toArray();
+        $categoryArr = array();
+        foreach ($categories as $category) {
+            $categoryArr[$category['id']] = $category['name'];
+        }
+        $grid->column('category', __('Category'))->display(function ($cat_id) use ($categoryArr) {
+            if ($cat_id !== 0) {
+                return $categoryArr[$cat_id];
+            } else {
+                return "";
+            }
+        })->filter($categoryArr);
+
+        $states = [
+            'on' => ['value' => 'publish', 'text' => 'Publish', 'color' => 'primary'],
+            'off' => ['value' => 'pending', 'text' => 'Pending', 'color' => 'default'],
+        ];
+        $grid->column('status', __('Status'))->switch($states)->filter([
+            'pending' => 'Pending',
+            'publish' => 'Publish',
+        ]);
+        $grid->column('created_at', __('Created at'))->display(function ($created_at) {
+            return date("Y-m-d H:i:s", strtotime($created_at));
+        });
+        $grid->column('updated_at', __('Updated at'))->display(function ($created_at) {
+            return date("Y-m-d H:i:s", strtotime($created_at));
+        });
+
+        $grid->quickSearch('subject', 'content');
+        $grid->filter(function ($filter) {
+            $filter->like('subject');
+            // $filter->date('updated_at', 'Lọc theo ngày tháng');
+            $filter->between('updated_at', 'Lọc theo ngày tháng')->datetime();
+
+            $cats = Category::get()->pluck('name', 'id')->toArray();
+            $filter->where(function ($query) {
+                $query->whereHas('category', function ($query) {
+                    $query->where('id', $this->input);
+                });
+            }, 'Category')->select($cats);
+        });
 
         return $grid;
     }
