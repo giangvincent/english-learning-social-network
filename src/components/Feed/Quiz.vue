@@ -100,11 +100,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import interactionPack from "./InteractionPack";
-import ProcessBar from "./ProcessBar";
-import CatsAndTags from "./CatsAndTags";
-import Author from "./AuthorPart";
+import { mapActions, mapState } from "vuex";
+import interactionPack from "./BaseParts/InteractionPack";
+import ProcessBar from "./BaseParts/ProcessBar";
+import CatsAndTags from "./BaseParts/CatsAndTags";
+import Author from "./BaseParts/AuthorPart";
 export default {
   name: "feed-quiz",
   props: {
@@ -188,10 +188,12 @@ export default {
       .catch((err) => console.log(err));
   },
   methods: {
+    ...mapActions(["ReqInteract"]),
     pickAnswer(index) {
       if (!this.answered) {
         this.answered = true;
         this.numAnswer = index;
+        this.ReqInteract({ post_id: this.pid, interact: "bagged" });
         var self = this;
         setTimeout(() => {
           self.reviewCorrectAns = true;

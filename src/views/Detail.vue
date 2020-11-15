@@ -26,7 +26,7 @@ import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
 import Post from "@/components/Feed/Post.vue";
 import FlashCard from "@/components/Feed/FlashCard.vue";
 import Quiz from "@/components/Feed/Quiz.vue";
-import Comment from "@/components/Feed/CommentSection.vue";
+import Comment from "@/components/Feed/BaseParts/CommentSection.vue";
 
 export default {
   name: "detail-page",
@@ -35,14 +35,14 @@ export default {
     Post,
     FlashCard,
     Quiz,
-    Comment
+    Comment,
   },
   data() {
     return {
       item: {
-        type: "flashCard"
-      }
+        type: "flashCard",
+      },
     };
-  }
+  },
 };
 </script>

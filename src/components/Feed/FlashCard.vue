@@ -122,12 +122,12 @@
 
 <script>
 import "quill/dist/quill.snow.css";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 // import slideImages from "./SlideImages";
-import interactionPack from "./InteractionPack";
-import ProcessBar from "./ProcessBar";
-import CatsAndTags from "./CatsAndTags";
-import Author from "./AuthorPart";
+import interactionPack from "./BaseParts/InteractionPack";
+import ProcessBar from "./BaseParts/ProcessBar";
+import CatsAndTags from "./BaseParts/CatsAndTags";
+import Author from "./BaseParts/AuthorPart";
 export default {
   name: "Feed-flash-card",
   props: {
@@ -209,8 +209,10 @@ export default {
       .catch((err) => console.log(err));
   },
   methods: {
+    ...mapActions(["ReqInteract"]),
     reviewBackCard() {
       this.currentBackCard = true;
+      this.ReqInteract({ post_id: this.pid, interact: "bagged" });
     },
     toNextCard() {
       this.currentBackCard = false;

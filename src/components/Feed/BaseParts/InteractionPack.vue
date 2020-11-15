@@ -3,7 +3,7 @@
     class="py-2 px-2 border-t-2 border-gray-400 flex content-center flex-wrap"
   >
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
       @click="saveClick"
     >
       <bagged-icon :saved="saved"></bagged-icon>
@@ -18,7 +18,7 @@
     </div>
     <!-- saved icon -->
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
       @click="goodClick"
     >
       <good-voted :goodVoted="goodVoted"></good-voted>
@@ -34,7 +34,7 @@
     <!-- good icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+      class="w-1/5 py-2 rounded-lg focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
       @click="badClick"
     >
       <bad-voted :badVoted="badVoted"></bad-voted>
@@ -50,7 +50,7 @@
     <!-- bad icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
       @click="shareClicked = !shareClicked"
     >
       <svg
@@ -69,12 +69,12 @@
       </svg>
       <span>Share</span>
       <div
-        class="bg-white absolute top-0 -mt-16  p-2 shadow-2xl rounded-lg"
+        class="bg-white absolute top-0 -mt-16 p-2 shadow-2xl rounded-lg"
         v-show="shareClicked"
       >
         <ul class="flex">
           <li
-            class="m-1  w-10 h-10"
+            class="m-1 w-10 h-10"
             v-for="(shareIcon, index) in socialShareIcons"
             :key="'social-icon-' + index"
           >
@@ -86,7 +86,7 @@
     <!-- Share icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
+      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
       @click="showModal = true"
     >
       <svg
@@ -113,11 +113,11 @@
       class="modal-bg transition-all duration-500 fixed left-0 overflow-auto z-50 top-0 bottom-0 right-0 flex"
     >
       <div
-        class="absolute w-full h-full bg-opacity-25 bg-black"
+        class="absolute w-full h-full bg-opacity-50 bg-black"
         @click="showModal = false"
       ></div>
       <div
-        class="modal-content bg-white relative m-auto w-4/5 shadow-lg rounded-lg"
+        class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
       >
         <div
           class="closeBtn absolute right-0 top-0 font-bold hover:text-gray-500 no-underline cursor-pointer text-4xl p-1 leading-none w-10 h-10 flex text-center justify-center items-center"
@@ -125,17 +125,83 @@
         >
           &times;
         </div>
-        <div class="p-6">
-          <p>Some text in the Modal Body</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
-          <p>Some other text...</p>
+        <div class="pt-8 pb-3 px-3 flex flex-wrap">
+          <div
+            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+          >
+            <svg
+              class="w-8"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+              />
+            </svg>
+            <span class="font-bold text-center">Bình luận</span>
+          </div>
+          <div
+            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+          >
+            <svg
+              class="w-8"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+              />
+            </svg>
+            <span class="text-center font-bold">Báo cáo</span>
+          </div>
+          <div
+            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg focus:bg-gray-300"
+          >
+            <svg
+              class="w-8"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            <span class="text-center font-bold">Thay đổi</span>
+          </div>
+          <div
+            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+          >
+            <svg
+              class="w-8"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+            <span class="text-center font-bold">Xóa</span>
+          </div>
         </div>
       </div>
     </div>
@@ -153,12 +219,12 @@ export default {
   name: "interaction-pack",
   props: {
     post_id: Number,
-    indicatorNum: Object
+    indicatorNum: Object,
   },
   components: {
     BadVoted,
     GoodVoted,
-    BaggedIcon
+    BaggedIcon,
   },
   data() {
     return {
@@ -168,10 +234,10 @@ export default {
       socialShareIcons: [
         "/assets/icons/fb_share.png",
         "/assets/icons/twittershare.png",
-        "/assets/icons/zalo_share.png"
+        "/assets/icons/zalo_share.png",
       ],
       shareClicked: false,
-      showModal: false
+      showModal: false,
     };
   },
   methods: {
@@ -183,24 +249,24 @@ export default {
         return;
       }
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.ReqInteract({ post_id: self.post_id, interact: "bagged" });
       }, 500);
     },
     goodClick() {
       this.goodVoted = !this.goodVoted;
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.ReqInteract({ post_id: self.post_id, interact: "good" });
       }, 500);
     },
     badClick() {
       this.badVoted = !this.badVoted;
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.ReqInteract({ post_id: self.post_id, interact: "bad" });
       }, 500);
-    }
-  }
+    },
+  },
 };
 </script>
