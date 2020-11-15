@@ -9,6 +9,8 @@ class userInteract extends Model
 {
     use HasFactory;
 
+    public $fillable = ['post_id', 'user_id', 'interact'];
+
     public function post()
     {
         return $this->belongsTo(Post::class);

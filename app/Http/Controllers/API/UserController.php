@@ -168,11 +168,11 @@ class UserController extends Controller
 
         if (strpos($request->interact, 'un-') !== false) {
             $success = $this->handleRemoveInteract($request);
-            $this->impactPostData($post, 'decrement', $request->interact);
+            $this->impactPostData($post, 'decrement', $success);
             return response()->json(['success' => $success], $this->successStatus);
         } else {
             $newInteract = $this->handleAddInteract($request);
-            $this->impactPostData($post, 'increment', $request->interact);
+            $this->impactPostData($post, 'increment', $newInteract);
             return response()->json(['success' => $newInteract], $this->successStatus);
         }
     }
@@ -191,34 +191,63 @@ class UserController extends Controller
 
     public function handleAddInteract($request)
     {
-        $newInteract = new userInteract();
+        /* $newInteract = new userInteract();
         $newInteract->post_id = $request->post_id;
         $newInteract->user_id = Auth::user()->id;
         $newInteract->interact = $request->interact;
-        $newInteract->save();
+        $newInteract->save(); */
+
+        $newInteract = userInteract::firstOrCreate([
+            'post_id' => $request->post_id,
+            'user_id' => Auth::user()->id,
+            'interact' =>  $request->interact
+        ]);
 
         return $newInteract;
     }
 
     public function impactPostData($post, $impactType, $reqInteract)
     {
-        $interact = str_replace('un-', '', $reqInteract);
-        $postJsonData = file_get_contents(public_path('content/posts') . '/' . $post->pid . '.json');
+        $interact = str_replace('un-', '', $reqInteract->interact);
+        $postJsonData = file_get_contents(
+            public_path('content/posts') . '/' . $post->pid . '.json'
+        );
         $postJsonData = json_decode($postJsonData, true);
 
-        if ($impactType === 'decrement') {
+        if (
+            $impactType === 'decrement' &&
+            in_array(Auth::user()->id, $postJsonData[0]['interact'][$interact])
+        ) {
             $dbSaved = $post->decrement('nums_' . $interact);
-            $postJsonData[0]['nums_' . $interact] = ($postJsonData[0]['nums_' . $interact] > 1) ? $postJsonData[0]['nums_' . $interact]-- : 0;
-            array_diff($postJsonData[0]['interact'][$interact], array(Auth::user()->id));
+            $postJsonData[0]['nums_' . $interact] =
+                ($postJsonData[0]['nums_' . $interact] > 1) ?
+                    $postJsonData[0]['nums_' . $interact]-- :
+                    0;
+            array_diff(
+                $postJsonData[0]['interact'][$interact],
+                array(Auth::user()->id)
+            );
         }
 
-        if ($impactType === 'increment') {
+        if (
+            $impactType === 'increment' &&
+            !in_array(Auth::user()->id, $postJsonData[0]['interact'][$interact])
+        ) {
             $dbSaved = $post->increment('nums_' . $interact);
-            $postJsonData[0]['nums_' . $interact] = ($postJsonData[0]['nums_' . $interact] !== null) ? $postJsonData[0]['nums_' . $interact]++ : 1;
-            array_push($postJsonData[0]['interact'][$interact], Auth::user()->id);
+            $postJsonData[0]['nums_' . $interact] =
+                ($postJsonData[0]['nums_' . $interact] !== null) ?
+                    $postJsonData[0]['nums_' . $interact]++ :
+                    1;
+            array_push(
+                $postJsonData[0]['interact'][$interact],
+                Auth::user()->id
+            );
         }
 
-        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($postJsonData));
+        return file_put_contents(
+            public_path('content/posts') . '/' . $post->pid . '.json',
+            json_encode($postJsonData)
+        );
     }
 
     public function uploadedPosts()
@@ -233,14 +262,16 @@ class UserController extends Controller
     {
         $postsBagged = userInteract::where('user_id', Auth::user()->id)->where('interact', 'bagged')->orderBy('id', 'desc')->select(['post_id'])->get()->toArray();
 
-        $posts = Post::whereIn('id', $postsBagged)->select(['id', 'pid', 'type'])->simplePaginate(10);
+        $posts = Post::whereIn('id', $postsBagged)->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
 
         return response()->json($posts, $this->successStatus);
     }
 
     public function AddLearningProcess(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'post_id' => 'required',
+        ]);
     }
 
     public function calculateNextLearningDay()
