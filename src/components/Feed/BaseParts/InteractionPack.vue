@@ -120,7 +120,7 @@
         class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
       >
         <div
-          class="closeBtn absolute right-0 top-0 font-bold hover:text-gray-500 no-underline cursor-pointer text-4xl p-1 leading-none w-10 h-10 flex text-center justify-center items-center"
+          class="closeBtn absolute right-0 top-0 font-bold text-4xl w-10 h-10 flex justify-center items-center bg-gray-900 text-white rounded-full -m-4-"
           @click="showModal = false"
         >
           &times;
@@ -219,12 +219,12 @@ export default {
   name: "interaction-pack",
   props: {
     post_id: Number,
-    indicatorNum: Object,
+    indicatorNum: Object
   },
   components: {
     BadVoted,
     GoodVoted,
-    BaggedIcon,
+    BaggedIcon
   },
   data() {
     return {
@@ -234,10 +234,10 @@ export default {
       socialShareIcons: [
         "/assets/icons/fb_share.png",
         "/assets/icons/twittershare.png",
-        "/assets/icons/zalo_share.png",
+        "/assets/icons/zalo_share.png"
       ],
       shareClicked: false,
-      showModal: false,
+      showModal: false
     };
   },
   methods: {
@@ -249,24 +249,24 @@ export default {
         return;
       }
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "bagged" });
       }, 500);
     },
     goodClick() {
       this.goodVoted = !this.goodVoted;
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "good" });
       }, 500);
     },
     badClick() {
       this.badVoted = !this.badVoted;
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "bad" });
       }, 500);
-    },
-  },
+    }
+  }
 };
 </script>

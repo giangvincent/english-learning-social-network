@@ -33,7 +33,10 @@
     ></author>
     <!-- End author info parts -->
     <interaction-pack
-      v-if="$route.name !== 'user-page' && $route.query.cur !== 'saved'"
+      v-if="
+        ($route.name === 'user-page' && !$route.query.cur) ||
+          $route.name !== 'user-page'
+      "
       :post_id="postData.id"
       :indicatorNum="interactIndicatorNumber"
     ></interaction-pack>
@@ -57,13 +60,13 @@ import Author from "./BaseParts/AuthorPart";
 export default {
   name: "image-item",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
     ProcessBar,
     interactionPack,
     CatsAndTags,
-    Author,
+    Author
   },
   data() {
     return {
@@ -74,40 +77,40 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         subject: "",
         content: [
           {
             contentHtml: "<p>loading...</p>",
-            images: [""],
-          },
+            images: [""]
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
+        nums_bad: 0
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
-      },
+        nums_bad: 0
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   watch: {
     postData: {
-      handler: function (val) {
+      handler: function(val) {
         this.interactIndicatorNumber.nums_bagged =
           this.postData.nums_bagged !== null ? this.postData.nums_bagged : 0;
         this.interactIndicatorNumber.nums_good =
@@ -115,19 +118,19 @@ export default {
         this.interactIndicatorNumber.nums_bad =
           this.postData.nums_bad !== null ? this.postData.nums_bad : 0;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
-  },
+      .catch(err => console.log(err));
+  }
 };
 </script>

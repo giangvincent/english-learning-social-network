@@ -108,7 +108,10 @@
     ></author>
     <!-- End author info parts -->
     <interaction-pack
-      v-if="$route.name !== 'user-page' && $route.query.cur !== 'saved'"
+      v-if="
+        ($route.name === 'user-page' && !$route.query.cur) ||
+          $route.name !== 'user-page'
+      "
       :post_id="postData.id"
       :indicatorNum="interactIndicatorNumber"
     ></interaction-pack>
@@ -124,20 +127,19 @@
 import "quill/dist/quill.snow.css";
 import { mapActions, mapState } from "vuex";
 // import slideImages from "./SlideImages";
-import interactionPack from "./BaseParts/InteractionPack";
-import ProcessBar from "./BaseParts/ProcessBar";
+
 import CatsAndTags from "./BaseParts/CatsAndTags";
 import Author from "./BaseParts/AuthorPart";
 export default {
   name: "Feed-flash-card",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
-    ProcessBar,
-    interactionPack,
+    ProcessBar: () => import("./BaseParts/ProcessBar"),
+    interactionPack: () => import("./BaseParts/InteractionPack"),
     CatsAndTags,
-    Author,
+    Author
   },
   data() {
     return {
@@ -151,7 +153,7 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         subject: "",
         content: [
@@ -159,46 +161,46 @@ export default {
             contentHtml: "",
             images: [],
             flipContentHtml: "",
-            flipImages: [],
-          },
+            flipImages: []
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
+        nums_bad: 0
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
-      },
+        nums_bad: 0
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl
+    })
   },
   watch: {
     postData: {
-      handler: function (val) {
+      handler: function(val) {
         this.interactIndicatorNumber.nums_bagged = this.postData.nums_bagged;
         this.interactIndicatorNumber.nums_good = this.postData.nums_good;
         this.interactIndicatorNumber.nums_bad = this.postData.nums_bad;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     var self = this;
     fetch("/content/posts/" + this.pid + ".json")
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res);
         self.postData = res[0];
         self.postData.content = self.postData.content.sort(
@@ -206,7 +208,7 @@ export default {
         );
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   },
   methods: {
     ...mapActions(["ReqInteract"]),
@@ -221,7 +223,7 @@ export default {
         this.currentCardIndex < this.postData.content.length - 1
           ? this.currentCardIndex + 1
           : this.currentCardIndex;
-    },
-  },
+    }
+  }
 };
 </script>
