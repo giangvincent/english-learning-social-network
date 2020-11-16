@@ -198,7 +198,7 @@ export default {
       .catch(err => console.log(err));
   },
   methods: {
-    ...mapActions(["ReqInteract"]),
+    ...mapActions(["ReqInteract", "FinishPostLearnt"]),
     pickAnswer(index) {
       if (!this.answered) {
         this.answered = true;
@@ -208,6 +208,13 @@ export default {
         setTimeout(() => {
           self.reviewCorrectAns = true;
         }, 1000);
+        if (this.currentQuizIndex >= this.postData.content.length - 1) {
+          this.FinishPostLearnt(this.pid)
+            .then(res => {
+              console.log("finish learning this post", res);
+            })
+            .catch(error => console.log(error));
+        }
       }
     },
     toNextQuiz() {

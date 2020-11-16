@@ -218,10 +218,17 @@ export default {
       .catch(err => console.log(err));
   },
   methods: {
-    ...mapActions(["ReqInteract"]),
+    ...mapActions(["ReqInteract", "FinishPostLearnt"]),
     reviewBackCard() {
       this.currentBackCard = true;
       this.ReqInteract({ post_id: this.pid, interact: "bagged" });
+      if (this.currentCardIndex >= this.postData.content.length - 1) {
+        this.FinishPostLearnt(this.pid)
+          .then(res => {
+            console.log("finish learning this post", res);
+          })
+          .catch(error => console.log(error));
+      }
     },
     toNextCard() {
       this.currentBackCard = false;
