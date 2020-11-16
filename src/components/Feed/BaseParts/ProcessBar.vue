@@ -35,14 +35,14 @@ import BadVoted from "@/components/Icons/BadVoted.vue";
 export default {
   name: "interaction-pack",
   props: {
-    post_id: Number,
+    post_id: String
   },
   components: {},
   data() {
     return {
       datesArray: [1],
       datesIndex: 0,
-      defaultLength: 8,
+      defaultLength: 8
     };
   },
   mounted() {
@@ -62,7 +62,7 @@ export default {
       this.datesArray.push(nextDate);
       this.datesIndex++;
       return this.fibonacciDates();
-    },
-  },
+    }
+  }
 };
 </script>

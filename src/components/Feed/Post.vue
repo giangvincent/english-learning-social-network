@@ -37,13 +37,13 @@
         ($route.name === 'user-page' && !$route.query.cur) ||
           $route.name !== 'user-page'
       "
-      :post_id="postData.id"
+      :post_id="pid"
       :indicatorNum="interactIndicatorNumber"
     ></interaction-pack>
 
     <process-bar
       v-if="$route.name === 'user-page' && $route.query.cur === 'saved'"
-      :post_id="postData.id"
+      :post_id="pid"
     ></process-bar>
   </div>
   <!-- END post -->
@@ -73,6 +73,7 @@ export default {
       shortTimer: "",
       postData: {
         id: 0,
+        pid: "",
         author: {
           id: 1,
           full_name: "loading",

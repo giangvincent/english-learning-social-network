@@ -158,6 +158,25 @@ export default {
     if (!this.user_token || !this.user.id) {
       this.$router.push("/auth/login");
     }
+
+    if (this.currentAction === "edit" && this.editPostId) {
+      let self = this;
+      fetch("/content/posts/" + this.editPostId + ".json")
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res);
+          self.postType = res[0].type ? res[0].type : "normalPost";
+          self.category = res[0].category.id;
+          self.subject = res[0].subject;
+          self.postContent = res[0].content;
+          let tags = [];
+          res[0].tags.forEach(tag => {
+            tags.push(tag.name);
+          });
+          self.tags = tags;
+        })
+        .catch(err => console.log(err));
+    }
   },
   methods: {
     ...mapMutations(["SET_current_action", "SET_edit_post_id"]),

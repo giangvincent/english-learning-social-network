@@ -10,8 +10,11 @@
     <!-- card indicator -->
     <div
       ref="frontCard"
-      class="flex flex-col m-2 shadow rounded"
-      :class="{ block: !currentBackCard, hidden: currentBackCard }"
+      class=" flex flex-col m-2 shadow rounded"
+      :class="{
+        'flip-in-ver-right block': !currentBackCard,
+        hidden: currentBackCard
+      }"
     >
       <div class="mx-auto bg-color-black">
         <img
@@ -53,8 +56,11 @@
 
     <div
       ref="backCard"
-      class="flex flex-col m-2 shadow rounded"
-      :class="{ block: currentBackCard, hidden: !currentBackCard }"
+      class=" flex flex-col m-2 shadow rounded"
+      :class="{
+        'flip-in-ver-right block': currentBackCard,
+        hidden: !currentBackCard
+      }"
     >
       <div class="mx-auto bg-color-black">
         <img
@@ -112,13 +118,13 @@
         ($route.name === 'user-page' && !$route.query.cur) ||
           $route.name !== 'user-page'
       "
-      :post_id="postData.id"
+      :post_id="pid"
       :indicatorNum="interactIndicatorNumber"
     ></interaction-pack>
 
     <process-bar
       v-if="$route.name === 'user-page' && $route.query.cur === 'saved'"
-      :post_id="postData.id"
+      :post_id="pid"
     ></process-bar>
   </div>
 </template>
@@ -149,6 +155,7 @@ export default {
       currentAnswer: null,
       postData: {
         id: 0,
+        pid: "",
         author: {
           id: 1,
           full_name: "loading",
@@ -227,3 +234,36 @@ export default {
   }
 };
 </script>
+
+<style>
+.flip-in-ver-right {
+  -webkit-animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-80deg);
+    transform: rotateY(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+@keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-80deg);
+    transform: rotateY(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+</style>

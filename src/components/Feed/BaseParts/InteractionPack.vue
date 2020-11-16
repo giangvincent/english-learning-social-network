@@ -120,12 +120,12 @@
         class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
       >
         <div
-          class="closeBtn absolute right-0 top-0 font-bold text-4xl w-10 h-10 flex justify-center items-center bg-gray-900 text-white rounded-full -m-4-"
+          class="closeBtn absolute right-0 top-0 font-bold text-4xl w-10 h-10 flex justify-center items-center bg-gray-900 text-white rounded-full -m-4"
           @click="showModal = false"
         >
           &times;
         </div>
-        <div class="pt-8 pb-3 px-3 flex flex-wrap">
+        <div class="py-3 px-3 flex flex-wrap">
           <div
             class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
           >
@@ -166,6 +166,7 @@
           </div>
           <div
             class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg focus:bg-gray-300"
+            @click="goEditPost"
           >
             <svg
               class="w-8"
@@ -211,14 +212,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import BaggedIcon from "@/components/Icons/BaggedIcon.vue";
 import GoodVoted from "@/components/Icons/GoodVoted.vue";
 import BadVoted from "@/components/Icons/BadVoted.vue";
 export default {
   name: "interaction-pack",
   props: {
-    post_id: Number,
+    post_id: String,
     indicatorNum: Object
   },
   components: {
@@ -242,12 +243,14 @@ export default {
   },
   methods: {
     ...mapActions(["ReqInteract"]),
+    ...mapMutations(["SET_current_action", "SET_edit_post_id"]),
+    goEditPost() {
+      this.SET_current_action("edit");
+      this.SET_edit_post_id(this.post_id);
+      this.$router.push("/creator");
+    },
     saveClick() {
       this.saved = !this.saved;
-      console.log(this.post_id);
-      if (this.post_id < 1) {
-        return;
-      }
       var self = this;
       setTimeout(function() {
         self.ReqInteract({ post_id: self.post_id, interact: "bagged" });
