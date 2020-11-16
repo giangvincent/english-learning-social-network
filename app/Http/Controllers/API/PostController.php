@@ -152,9 +152,13 @@ class PostController extends Controller
             'url' => $post->pid,
             'subject' => $post->subject,
             'content' => json_decode($post->content, true),
-            'author' => $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
-            'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
-            'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
+            'author' =>
+            $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
+            'category' =>
+            $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
+            'tags' =>
+            $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
+            'type' => $post->type,
             'datetime' => $post->updated_at,
             'nums_bagged' => $post->nums_bagged,
             'nums_good' => $post->nums_good,

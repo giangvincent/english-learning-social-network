@@ -2,8 +2,8 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -42,7 +42,7 @@ class PostController extends AdminController
         $grid->column('type', __('Type'))->filter([
             'flashCard' => 'flashCard',
             'quiz' => 'quiz',
-            'normalPost' => 'Post'
+            'normalPost' => 'Post',
         ]);
 
         $grid->column('author', __('Author'))->display(function ($user_id) {
@@ -173,9 +173,13 @@ class PostController extends AdminController
             'url' => $post->pid,
             'subject' => $post->subject,
             'content' => json_decode($post->content, true),
-            'author' => $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
-            'category' => $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
-            'tags' => $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
+            'author' =>
+            $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
+            'category' =>
+            $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
+            'tags' =>
+            $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
+            'type' => $post->type,
             'datetime' => $post->updated_at,
             'nums_bagged' => $post->nums_bagged,
             'nums_good' => $post->nums_good,

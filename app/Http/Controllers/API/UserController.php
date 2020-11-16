@@ -157,31 +157,31 @@ class UserController extends Controller
     {
         $allowInteract = array("bagged", "good", "bad", "report", "un-bagged", "un-good", "un-bad");
         $validator = Validator::make($request->all(), [
-            'post_id' => 'required|exists:posts,id',
+            'post_id' => 'required|exists:posts,pid',
             'interact' => 'required|in:' . implode(',', $allowInteract),
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $post = Post::where('id', $request->post_id)->first();
+        $post = Post::where('pid', $request->post_id)->first();
 
         if (strpos($request->interact, 'un-') !== false) {
-            $success = $this->handleRemoveInteract($request);
+            $success = $this->handleRemoveInteract($post);
             $this->impactPostData($post, 'decrement', $success);
             return response()->json(['success' => $success], $this->successStatus);
         } else {
-            $newInteract = $this->handleAddInteract($request);
+            $newInteract = $this->handleAddInteract($post, $request);
             $this->impactPostData($post, 'increment', $newInteract);
             return response()->json(['success' => $newInteract], $this->successStatus);
         }
     }
 
-    public function handleRemoveInteract($request)
+    public function handleRemoveInteract($post)
     {
         $interact = str_replace('un-', '', $request->interact);
         $success = userInteract::where([
-            ['post_id', $request->post_id],
+            ['post_id', $post->id],
             ['user_id', Auth::user()->id],
             ['interact', $interact],
         ])->delete();
@@ -189,18 +189,13 @@ class UserController extends Controller
         return $success;
     }
 
-    public function handleAddInteract($request)
+    public function handleAddInteract($post, $request)
     {
-        /* $newInteract = new userInteract();
-        $newInteract->post_id = $request->post_id;
-        $newInteract->user_id = Auth::user()->id;
-        $newInteract->interact = $request->interact;
-        $newInteract->save(); */
 
         $newInteract = userInteract::firstOrCreate([
-            'post_id' => $request->post_id,
+            'post_id' => $post->id,
             'user_id' => Auth::user()->id,
-            'interact' =>  $request->interact
+            'interact' => $request->interact,
         ]);
 
         return $newInteract;
@@ -220,9 +215,9 @@ class UserController extends Controller
         ) {
             $dbSaved = $post->decrement('nums_' . $interact);
             $postJsonData[0]['nums_' . $interact] =
-                ($postJsonData[0]['nums_' . $interact] > 1) ?
-                    $postJsonData[0]['nums_' . $interact]-- :
-                    0;
+            ($postJsonData[0]['nums_' . $interact] > 1) ?
+            $postJsonData[0]['nums_' . $interact]-- :
+            0;
             array_diff(
                 $postJsonData[0]['interact'][$interact],
                 array(Auth::user()->id)
@@ -235,9 +230,9 @@ class UserController extends Controller
         ) {
             $dbSaved = $post->increment('nums_' . $interact);
             $postJsonData[0]['nums_' . $interact] =
-                ($postJsonData[0]['nums_' . $interact] !== null) ?
-                    $postJsonData[0]['nums_' . $interact]++ :
-                    1;
+            ($postJsonData[0]['nums_' . $interact] !== null) ?
+            $postJsonData[0]['nums_' . $interact]++ :
+            1;
             array_push(
                 $postJsonData[0]['interact'][$interact],
                 Auth::user()->id
