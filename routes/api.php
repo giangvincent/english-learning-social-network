@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('create-post', 'PostController@CreatePost');
     Route::post('upload-image', 'TempController@uploadTempImg');
 
+    Route::post('update-learning-progress', 'UserController@AddLearningProcess');
+
 });
 
 Route::get('feed-home', 'FeedController@home');

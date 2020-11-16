@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\userInteract;
+use App\Models\UserProgress;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -267,6 +269,20 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'post_id' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        $post = Post::where('pid', $request->post_id)->firstOrFail();
+
+        $learntSaved = UserProgress::firstOrCreate([
+            'post_id' => $post->id,
+            'user_id' => Auth::user()->id,
+            'learnt_at' => Carbon::now()->toDateString(),
+        ]);
+
+        return response()->json($learntSaved, 200);
     }
 
     public function calculateNextLearningDay()

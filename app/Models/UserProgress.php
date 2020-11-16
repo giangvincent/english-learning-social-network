@@ -9,6 +9,7 @@ class UserProgress extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $fillable = ['post_id', 'user_id', 'learnt_at'];
 
     public function post()
     {
