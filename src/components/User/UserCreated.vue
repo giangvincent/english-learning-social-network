@@ -40,17 +40,19 @@ export default {
     ...mapMutations(["SET_PAGE", "setUploadedPosts"]),
     infiniteHandler($state) {
       var self = this;
-      this.GetUploadedPosts().then(content => {
-        var feedData = self.uploadedPosts;
-        feedData.push(...content.data);
-        self.setUploadedPosts(feedData);
-        self.SET_PAGE(self.currentPage + 1);
-        if (content.data.length >= 10) {
-          $state.loaded();
-        } else {
-          $state.complete();
-        }
-      });
+      this.GetUploadedPosts()
+        .then(content => {
+          var feedData = self.uploadedPosts;
+          feedData.push(...content.data);
+          self.setUploadedPosts(feedData);
+          self.SET_PAGE(self.currentPage + 1);
+          if (content.data.length >= 10) {
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(e => console.log(e));
     }
   }
 };

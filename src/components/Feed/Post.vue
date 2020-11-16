@@ -126,7 +126,7 @@ export default {
     fetch("/content/posts/" + this.pid + ".json")
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         self.postData = res[0];
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })

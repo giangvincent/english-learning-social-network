@@ -52,17 +52,19 @@ export default {
     ...mapMutations(["SET_PAGE", "SET_CURRENTFEED"]),
     infiniteHandler($state) {
       var self = this;
-      this.LOAD_FEED_CAT(this.$route.params.name).then(content => {
-        var feedData = self.currentFeed;
-        feedData.push(...content.data);
-        self.SET_CURRENTFEED(feedData);
-        self.SET_PAGE(self.currentPage + 1);
-        if (content.data.length >= 10) {
-          $state.loaded();
-        } else {
-          $state.complete();
-        }
-      });
+      this.LOAD_FEED_CAT(this.$route.params.name)
+        .then(content => {
+          var feedData = self.currentFeed;
+          feedData.push(...content.data);
+          self.SET_CURRENTFEED(feedData);
+          self.SET_PAGE(self.currentPage + 1);
+          if (content.data.length >= 10) {
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(e => console.log(e));
     }
   }
 };

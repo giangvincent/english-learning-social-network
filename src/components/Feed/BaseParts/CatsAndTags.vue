@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "Cats and Tags",
+  name: "Cats-and-Tags",
   props: {
     postData: Object
   }

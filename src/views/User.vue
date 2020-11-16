@@ -74,13 +74,13 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: user.id },
+                params: { id: user.id }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
                 'border-b-2 border-gray-900':
-                  typeof $route.query.cur === 'undefined',
+                  typeof $route.query.cur === 'undefined'
               }"
               >Đã đăng</router-link
             >
@@ -88,12 +88,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'saved' },
+                query: { cur: 'saved' }
               }"
               replace
               class="w-1/3 py-3"
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'saved',
+                'border-b-2 border-gray-900': $route.query.cur === 'saved'
               }"
               >Đang học</router-link
             >
@@ -101,12 +101,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'setting' },
+                query: { cur: 'setting' }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'setting',
+                'border-b-2 border-gray-900': $route.query.cur === 'setting'
               }"
               >Cài đặt</router-link
             >
@@ -137,31 +137,33 @@ export default {
   components: {
     SavedPost,
     UserCreated,
-    Setting,
+    Setting
   },
   data() {
     return {
-      items: [],
+      items: []
     };
   },
   computed: {
     ...mapState({
-      user: (state) => state.user.user,
-    }),
+      user: state => state.user.user
+    })
   },
   mounted() {
     this.SET_PAGE("user");
     let self = this;
-    this.LoadUserInfo().then((userInfo) => {
-      console.log(userInfo);
-      if (self.isLocalStorage()) {
-        localStorage.setItem("user", JSON.stringify(userInfo));
-      }
-    });
+    this.LoadUserInfo()
+      .then(userInfo => {
+        // console.log(userInfo);
+        if (self.isLocalStorage()) {
+          localStorage.setItem("user", JSON.stringify(userInfo));
+        }
+      })
+      .catch(e => console.log(e));
   },
   methods: {
     ...mapMutations(["SET_PAGE"]),
-    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"]),
-  },
+    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"])
+  }
 };
 </script>
