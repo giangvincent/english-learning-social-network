@@ -141,7 +141,9 @@ export default {
     ...mapState({
       categories: state => state.categories,
       user: state => state.user.user,
-      user_token: state => state.user.token
+      user_token: state => state.user.token,
+      currentAction: state => state.creator.currentAction,
+      editPostId: state => state.creator.editPostId
     })
   },
   watch: {
@@ -152,17 +154,13 @@ export default {
     }
   },
   mounted() {
-    console.log(this.user, this.user_token);
+    console.log(this.currentAction, this.editPostId);
     if (!this.user_token || !this.user.id) {
       this.$router.push("/auth/login");
     }
-    console.log(this.$route.query);
-    if (!this.$route.query.reloaded) {
-      location.replace("/creator?reloaded=1");
-    }
   },
   methods: {
-    ...mapMutations(),
+    ...mapMutations(["SET_current_action", "SET_edit_post_id"]),
     ...mapActions(["SUBMIT_POST", "Upload_image"]),
     changePostType(type) {
       this.postType = type;

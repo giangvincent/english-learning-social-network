@@ -133,6 +133,13 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    if (!isScriptAlreadyIncluded("/assets/fabric.min.js")) {
+      let fabricScript = document.createElement("script");
+      fabricScript.setAttribute("src", "/assets/fabric.min.js");
+      document.head.appendChild(fabricScript);
+    }
+  },
   methods: {
     ...mapMutations(["Toggle_popupEditor"]),
     selectImages() {
@@ -168,4 +175,10 @@ export default {
     }
   }
 };
+function isScriptAlreadyIncluded(src) {
+  var scripts = document.getElementsByTagName("script");
+  for (var i = 0; i < scripts.length; i++)
+    if (scripts[i].getAttribute("src") == src) return true;
+  return false;
+}
 </script>
