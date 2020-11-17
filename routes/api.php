@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('update-learning-progress', 'UserController@AddLearningProcess');
 
+    // test api
+    Route::get('get-calculate', 'UserController@calculateLearningDay');
 });
 
 Route::get('feed-home', 'FeedController@home');

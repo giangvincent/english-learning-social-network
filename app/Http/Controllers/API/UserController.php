@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\userInteract;
+use App\Models\UserNotification;
 use App\Models\UserProgress;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -175,6 +176,9 @@ class UserController extends Controller
         } else {
             $newInteract = $this->handleAddInteract($post, $request);
             $this->impactPostData($post, 'increment', $newInteract);
+            if ($request->interact === 'bagged') {
+                $this->calculateLearningDay($post);
+            }
             return response()->json(['success' => $newInteract], $this->successStatus);
         }
     }
@@ -285,8 +289,41 @@ class UserController extends Controller
         return response()->json($learntSaved, 200);
     }
 
-    public function calculateNextLearningDay()
+    public function calculateLearningDay($post)
     {
-        # code...
+        $dateArray = [];
+        $fibonacciDates = $this->fibonacciDates();
+        foreach ($fibonacciDates as $num) {
+            $dayNow = new Carbon();
+            array_push($dateArray, $dayNow->addDays($num - 1)->toDateString());
+        }
+        return response()->json($this->saveSupposedNotification($post, $dateArray));
+    }
+    public function fibonacciDates($defaultLength = 8, $returnDates = [1], $index = 0)
+    {
+        if ($index >= $defaultLength - 1) {
+            return $returnDates;
+        }
+        $nextDate = $index === 0 ?
+        $returnDates[$index] + $returnDates[$index] :
+        $returnDates[$index] + $returnDates[$index - 1];
+        array_push($returnDates, $nextDate);
+
+        $index++;
+        return $this->fibonacciDates($defaultLength, $returnDates, $index);
+    }
+    public function saveSupposedNotification($post, $dateArray)
+    {
+        $dataSaveArray = [];
+        foreach ($dateArray as $date) {
+            array_push($dataSaveArray, [
+                'post_id' => $post->id,
+                'user_id' => Auth::user()->id,
+                'time_notification' => $date,
+            ]);
+        }
+        $supposedLearn = UserNotification::createMany($dataSaveArray);
+
+        return $supposedLearn;
     }
 }
