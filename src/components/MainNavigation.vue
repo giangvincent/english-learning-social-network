@@ -1,7 +1,7 @@
 <template>
   <nav id="header" class="w-full z-40 top-0 fixed">
     <div
-      class="absolute bg-white w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center z-10"
+      class="absolute bg-white w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center z-10 md:shadow"
       :class="{ shadow: !showNavbar }"
     >
       <label
