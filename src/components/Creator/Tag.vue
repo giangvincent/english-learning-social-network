@@ -40,10 +40,12 @@
 <script>
 export default {
   name: "tags",
+  props: {
+    tags: Array
+  },
   data() {
     return {
-      curTag: "",
-      tags: []
+      curTag: ""
     };
   },
   mounted() {},

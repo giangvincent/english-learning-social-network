@@ -25,6 +25,9 @@ export default {
     };
   },
   watch: {
+    contentHtml: function(newVal, oldVal) {
+      this.initEditor();
+    },
     paraIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
@@ -54,14 +57,16 @@ export default {
 
         ["clean"] // remove formatting button
       ];
-      this.editor = new Quill("#editor-" + this.paraIndex, {
-        modules: {
-          toolbar: this.toolbar || toolbarOptions
-        },
-        scrollingContainer: "#editor-container-" + this.paraIndex,
-        theme: "snow",
-        height: 200
-      });
+      this.editor =
+        this.editor ||
+        new Quill("#editor-" + this.paraIndex, {
+          modules: {
+            toolbar: this.toolbar || toolbarOptions
+          },
+          scrollingContainer: "#editor-container-" + this.paraIndex,
+          theme: "snow",
+          height: 200
+        });
 
       const importContent = this.editor.clipboard.convert(this.contentHtml);
       console.log(this.contentOrigin);

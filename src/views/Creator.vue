@@ -59,18 +59,21 @@
 
         <normalPost
           v-if="postType == 'normalPost'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></normalPost>
         <flash-card
           v-if="postType == 'flashCard'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></flash-card>
         <quiz
           v-if="postType == 'quiz'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></quiz>
 
-        <tags @updateTags="changeTags"></tags>
+        <tags :tags="tags" @updateTags="changeTags"></tags>
 
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"

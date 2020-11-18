@@ -78,6 +78,9 @@ export default {
     ContentEditor,
     ImagePreview
   },
+  props: {
+    data: Array
+  },
   data() {
     return {
       flashCards: [
@@ -98,6 +101,19 @@ export default {
         this.$emit("changeContent", this.flashCards);
       },
       deep: true
+    },
+    data: {
+      handler: function(val) {
+        console.log(val);
+        this.flashCards = this.data;
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    console.log(this.data);
+    if (this.data) {
+      this.flashCards = this.data;
     }
   },
   methods: {

@@ -186,6 +186,7 @@
           </div>
           <div
             class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+            @click="RequestDeletePost()"
           >
             <svg
               class="w-8"
@@ -242,12 +243,21 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["ReqInteract"]),
+    ...mapActions(["ReqInteract", "REQ_DEL_POST"]),
     ...mapMutations(["SET_current_action", "SET_edit_post_id"]),
     goEditPost() {
       this.SET_current_action("edit");
       this.SET_edit_post_id(this.post_id);
       this.$router.push("/creator");
+    },
+    RequestDeletePost() {
+      this.REQ_DEL_POST(this.post_id)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     saveClick() {
       this.saved = !this.saved;
