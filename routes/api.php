@@ -31,6 +31,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('req-interact', 'UserController@interactPost');
 
     Route::post('create-post', 'PostController@CreatePost');
+    Route::post('update-post', 'PostController@updatePost');
+    Route::post('delete-post', 'PostController@deletePost');
+
     Route::post('upload-image', 'TempController@uploadTempImg');
 
     Route::post('update-learning-progress', 'UserController@AddLearningProcess');

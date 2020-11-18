@@ -38,7 +38,6 @@ class PostController extends Controller
     public function updatePost(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required',
             'pid' => 'required',
             'cat_id' => 'required',
             'post_type' => 'required',
@@ -50,10 +49,8 @@ class PostController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $post = Post::firstOrFail($request->id);
-        if ($post->pid !== $request->pid) {
-            return response()->json(['error' => 'Your request has been refused.'], 401);
-        }
+        $post = Post::where('pid', $request->pid)->firstOrFail();
+
         $this->changePostDB($request, $post);
         $post->tags()->detach();
         $this->attachTags($request->tags, $post);
@@ -65,16 +62,13 @@ class PostController extends Controller
     public function deletePost(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required',
             'pid' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
-        $post = Post::firstOrFail($request->id);
-        if ($post->pid !== $request->pid) {
-            return response()->json(['error' => 'Your request has been refused.'], 401);
-        }
+        $post = Post::where('pid', $request->pid)->firstOrFail();
+
         $this->removeMedias($post);
         $post->tags()->detach();
 
@@ -91,10 +85,11 @@ class PostController extends Controller
         for ($paraIndex = 0; $paraIndex < count($postContent); $paraIndex++) {
             array_push($medias, $postContent[$paraIndex]['images']);
         }
-
         foreach ($medias as $media) {
-            if (file_exist(public_path($media))) {
-                unlink(public_path($media));
+            foreach ($media as $image) {
+                if (file_exists(public_path($image))) {
+                    unlink(public_path($image));
+                }
             }
         }
     }
