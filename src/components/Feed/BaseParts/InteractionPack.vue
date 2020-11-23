@@ -213,7 +213,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import BaggedIcon from "@/components/Icons/BaggedIcon.vue";
 import GoodVoted from "@/components/Icons/GoodVoted.vue";
 import BadVoted from "@/components/Icons/BadVoted.vue";
@@ -221,7 +221,8 @@ export default {
   name: "interaction-pack",
   props: {
     post_id: String,
-    indicatorNum: Object
+    indicatorNum: Object,
+    interactOb: Object
   },
   components: {
     BadVoted,
@@ -241,6 +242,21 @@ export default {
       shareClicked: false,
       showModal: false
     };
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
+  },
+  watch: {
+    interactOb: {
+      handler(val) {
+        this.saved = this.interactOb.bagged.includes(this.user.id);
+        this.goodVoted = this.interactOb.good.includes(this.user.id);
+        this.badVoted = this.interactOb.bad.includes(this.user.id);
+      },
+      deep: true
+    }
   },
   methods: {
     ...mapActions(["ReqInteract", "REQ_DEL_POST"]),

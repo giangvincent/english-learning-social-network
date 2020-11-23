@@ -40,7 +40,8 @@
         >
           <label
             class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-            >9+</label
+            v-show="notification.length > 0"
+            >{{ notification.length > 10 ? "9+" : notification.length }}</label
           >
           <svg
             class="hover:text-black"
@@ -129,7 +130,8 @@ export default {
     ...mapState({
       currentTab: state => state.currentTab,
       user: state => state.user.user,
-      categories: state => state.categories
+      categories: state => state.categories,
+      notification: state => state.user.notification
     })
   },
   mounted() {

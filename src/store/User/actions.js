@@ -1,4 +1,17 @@
 export default {
+  LoadNotification: function({ rootState, state, commit }) {
+    fetch("/content/notification/" + rootState.user.user.id + ".json", {
+      method: "GET"
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        rootState.user.notification = res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
   LOGIN: function({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);

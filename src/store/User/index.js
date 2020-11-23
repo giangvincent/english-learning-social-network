@@ -6,7 +6,8 @@ export default {
     token: null,
     user: {},
     uploadedPosts: [],
-    baggedPosts: []
+    baggedPosts: [],
+    notification: []
   },
   mutations: mutations,
   actions: actions

@@ -97,6 +97,7 @@
       "
       :post_id="pid"
       :indicatorNum="interactIndicatorNumber"
+      :interactOb="postData.interact"
     ></interaction-pack>
 
     <process-bar
