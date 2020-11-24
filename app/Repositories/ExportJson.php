@@ -30,4 +30,16 @@ class ExportJson
             file_put_contents(public_path('content/notification') . '/' . $user->id . '.json', json_encode($notifyData));
         }
     }
+
+    public function SaveLearningProgress()
+    {
+        if (!file_exists(public_path('content/learn_progress'))) {
+            mkdir(public_path('content/learn_progress'), 0777);
+        }
+
+        $users = User::all();
+        foreach ($users as $user) {
+
+        }
+    }
 }
