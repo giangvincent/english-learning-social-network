@@ -36,7 +36,7 @@
           </ul>
         </div>
       </nav>
-      <footer-component></footer-component>
+      <footer-info></footer-info>
     </section>
   </div>
   <!-- Slide panel left -->
@@ -44,7 +44,7 @@
 
 <script>
 import TagRoute from "@/components/Navigator/TagRoute.vue";
-import FooterComponent from "@/components/Footer.vue";
+import FooterInfo from "@/components/FooterInfo.vue";
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -54,7 +54,7 @@ export default {
   },
   components: {
     TagRoute,
-    FooterComponent
+    FooterInfo
   },
   computed: {
     ...mapState(["showPanelLeft", "tags"])
