@@ -10,6 +10,7 @@
 <script>
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import { mapState } from "vuex";
 
 export default {
   name: "content-editor",
@@ -21,17 +22,26 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      reinitEditor: true
     };
   },
   watch: {
     contentHtml: function(newVal, oldVal) {
-      this.initEditor();
+      if (this.currentAction === "edit" && this.reinitEditor) {
+        this.initEditor();
+        this.reinitEditor = false;
+      }
     },
     paraIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
     }
+  },
+  computed: {
+    ...mapState({
+      currentAction: state => state.creator.currentAction
+    })
   },
   mounted() {
     console.log("para index: ", this.paraIndex);
