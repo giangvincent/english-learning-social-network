@@ -8,7 +8,7 @@
     <!-- shade -->
 
     <section
-      class="bg-white transform md:transform-none ease-in-out transition-all duration-300 translate-x-0  fixed top-0 bottom-0 z-50 md:z-30 w-64 md:w-1/5 lg:w-1/6 -translate-x-full"
+      class="bg-white transform md:transform-none ease-in-out transition-all duration-300 translate-x-0  fixed top-0 bottom-0 z-50 md:z-30 w-64 md:w-1/5 lg:w-1/6"
       :class="{ '-translate-x-full': !showPanelLeft }"
     >
       <nav
