@@ -40,17 +40,19 @@ export default {
     ...mapMutations(["SET_PAGE", "setBaggedPosts"]),
     infiniteHandler($state) {
       var self = this;
-      this.GetBaggedPosts().then(content => {
-        var feedData = self.baggedPosts;
-        feedData.push(...content.data);
-        self.setBaggedPosts(feedData);
-        self.SET_PAGE(self.currentPage + 1);
-        if (content.data.length >= 10) {
-          $state.loaded();
-        } else {
-          $state.complete();
-        }
-      });
+      this.GetBaggedPosts()
+        .then(content => {
+          var feedData = self.baggedPosts;
+          feedData.push(...content.data);
+          self.setBaggedPosts(feedData);
+          self.SET_PAGE(self.currentPage + 1);
+          if (content.data.length >= 10) {
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(e => console.log(e));
     }
   }
 };

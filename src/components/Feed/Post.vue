@@ -33,9 +33,19 @@
     ></author>
     <!-- End author info parts -->
     <interaction-pack
-      :post_id="postData.id"
+      v-if="
+        ($route.name === 'user-page' && !$route.query.cur) ||
+          $route.name !== 'user-page'
+      "
+      :post_id="pid"
       :indicatorNum="interactIndicatorNumber"
+      :interactOb="postData.interact"
     ></interaction-pack>
+
+    <process-bar
+      v-if="$route.name === 'user-page' && $route.query.cur === 'saved'"
+      :post_id="pid"
+    ></process-bar>
   </div>
   <!-- END post -->
 </template>
@@ -43,9 +53,10 @@
 <script>
 import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
-import interactionPack from "./InteractionPack";
-import CatsAndTags from "./CatsAndTags";
-import Author from "./AuthorPart";
+import interactionPack from "./BaseParts/InteractionPack";
+import ProcessBar from "./BaseParts/ProcessBar";
+import CatsAndTags from "./BaseParts/CatsAndTags";
+import Author from "./BaseParts/AuthorPart";
 
 export default {
   name: "image-item",
@@ -53,6 +64,7 @@ export default {
     pid: String
   },
   components: {
+    ProcessBar,
     interactionPack,
     CatsAndTags,
     Author
@@ -62,6 +74,7 @@ export default {
       shortTimer: "",
       postData: {
         id: 0,
+        pid: "",
         author: {
           id: 1,
           full_name: "loading",
@@ -115,7 +128,7 @@ export default {
     fetch("/content/posts/" + this.pid + ".json")
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         self.postData = res[0];
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })

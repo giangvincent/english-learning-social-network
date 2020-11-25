@@ -1,7 +1,8 @@
 <template>
-  <nav id="header" class="bg-white w-full z-40 top-0 fixed shadow">
+  <nav id="header" class="w-full z-40 top-0 fixed">
     <div
-      class="w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
+      class="absolute bg-white w-full mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center z-10 md:shadow"
+      :class="{ shadow: !showNavbar }"
     >
       <label
         for="menu-toggle"
@@ -39,7 +40,8 @@
         >
           <label
             class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-            >9+</label
+            v-show="notification.length > 0"
+            >{{ notification.length > 10 ? "9+" : notification.length }}</label
           >
           <svg
             class="hover:text-black"
@@ -81,7 +83,10 @@
       </div>
     </div>
     <!-- End top bar lvl0 -->
-    <div class="w-full mx-auto flex text-center font-bold block md:hidden">
+    <div
+      class="absolute mt-10 w-full mx-auto flex text-center font-bold block md:hidden bg-white z-0 shadow"
+      :class="{ 'slide-out-top': !showNavbar, 'slide-in-top': showNavbar }"
+    >
       <a
         class="w-1/3 py-3"
         :class="{ 'border-b-2 border-gray-900': currentTab === cat.slug }"
@@ -102,31 +107,35 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav,
+    DesktopNav
   },
   data() {
     return {
       userNavigateUrl: "/auth/login",
+      showNavbar: true,
+      lastScrollPosition: 0
     };
   },
   watch: {
     user: {
-      handler: function (val) {
+      handler: function(val) {
         if (this.user.id) {
           this.userNavigateUrl = "/u/" + this.user.id;
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   computed: {
     ...mapState({
-      currentTab: (state) => state.currentTab,
-      user: (state) => state.user.user,
-      categories: (state) => state.categories,
-    }),
+      currentTab: state => state.currentTab,
+      user: state => state.user.user,
+      categories: state => state.categories,
+      notification: state => state.user.notification
+    })
   },
   mounted() {
+    window.addEventListener("scroll", this.onScroll);
     if (this.user.id) {
       this.userNavigateUrl = "/u/" + this.user.id;
     }
@@ -143,6 +152,69 @@ export default {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
     },
+    onScroll() {
+      const currentScrollPosition =
+        window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScrollPosition < 0) {
+        return;
+      } // Stop executing this function if the difference between
+      // current scroll position and last scroll position is less than some offset
+      if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
+        return;
+      }
+      this.showNavbar = currentScrollPosition < this.lastScrollPosition;
+      this.lastScrollPosition = currentScrollPosition;
+    }
   },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
+  }
 };
 </script>
+
+<style>
+.slide-out-top {
+  -webkit-animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    both;
+  animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
+.slide-in-top {
+  -webkit-animation: slide-in-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    both;
+  animation: slide-in-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+@-webkit-keyframes slide-out-top {
+  0% {
+    margin-top: 2.5rem;
+  }
+  100% {
+    margin-top: -2.5rem;
+  }
+}
+@keyframes slide-out-top {
+  0% {
+    margin-top: 2.5rem;
+  }
+  100% {
+    margin-top: -2.5rem;
+  }
+}
+
+@-webkit-keyframes slide-in-top {
+  0% {
+    margin-top: -2.5rem;
+  }
+  100% {
+    margin-top: 2.5rem;
+  }
+}
+@keyframes slide-in-top {
+  0% {
+    margin-top: -2.5rem;
+  }
+  100% {
+    margin-top: 2.5rem;
+  }
+}
+</style>

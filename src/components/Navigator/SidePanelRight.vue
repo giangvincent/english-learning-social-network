@@ -16,12 +16,32 @@
       <nav class="md:bg-none min min-h-full shadow-2xl md:shadow-none">
         <div class="px-1 xl:px-4">
           <ul class="flex flex-col w-full">
-            <li class="m-2 md:my-2">
-              <a
+            <li
+              class="m-2 md:my-2"
+              v-for="(notify, index) in notification"
+              :key="'notification-' + index"
+            >
+              <router-link
+                :to="`/p/post/${notify.pid}`"
                 class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
+                v-if="notify.type === 'normalPost'"
               >
-                test 1
-              </a>
+                {{ notify.subject }}
+              </router-link>
+              <router-link
+                :to="`/p/flash-card/${notify.pid}`"
+                class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
+                v-if="notify.type === 'flashCard'"
+              >
+                {{ notify.subject }}
+              </router-link>
+              <router-link
+                :to="`/p/quiz/${notify.pid}`"
+                class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
+                v-if="notify.type === 'quiz'"
+              >
+                {{ notify.subject }}
+              </router-link>
             </li>
           </ul>
         </div>
@@ -41,7 +61,10 @@ export default {
   },
   components: {},
   computed: {
-    ...mapState(["showPanelRight"])
+    ...mapState({
+      showPanelRight: state => state.showPanelRight,
+      notification: state => state.user.notification
+    })
   },
   methods: {
     ...mapMutations(["toggle_right_panel"])

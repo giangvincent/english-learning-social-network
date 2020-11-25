@@ -59,18 +59,21 @@
 
         <normalPost
           v-if="postType == 'normalPost'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></normalPost>
         <flash-card
           v-if="postType == 'flashCard'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></flash-card>
         <quiz
           v-if="postType == 'quiz'"
+          :data="postContent"
           @changeContent="changePostContent"
         ></quiz>
 
-        <tags @updateTags="changeTags"></tags>
+        <tags :tags="tags" @updateTags="changeTags"></tags>
 
         <button
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -141,7 +144,9 @@ export default {
     ...mapState({
       categories: state => state.categories,
       user: state => state.user.user,
-      user_token: state => state.user.token
+      user_token: state => state.user.token,
+      currentAction: state => state.creator.currentAction,
+      editPostId: state => state.creator.editPostId
     })
   },
   watch: {
@@ -152,17 +157,32 @@ export default {
     }
   },
   mounted() {
-    console.log(this.user, this.user_token);
+    console.log(this.currentAction, this.editPostId);
     if (!this.user_token || !this.user.id) {
       this.$router.push("/auth/login");
     }
-    console.log(this.$route.query);
-    if (!this.$route.query.reloaded) {
-      location.replace("/creator?reloaded=1");
+
+    if (this.currentAction === "edit" && this.editPostId) {
+      let self = this;
+      fetch("/content/posts/" + this.editPostId + ".json")
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res);
+          self.postType = res[0].type ? res[0].type : "normalPost";
+          self.category = res[0].category.id;
+          self.subject = res[0].subject;
+          self.postContent = res[0].content;
+          let tags = [];
+          res[0].tags.forEach(tag => {
+            tags.push(tag.name);
+          });
+          self.tags = tags;
+        })
+        .catch(err => console.log(err));
     }
   },
   methods: {
-    ...mapMutations(),
+    ...mapMutations(["SET_current_action", "SET_edit_post_id"]),
     ...mapActions(["SUBMIT_POST", "Upload_image"]),
     changePostType(type) {
       this.postType = type;

@@ -53,6 +53,7 @@
             type="text"
             class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
             v-on:change="updateAnswer($event.target.value, index, paraIndex)"
+            :value="answer"
           />
 
           <button
@@ -133,6 +134,9 @@ export default {
     ContentEditor,
     ImagePreview
   },
+  props: {
+    data: Array
+  },
   data() {
     return {
       quizs: [
@@ -152,6 +156,17 @@ export default {
         this.$emit("changeContent", this.quizs);
       },
       deep: true
+    },
+    data: {
+      handler: function(val) {
+        this.quizs = this.data;
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    if (this.data) {
+      this.quizs = this.data;
     }
   },
   methods: {

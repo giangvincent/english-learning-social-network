@@ -3,7 +3,7 @@
     <div class="hidden md:block md:w-1/5"></div>
     <div class="w-full px-4 mb-10 md:my-6 md:px-6 lg:px-8 md:w-4/5">
       <fieldset
-        class="relative mt-2 mb-6 p-3 border-2 border-blue-900 rounded-lg bg-white shadow"
+        class="flex flex-col relative mt-2 mb-6 p-3 rounded-lg bg-white shadow"
       >
         <legend class="mx-2 font-bold rounded-lg bg-blue-900 text-white p-2">
           Đổi thông tin cơ bản
@@ -14,7 +14,7 @@
             v-model="user.full_name"
             placeholder
             type="text"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <div class="py-1">
@@ -23,7 +23,7 @@
             v-model="user.nick_name"
             placeholder
             type="text"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <div class="py-1">
@@ -33,7 +33,7 @@
             placeholder
             readonly
             type="text"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
 
@@ -41,7 +41,7 @@
           <span class="px-1 text-sm text-gray-600">Giới thiệu ngắn</span>
           <textarea
             placeholder
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
             v-model="user.bio"
           ></textarea>
         </div>
@@ -51,11 +51,11 @@
             v-model="user.birthday"
             placeholder
             type="date"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <button
-          class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          class="mt-3 text-lg font-semibold mx-auto text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="callUpdateInfo()"
         >
           <span v-if="!processUpload">Lưu thay đổi</span>
@@ -65,7 +65,7 @@
         </button>
       </fieldset>
       <fieldset
-        class="relative my-6 p-3 border-2 border-green-800 rounded-lg shadow bg-white"
+        class="flex flex-col relative my-6 p-3 rounded-lg shadow bg-white"
       >
         <legend class="mx-2 font-bold rounded-lg bg-green-800 text-white p-2">
           Đổi cài đặt thông báo
@@ -75,12 +75,20 @@
           <input
             placeholder
             type="text"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
+        <button
+          class="mt-3 text-lg font-semibold mx-auto text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+        >
+          <span v-if="!processUpload">Lưu thay đổi</span>
+          <div v-if="processUpload">
+            <loading-icon></loading-icon>
+          </div>
+        </button>
       </fieldset>
       <fieldset
-        class="relative my-6 p-3 border-2 border-red-600 rounded-lg shadow bg-white"
+        class="flex flex-col relative my-6 p-3 rounded-lg shadow bg-white"
       >
         <legend class="mx-2 font-bold rounded-lg bg-red-600 text-white p-2">
           Đổi mật khẩu
@@ -91,7 +99,7 @@
             placeholder
             type="password"
             v-model="cur_password"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <div class="py-1">
@@ -100,7 +108,7 @@
             placeholder
             type="password"
             v-model="password"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <div class="py-1">
@@ -109,11 +117,11 @@
             placeholder
             type="password"
             v-model="c_password"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
           />
         </div>
         <button
-          class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          class="mt-3 text-lg font-semibold mx-auto text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="callChangePassword"
         >
           <span v-if="!processUpload">Lưu thay đổi</span>

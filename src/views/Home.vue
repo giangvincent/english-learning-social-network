@@ -47,17 +47,19 @@ export default {
     ...mapMutations(["CHANGE_TAB", "SET_PAGE", "SET_CURRENTFEED"]),
     infiniteHandler($state) {
       var self = this;
-      this.LOAD_HOME().then(content => {
-        var feedData = self.currentFeed;
-        feedData.push(...content.data);
-        self.SET_CURRENTFEED(feedData);
-        self.SET_PAGE(self.currentPage + 1);
-        if (content.data.length >= 10) {
-          $state.loaded();
-        } else {
-          $state.complete();
-        }
-      });
+      this.LOAD_HOME()
+        .then(content => {
+          var feedData = self.currentFeed;
+          feedData.push(...content.data);
+          self.SET_CURRENTFEED(feedData);
+          self.SET_PAGE(self.currentPage + 1);
+          if (content.data.length >= 10) {
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(e => console.log(e));
     }
   }
 };

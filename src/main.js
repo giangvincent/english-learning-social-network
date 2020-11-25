@@ -15,15 +15,16 @@ if (helperFunc.isLocalStorage()) {
     let user_token = JSON.parse(localStorage.getItem("user_token"));
     let user = JSON.parse(localStorage.getItem("user"));
     if (user_token && user) {
-      console.log(user_token, user);
+      // console.log(user_token, user);
       store.commit("SET_USER", user);
       store.commit("SET_TOKEN", user_token);
+      store.dispatch("LoadNotification");
     }
   } catch (err) {
     console.log(err);
   }
 }
-console.log();
+
 Vue.mixin({
   methods: helperFunc
 });

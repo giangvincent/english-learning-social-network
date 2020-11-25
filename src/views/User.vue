@@ -74,7 +74,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 }
+                params: { id: user.id }
               }"
               class="w-1/3 py-3"
               replace
@@ -87,7 +87,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 },
+                params: { id: user.id },
                 query: { cur: 'saved' }
               }"
               replace
@@ -100,7 +100,7 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: 123 },
+                params: { id: user.id },
                 query: { cur: 'setting' }
               }"
               class="w-1/3 py-3"
@@ -152,11 +152,14 @@ export default {
   mounted() {
     this.SET_PAGE("user");
     let self = this;
-    this.LoadUserInfo().then(userInfo => {
-      if (self.isLocalStorage()) {
-        localStorage.setItem("user", JSON.stringify(userInfo.success.user));
-      }
-    });
+    this.LoadUserInfo()
+      .then(userInfo => {
+        // console.log(userInfo);
+        if (self.isLocalStorage()) {
+          localStorage.setItem("user", JSON.stringify(userInfo));
+        }
+      })
+      .catch(e => console.log(e));
   },
   methods: {
     ...mapMutations(["SET_PAGE"]),

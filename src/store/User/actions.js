@@ -1,4 +1,17 @@
 export default {
+  LoadNotification: function({ rootState, state, commit }) {
+    fetch("/content/notification/" + rootState.user.user.id + ".json", {
+      method: "GET"
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        rootState.user.notification = res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
   LOGIN: function({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);
@@ -268,5 +281,33 @@ export default {
         });
     });
   },
-  UpdateNotificationConn: function() {}
+  UpdateNotificationConn: function() {},
+  FinishPostLearnt: function({ rootState, state, commit }, payload) {
+    var data = new FormData();
+    data.append("post_id", payload);
+
+    return new Promise((res, rej) => {
+      fetch(rootState.apiUrl + "/update-learning-progress", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + rootState.user.token
+        },
+        body: data
+      })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(function(result) {
+          if (result) {
+            res(result);
+          } else {
+            rej(result);
+          }
+        })
+        .catch(err => {
+          rej(err);
+        });
+    });
+  }
 };

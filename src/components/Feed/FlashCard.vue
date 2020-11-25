@@ -10,8 +10,11 @@
     <!-- card indicator -->
     <div
       ref="frontCard"
-      class="flex flex-col m-2 shadow rounded"
-      :class="{ block: !currentBackCard, hidden: currentBackCard }"
+      class=" flex flex-col m-2 shadow rounded"
+      :class="{
+        'flip-in-ver-right block': !currentBackCard,
+        hidden: currentBackCard
+      }"
     >
       <div class="mx-auto bg-color-black">
         <img
@@ -53,8 +56,11 @@
 
     <div
       ref="backCard"
-      class="flex flex-col m-2 shadow rounded"
-      :class="{ block: currentBackCard, hidden: !currentBackCard }"
+      class=" flex flex-col m-2 shadow rounded"
+      :class="{
+        'flip-in-ver-right block': currentBackCard,
+        hidden: !currentBackCard
+      }"
     >
       <div class="mx-auto bg-color-black">
         <img
@@ -92,9 +98,7 @@
     </div>
     <!-- Back card -->
 
-    <div
-      class=" mb-4 flex cursor-pointer justify-center items-center flex-wrap"
-    >
+    <div class="mb-4 flex cursor-pointer justify-center items-center flex-wrap">
       <div
         class="bg-gray-700 border-2 border-white text-white text-center font-bold rounded-full py-1 px-3"
       >
@@ -110,26 +114,37 @@
     ></author>
     <!-- End author info parts -->
     <interaction-pack
-      :post_id="postData.id"
+      v-if="
+        ($route.name === 'user-page' && !$route.query.cur) ||
+          $route.name !== 'user-page'
+      "
+      :post_id="pid"
       :indicatorNum="interactIndicatorNumber"
+      :interactOb="postData.interact"
     ></interaction-pack>
+
+    <process-bar
+      v-if="$route.name === 'user-page' && $route.query.cur === 'saved'"
+      :post_id="pid"
+    ></process-bar>
   </div>
 </template>
 
 <script>
 import "quill/dist/quill.snow.css";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 // import slideImages from "./SlideImages";
-import interactionPack from "./InteractionPack";
-import CatsAndTags from "./CatsAndTags";
-import Author from "./AuthorPart";
+
+import CatsAndTags from "./BaseParts/CatsAndTags";
+import Author from "./BaseParts/AuthorPart";
 export default {
   name: "Feed-flash-card",
   props: {
     pid: String
   },
   components: {
-    interactionPack,
+    ProcessBar: () => import("./BaseParts/ProcessBar"),
+    interactionPack: () => import("./BaseParts/InteractionPack"),
     CatsAndTags,
     Author
   },
@@ -141,6 +156,7 @@ export default {
       currentAnswer: null,
       postData: {
         id: 0,
+        pid: "",
         author: {
           id: 1,
           full_name: "loading",
@@ -193,15 +209,27 @@ export default {
     fetch("/content/posts/" + this.pid + ".json")
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         self.postData = res[0];
+        self.postData.content = self.postData.content.sort(
+          () => Math.random() - 0.5
+        );
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })
       .catch(err => console.log(err));
   },
   methods: {
+    ...mapActions(["ReqInteract", "FinishPostLearnt"]),
     reviewBackCard() {
       this.currentBackCard = true;
+      this.ReqInteract({ post_id: this.pid, interact: "bagged" });
+      if (this.currentCardIndex >= this.postData.content.length - 1) {
+        this.FinishPostLearnt(this.pid)
+          .then(res => {
+            console.log("finish learning this post", res);
+          })
+          .catch(error => console.log(error));
+      }
     },
     toNextCard() {
       this.currentBackCard = false;
@@ -214,3 +242,36 @@ export default {
   }
 };
 </script>
+
+<style>
+.flip-in-ver-right {
+  -webkit-animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-80deg);
+    transform: rotateY(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+@keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-80deg);
+    transform: rotateY(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+</style>
