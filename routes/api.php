@@ -38,6 +38,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('update-learning-progress', 'UserController@AddLearningProcess');
 
+    Route::get('seen-notification/{slug}', 'UserController@seenNotification');
+
     // test api
     Route::get('get-calculate', 'UserController@calculateLearningDay');
 });

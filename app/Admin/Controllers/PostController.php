@@ -30,15 +30,35 @@ class PostController extends AdminController
 
         $grid->model()->orderBy('id', 'desc');
         $grid->column('id', __('Id'))->sortable();
-        $grid->column('subject', __('Subject'));
+        $grid->column('subject', __('Subject'))->width(100);
         $grid->column('content', __('Content'))->display(function ($content) {
             $contentArr = json_decode($content, true);
             $contentDisplay = '';
             $numParagraph = count($contentArr);
             $contentDisplay .= "<p>Số para: $numParagraph</p>";
+            foreach ($contentArr as $content) {
+                $contentDisplay .= '<p>' . strip_tags($content['contentHtml']) . '</p>';
+                foreach ($content['images'] as $image) {
+                    $contentDisplay .= '<img src="' . $image . '" style="max-width: 100px"/>';
+                }
+
+                if (isset($content['flipContentHtml'])) {
+                    $contentDisplay .= '<p> -> ' . strip_tags($content['flipContentHtml']) . '</p>';
+                    foreach ($content['flipImages'] as $image) {
+                        $contentDisplay .= '<img src="' . $image . '" style="max-width: 100px"/>';
+                    }
+                }
+
+                if (isset($content['answers'])) {
+
+                    foreach ($content['answers'] as $answer) {
+                        $contentDisplay .= '<p> -' . strip_tags($answer) . '</p>';
+                    }
+                }
+            }
 
             return $contentDisplay;
-        })->width(300);
+        });
         $grid->column('type', __('Type'))->filter([
             'flashCard' => 'flashCard',
             'quiz' => 'quiz',

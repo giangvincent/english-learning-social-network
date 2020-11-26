@@ -326,4 +326,21 @@ class UserController extends Controller
 
         return $supposedLearn;
     }
+
+    public function seenNotification($slug)
+    {
+        $post = Post::where('pid', $slug)->firstOrFail();
+        $dayNow = Carbon::now()->toDateString();
+
+        $userNotification = UserNotification::where([
+            ['post_id', $post->id],
+            ['user_id', Auth::user()->id],
+            ['time_notification', $dayNow],
+        ])->firstOrFail();
+
+        $userNotification->seen = 1;
+        $userNotification->save();
+
+        return response()->json(['success' => 1], $this->successStatus);
+    }
 }
