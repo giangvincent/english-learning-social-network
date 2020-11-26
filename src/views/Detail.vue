@@ -27,6 +27,7 @@ import Post from "@/components/Feed/Post.vue";
 import FlashCard from "@/components/Feed/FlashCard.vue";
 import Quiz from "@/components/Feed/Quiz.vue";
 import Comment from "@/components/Feed/BaseParts/CommentSection.vue";
+import { mapActions } from "vuex";
 
 export default {
   name: "detail-page",
@@ -35,14 +36,16 @@ export default {
     Post,
     FlashCard,
     Quiz,
-    Comment,
+    Comment
   },
   data() {
-    return {
-      item: {
-        type: "flashCard",
-      },
-    };
+    return {};
   },
+  mounted() {
+    this.SeenNotification(this.$route.params.slug);
+  },
+  methods: {
+    ...mapActions(["SeenNotification"])
+  }
 };
 </script>
