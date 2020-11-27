@@ -1,5 +1,11 @@
 <template>
   <div class="py-2 px-2 border-t-2 border-gray-400">
+    <button
+      class="font-semibold text-white rounded-lg btn-hover flex justify-center items-center mx-auto bg-gray-900 px-3 py-1 mb-3"
+      @click="unLearn"
+    >
+      Bỏ học
+    </button>
     <ul class="flex flex-wrap border-l-2 border-r-2 border-gray-900">
       <li
         class="w-1/4 mt-5 relative flex items-center justify-center"
@@ -28,7 +34,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import BaggedIcon from "@/components/Icons/BaggedIcon.vue";
 import GoodVoted from "@/components/Icons/GoodVoted.vue";
 import BadVoted from "@/components/Icons/BadVoted.vue";
@@ -45,11 +51,33 @@ export default {
       defaultLength: 8
     };
   },
+  computed: {
+    ...mapState({
+      baggedPosts: state => state.user.baggedPosts
+    })
+  },
   mounted() {
     this.fibonacciDates();
   },
   methods: {
-    ...mapActions([""]),
+    ...mapActions(["ReqInteract"]),
+    ...mapMutations(["setBaggedPosts"]),
+    unLearn() {
+      let newBaggedPosts = this.baggedPosts;
+      for (let index = 0; index < this.baggedPosts.length; index++) {
+        if (this.baggedPosts[index].pid === this.post_id) {
+          newBaggedPosts.splice(index, 1);
+        }
+      }
+      this.setBaggedPosts(newBaggedPosts);
+      var self = this;
+      setTimeout(function() {
+        self.ReqInteract({
+          post_id: self.post_id,
+          interact: "un-bagged"
+        });
+      }, 500);
+    },
     fibonacciDates() {
       if (this.datesIndex >= this.defaultLength - 1) {
         return false;
