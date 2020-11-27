@@ -170,8 +170,8 @@ class UserController extends Controller
         $post = Post::where('pid', $request->post_id)->first();
 
         if (strpos($request->interact, 'un-') !== false) {
-            $success = $this->handleRemoveInteract($post);
-            $this->impactPostData($post, 'decrement', $success);
+            $success = $this->handleRemoveInteract($post, $request);
+            $this->impactPostData($post, 'decrement', $request);
             return response()->json(['success' => $success], $this->successStatus);
         } else {
             $newInteract = $this->handleAddInteract($post, $request);
@@ -183,13 +183,23 @@ class UserController extends Controller
         }
     }
 
-    public function handleRemoveInteract($post)
+    public function handleRemoveInteract($post, $request)
     {
         $interact = str_replace('un-', '', $request->interact);
         $success = userInteract::where([
             ['post_id', $post->id],
             ['user_id', Auth::user()->id],
             ['interact', $interact],
+        ])->delete();
+
+        UserProgress::where([
+            ['post_id', $post->id],
+            ['user_id', Auth::user()->id],
+        ])->delete();
+
+        UserNotification::where([
+            ['post_id', $post->id],
+            ['user_id', Auth::user()->id],
         ])->delete();
 
         return $success;
@@ -209,6 +219,9 @@ class UserController extends Controller
 
     public function impactPostData($post, $impactType, $reqInteract)
     {
+        if (!$reqInteract) {
+            return false;
+        }
         $interact = str_replace('un-', '', $reqInteract->interact);
         $postJsonData = file_get_contents(
             public_path('content/posts') . '/' . $post->pid . '.json'
@@ -297,7 +310,8 @@ class UserController extends Controller
             $dayNow = new Carbon();
             array_push($dateArray, $dayNow->addDays($num - 1)->toDateString());
         }
-        return response()->json($this->saveSupposedNotification($post, $dateArray));
+        $success = $this->saveSupposedNotification($post, $dateArray);
+        return response()->json($success);
     }
     public function fibonacciDates($defaultLength = 8, $returnDates = [1], $index = 0)
     {
@@ -312,19 +326,22 @@ class UserController extends Controller
         $index++;
         return $this->fibonacciDates($defaultLength, $returnDates, $index);
     }
+
     public function saveSupposedNotification($post, $dateArray)
     {
-        $dataSaveArray = [];
+        if (count($dateArray) <= 0) {
+            return ["success" => "empty"];
+        }
         foreach ($dateArray as $date) {
-            array_push($dataSaveArray, [
+            $dataSaveArray = [
                 'post_id' => $post->id,
                 'user_id' => Auth::user()->id,
                 'time_notification' => $date,
-            ]);
+            ];
+            UserNotification::create($dataSaveArray);
         }
-        $supposedLearn = UserNotification::createMany($dataSaveArray);
 
-        return $supposedLearn;
+        return ["success" => 1];
     }
 
     public function seenNotification($slug)
@@ -343,4 +360,5 @@ class UserController extends Controller
 
         return response()->json(['success' => 1], $this->successStatus);
     }
+
 }
