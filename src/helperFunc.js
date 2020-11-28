@@ -1,4 +1,4 @@
-const evaluateTime = function(beginTime) {
+const evaluateTime = function (beginTime) {
   let timeString = new Date(beginTime).getTime() / 1000;
   let timeNow = new Date().getTime() / 1000;
   let distanceTime = parseInt(timeNow) - timeString;
@@ -25,7 +25,7 @@ const evaluateTime = function(beginTime) {
   }
 };
 
-const isLocalStorage = function() {
+const isLocalStorage = function () {
   var mod = "modernizr";
   try {
     localStorage.setItem(mod, mod);
@@ -36,7 +36,15 @@ const isLocalStorage = function() {
   }
 };
 
+const isExist = function (url) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  return http.status != 404;
+}
+
 export default {
   evaluateTime,
-  isLocalStorage
+  isLocalStorage,
+  isExist
 };

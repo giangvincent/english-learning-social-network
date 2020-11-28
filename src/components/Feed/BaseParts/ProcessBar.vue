@@ -16,7 +16,8 @@
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          class="w-6 absolute top-0 -m-3 rounded-full bg-white border-2 border-gray-900 text-white"
+          class="w-6 absolute top-0 -m-3 rounded-full bg-white border-2 border-gray-900"
+          :class="{ 'text-white': typeof dataProgress[index] === 'undefined' }"
         >
           <path
             fill-rule="evenodd"
@@ -41,27 +42,42 @@ import BadVoted from "@/components/Icons/BadVoted.vue";
 export default {
   name: "interaction-pack",
   props: {
-    post_id: String
+    post_id: String,
   },
   components: {},
   data() {
     return {
       datesArray: [1],
       datesIndex: 0,
-      defaultLength: 8
+      defaultLength: 8,
+      dataProgress: [],
     };
   },
   computed: {
     ...mapState({
-      baggedPosts: state => state.user.baggedPosts
-    })
+      user: (state) => state.user.user,
+      baggedPosts: (state) => state.user.baggedPosts,
+    }),
   },
   mounted() {
     this.fibonacciDates();
+    this.loadProgressData();
   },
   methods: {
     ...mapActions(["ReqInteract"]),
     ...mapMutations(["setBaggedPosts"]),
+    loadProgressData() {
+      let fileProgress =
+        "/content/progress/" + this.user.id + "_" + this.post_id + ".json";
+      let self = this;
+      if (this.isExist(fileProgress))
+        fetch(fileProgress)
+          .then((res) => res.json())
+          .then((res) => {
+            self.dataProgress = res;
+          })
+          .catch((err) => console.log(err));
+    },
     unLearn() {
       let newBaggedPosts = this.baggedPosts;
       for (let index = 0; index < this.baggedPosts.length; index++) {
@@ -71,10 +87,10 @@ export default {
       }
       this.setBaggedPosts(newBaggedPosts);
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.ReqInteract({
           post_id: self.post_id,
-          interact: "un-bagged"
+          interact: "un-bagged",
         });
       }, 500);
     },
@@ -90,7 +106,7 @@ export default {
       this.datesArray.push(nextDate);
       this.datesIndex++;
       return this.fibonacciDates();
-    }
-  }
+    },
+  },
 };
 </script>
