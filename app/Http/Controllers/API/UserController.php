@@ -207,7 +207,6 @@ class UserController extends Controller
 
     public function handleAddInteract($post, $request)
     {
-
         $newInteract = userInteract::firstOrCreate([
             'post_id' => $post->id,
             'user_id' => Auth::user()->id,
@@ -281,7 +280,7 @@ class UserController extends Controller
         return response()->json($posts, $this->successStatus);
     }
 
-    public function AddLearningProcess(Request $request)
+    public function SaveLearnt(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'post_id' => 'required',
@@ -292,14 +291,56 @@ class UserController extends Controller
         }
 
         $post = Post::where('pid', $request->post_id)->firstOrFail();
+        $this->AddLearningProcess($post);
+        $this->exportLearntJson($post);
 
+        return response()->json(['success' => 1], $this->successStatus);
+    }
+
+    public function exportLearntJson($post)
+    {
+        $learntSaved = UserProgress::where([
+            ['user_id', Auth::user()->id],
+            ['post_id', $post->id]
+        ])->orderBy('learnt_at')->get();
+
+        // Carbon::parse($dateString)
+        $dataExport = [];
+        $firstDay = null;
+        $supposedLearnt = $this->fibonacciDates();
+        $index = 0;
+        foreach ($learntSaved as $userLearnt) {
+            if (!$firstDay) {
+                $firstDay = $userLearnt->learnt_at;
+            }
+            $supposedDay = Carbon::parse($firstDay)->addDays($supposedLearnt[$index] - 1)->toDateString();
+            $currentDay = Carbon::parse($userLearnt->learnt_at)->toDateString();
+            // dump($supposedDay, $currentDay);
+            if ($currentDay === $supposedDay) {
+                array_push($dataExport, $userLearnt->learnt_at);
+                $index++;
+            }
+        }
+
+        if (!file_exists(public_path('content/progress'))) {
+            mkdir(public_path('content/progress'), 0777);
+        }
+
+        return file_put_contents(
+            public_path('content/progress') . '/' . Auth::user()->id . '-' . $post->id . '.json',
+            json_encode($dataExport)
+        );
+    }
+
+    public function AddLearningProcess($post)
+    {
         $learntSaved = UserProgress::firstOrCreate([
             'post_id' => $post->id,
             'user_id' => Auth::user()->id,
             'learnt_at' => Carbon::now()->toDateString(),
         ]);
 
-        return response()->json($learntSaved, 200);
+        return $learntSaved;
     }
 
     public function calculateLearningDay($post)
@@ -338,7 +379,7 @@ class UserController extends Controller
                 'user_id' => Auth::user()->id,
                 'time_notification' => $date,
             ];
-            UserNotification::create($dataSaveArray);
+            UserNotification::firstOrCreate($dataSaveArray);
         }
 
         return ["success" => 1];
@@ -360,5 +401,4 @@ class UserController extends Controller
 
         return response()->json(['success' => 1], $this->successStatus);
     }
-
 }

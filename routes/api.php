@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('upload-image', 'TempController@uploadTempImg');
 
-    Route::post('update-learning-progress', 'UserController@AddLearningProcess');
+    Route::post('update-learning-progress', 'UserController@SaveLearnt');
 
     Route::get('seen-notification/{slug}', 'UserController@seenNotification');
 
