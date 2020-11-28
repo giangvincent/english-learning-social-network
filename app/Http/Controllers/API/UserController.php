@@ -327,7 +327,7 @@ class UserController extends Controller
         }
 
         return file_put_contents(
-            public_path('content/progress') . '/' . Auth::user()->id . '-' . $post->id . '.json',
+            public_path('content/progress') . '/' . Auth::user()->id . '_' . $post->pid . '.json',
             json_encode($dataExport)
         );
     }
