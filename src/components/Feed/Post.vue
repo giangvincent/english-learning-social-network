@@ -21,7 +21,16 @@
         />
       </div>
       <!-- End media -->
-      <div class="px-3 py-4" v-html="content.contentHtml"></div>
+      <section>
+        <div class="ql-snow" style="height: auto; border: none">
+          <div
+            class="ql-editor"
+            v-html="content.contentHtml"
+            style="height: auto"
+          ></div>
+        </div>
+      </section>
+
       <!-- End content text -->
     </div>
 
