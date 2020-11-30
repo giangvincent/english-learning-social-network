@@ -4,7 +4,7 @@
   >
     <div
       class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
-      @click="saveClick"
+      @click="saveClick(!saved)"
     >
       <bagged-icon :saved="saved"></bagged-icon>
       <span :class="{ 'text-green-500': !saved, 'text-red-500': saved }">{{
@@ -12,14 +12,14 @@
       }}</span>
       <label
         class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-        v-if="indicatorNum.nums_bagged > 0"
+        v-if="indicatorNum.nums_bagged > 10"
         >{{ indicatorNum.nums_bagged }}</label
       >
     </div>
     <!-- saved icon -->
     <div
       class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
-      @click="goodClick"
+      @click="goodClick(!goodVoted)"
     >
       <good-voted :goodVoted="goodVoted"></good-voted>
       <span :class="{ 'color-blue': goodVoted }">{{
@@ -27,7 +27,7 @@
       }}</span>
       <label
         class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-        v-if="indicatorNum.nums_good > 0"
+        v-if="indicatorNum.nums_good > 10"
         >{{ indicatorNum.nums_good }}</label
       >
     </div>
@@ -35,7 +35,7 @@
 
     <div
       class="w-1/5 py-2 rounded-lg focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
-      @click="badClick"
+      @click="badClick(!badVoted)"
     >
       <bad-voted :badVoted="badVoted"></bad-voted>
       <span :class="{ 'color-blue': badVoted }">{{
@@ -43,7 +43,7 @@
       }}</span>
       <label
         class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-        v-if="indicatorNum.nums_bad > 0"
+        v-if="indicatorNum.nums_bad > 10"
         >{{ indicatorNum.nums_bad }}</label
       >
     </div>
@@ -275,25 +275,34 @@ export default {
           console.log(error);
         });
     },
-    saveClick() {
+    saveClick(status) {
       this.saved = !this.saved;
       var self = this;
       setTimeout(function() {
-        self.ReqInteract({ post_id: self.post_id, interact: "bagged" });
+        self.ReqInteract({
+          post_id: self.post_id,
+          interact: status ? "bagged" : "un-bagged"
+        });
       }, 500);
     },
-    goodClick() {
+    goodClick(status) {
       this.goodVoted = !this.goodVoted;
       var self = this;
       setTimeout(function() {
-        self.ReqInteract({ post_id: self.post_id, interact: "good" });
+        self.ReqInteract({
+          post_id: self.post_id,
+          interact: status ? "good" : "un-good"
+        });
       }, 500);
     },
-    badClick() {
+    badClick(status) {
       this.badVoted = !this.badVoted;
       var self = this;
       setTimeout(function() {
-        self.ReqInteract({ post_id: self.post_id, interact: "bad" });
+        self.ReqInteract({
+          post_id: self.post_id,
+          interact: status ? "bad" : "un-bad"
+        });
       }, 500);
     }
   }

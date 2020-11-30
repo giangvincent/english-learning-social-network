@@ -8,6 +8,8 @@ import "@/assets/css/tailwind.css";
 import "@/assets/css/main.css";
 import helperFunc from "./helperFunc";
 
+import VueMasonry from "vue-masonry-css";
+
 Vue.config.productionTip = false;
 
 if (helperFunc.isLocalStorage()) {
@@ -41,6 +43,8 @@ Vue.component("SidePanelLeft", () =>
 Vue.component("SidePanelRight", () =>
   import("@/components/Navigator/SidePanelRight.vue")
 );
+
+Vue.use(VueMasonry);
 
 new Vue({
   router,

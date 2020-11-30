@@ -5,8 +5,17 @@ export default {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
-        rootState.user.notification = res;
+        // console.log(res);
+        let dayNow = new Date().getDate();
+        let dayCur = 0;
+        let notificationData = [];
+        for (let index = 0; index < res.length; index++) {
+          dayCur = new Date(res[index].date).getDate();
+          if (dayCur === dayNow) {
+            notificationData.push(res[index]);
+          }
+        }
+        rootState.user.notification = notificationData;
       })
       .catch(err => {
         console.log(err);
@@ -309,5 +318,18 @@ export default {
           rej(err);
         });
     });
+  },
+  SeenNotification: function({ rootState, state, commit }, payload) {
+    fetch(rootState.apiUrl + "/seen-notification/" + payload, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + rootState.user.token
+      }
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
   }
 };

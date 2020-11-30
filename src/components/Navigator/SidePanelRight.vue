@@ -22,21 +22,21 @@
               :key="'notification-' + index"
             >
               <router-link
-                :to="`/p/post/${notify.pid}`"
+                :to="`/p/post/${notify.pid}?from=notification`"
                 class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
                 v-if="notify.type === 'normalPost'"
               >
                 {{ notify.subject }}
               </router-link>
               <router-link
-                :to="`/p/flash-card/${notify.pid}`"
+                :to="`/p/flash-card/${notify.pid}?from=notification`"
                 class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
                 v-if="notify.type === 'flashCard'"
               >
                 {{ notify.subject }}
               </router-link>
               <router-link
-                :to="`/p/quiz/${notify.pid}`"
+                :to="`/p/quiz/${notify.pid}?from=notification`"
                 class="flex flex-row items-center p-2 xl:px-4 rounded-lg border-2 border-gray-400 font-semibold"
                 v-if="notify.type === 'quiz'"
               >
