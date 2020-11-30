@@ -191,16 +191,17 @@ class UserController extends Controller
             ['user_id', Auth::user()->id],
             ['interact', $interact],
         ])->delete();
+        if ($interact === 'bagged') {
+            UserProgress::where([
+                ['post_id', $post->id],
+                ['user_id', Auth::user()->id],
+            ])->delete();
 
-        UserProgress::where([
-            ['post_id', $post->id],
-            ['user_id', Auth::user()->id],
-        ])->delete();
-
-        UserNotification::where([
-            ['post_id', $post->id],
-            ['user_id', Auth::user()->id],
-        ])->delete();
+            UserNotification::where([
+                ['post_id', $post->id],
+                ['user_id', Auth::user()->id],
+            ])->delete();
+        }
 
         return $success;
     }
@@ -301,7 +302,7 @@ class UserController extends Controller
     {
         $learntSaved = UserProgress::where([
             ['user_id', Auth::user()->id],
-            ['post_id', $post->id]
+            ['post_id', $post->id],
         ])->orderBy('learnt_at')->get();
 
         // Carbon::parse($dateString)

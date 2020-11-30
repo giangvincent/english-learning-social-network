@@ -14,7 +14,7 @@ class MakeUniqueColumsInteract extends Migration
     public function up()
     {
         Schema::table('user_interacts', function (Blueprint $table) {
-            $table->unique(['post_id', 'user_id', 'interact']);
+            // $table->unique(['post_id', 'user_id', 'interact']);
         });
     }
 

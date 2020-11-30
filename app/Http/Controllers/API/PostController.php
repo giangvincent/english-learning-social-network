@@ -72,7 +72,13 @@ class PostController extends Controller
         $this->removeMedias($post);
         $post->tags()->detach();
 
-        unlink(public_path('content/posts/') . $post->pid . '.json');
+        @unlink(public_path('content/posts/') . $post->pid . '.json');
+        $post->interacts()->delete();
+        $post->answers()->delete();
+        $post->comments()->delete();
+        $post->notifications()->delete();
+        $post->progress()->delete();
+
         $post->delete();
 
         return response()->json(['success' => 'Post deleted successfully.'], $this->successStatus);
