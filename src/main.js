@@ -9,6 +9,7 @@ import "@/assets/css/main.css";
 import helperFunc from "./helperFunc";
 
 import VueMasonry from "vue-masonry-css";
+import ReadMore from "vue-read-more";
 
 Vue.config.productionTip = false;
 
@@ -43,7 +44,7 @@ Vue.component("SidePanelLeft", () =>
 Vue.component("SidePanelRight", () =>
   import("@/components/Navigator/SidePanelRight.vue")
 );
-
+Vue.use(ReadMore);
 Vue.use(VueMasonry);
 
 new Vue({

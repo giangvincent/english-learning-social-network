@@ -23,11 +23,15 @@
       <!-- End media -->
       <section>
         <div class="ql-snow" style="height: auto; border: none">
-          <div
-            class="ql-editor"
-            v-html="content.contentHtml"
-            style="height: auto"
-          ></div>
+          <div class="ql-editor" style="height: auto">
+            <read-more
+              more-str="Đọc hết"
+              :text="content.contentHtml"
+              link="#"
+              less-str="Che đi"
+              :max-chars="700"
+            ></read-more>
+          </div>
         </div>
       </section>
 
