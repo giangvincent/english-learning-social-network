@@ -3,7 +3,7 @@
     class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
   >
     <div class="w-full p-3 font-bold">
-      <h4>{{ postData.subject }}</h4>
+      <h1>{{ postData.subject }}</h1>
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
     <!-- End relation label -->
@@ -21,7 +21,20 @@
         />
       </div>
       <!-- End media -->
-      <div class="px-3 py-4" v-html="content.contentHtml"></div>
+      <section>
+        <div class="ql-snow" style="height: auto; border: none">
+          <div class="ql-editor" style="height: auto">
+            <read-more
+              more-str="Đọc hết"
+              :text="content.contentHtml"
+              link="#"
+              less-str="Che đi"
+              :max-chars="700"
+            ></read-more>
+          </div>
+        </div>
+      </section>
+
       <!-- End content text -->
     </div>
 
