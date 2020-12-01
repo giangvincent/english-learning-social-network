@@ -237,7 +237,7 @@ class UserController extends Controller
             ($postJsonData[0]['nums_' . $interact] > 1) ?
             $postJsonData[0]['nums_' . $interact]-- :
             0;
-            array_diff(
+            $postJsonData[0]['interact'][$interact] = array_diff(
                 $postJsonData[0]['interact'][$interact],
                 array(Auth::user()->id)
             );
