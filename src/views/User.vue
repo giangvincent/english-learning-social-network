@@ -250,7 +250,17 @@ export default {
 
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
-      console.log(this.$refs.cropper.getCroppedCanvas().toDataURL());
+      let image = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      if (this.croperType === "avatar") {
+        this.ChangeAvatar(image)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+      }
+      if (this.croperType === "cover") {
+        this.ChangeCover(image)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+      }
     }
   }
 };
