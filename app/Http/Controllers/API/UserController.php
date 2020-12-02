@@ -11,6 +11,7 @@ use App\Models\UserProgress;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class UserController extends Controller
@@ -113,8 +114,24 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
+
+        if (!$this->validateBaseImg($request->avatar)) {
+            $res = [
+                'success' => false,
+                'message' => 'Validate failed: Image error',
+            ];
+            return response()->json($res);
+        }
+
+        list($extension, $content) = explode(';', $request->avatar);
+        $fileName = 'user/avatar-' . Auth::user()->id . '.' . explode('/', $extension)[1];
+        $content = explode(',', $content)[1];
+        $storage = Storage::disk('public');
+
+        $storage->put($fileName, base64_decode($content), 'public');
+
         $user = Auth::user();
-        $user->avatar = $request->avatar;
+        $user->avatar = '/upload/' . $fileName;
         $user->save();
 
         return response()->json(['success' => 1], $this->successStatus);
@@ -127,8 +144,23 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
+        if (!$this->validateBaseImg($request->avatar)) {
+            $res = [
+                'success' => false,
+                'message' => 'Validate failed: Image error',
+            ];
+            return response()->json($res);
+        }
+
+        list($extension, $content) = explode(';', $request->avatar);
+        $fileName = 'user/cover-' . Auth::user()->id . '.' . explode('/', $extension)[1];
+        $content = explode(',', $content)[1];
+        $storage = Storage::disk('public');
+
+        $storage->put($fileName, base64_decode($content), 'public');
+
         $userInfo = Auth::user()->info()->first();
-        $userInfo->cover_image = $request->cover_image;
+        $userInfo->cover_image = '/upload/' . $fileName;
         $userInfo->save();
 
         return response()->json(['success' => 1], $this->successStatus);
