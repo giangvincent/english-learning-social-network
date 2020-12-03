@@ -144,7 +144,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
-        if (!$this->validateBaseImg($request->avatar)) {
+        if (!$this->validateBaseImg($request->cover_image)) {
             $res = [
                 'success' => false,
                 'message' => 'Validate failed: Image error',
@@ -152,7 +152,7 @@ class UserController extends Controller
             return response()->json($res);
         }
 
-        list($extension, $content) = explode(';', $request->avatar);
+        list($extension, $content) = explode(';', $request->cover_image);
         $fileName = 'user/cover-' . Auth::user()->id . '.' . explode('/', $extension)[1];
         $content = explode(',', $content)[1];
         $storage = Storage::disk('public');
