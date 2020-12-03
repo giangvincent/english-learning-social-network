@@ -8,8 +8,12 @@
       <div class="w-full px-4 mt-10 md:mt-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
         <div class="sm:rounded sm:rounded-t-lg shadow bg-white">
           <div
-            class="h-40 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
-            style="background-image: url(/assets/images/default.jpg)"
+            class="h-64 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
+            :style="{
+              'background-image': user.cover_image
+                ? 'url(' + rootUrl + user.cover_image + ')'
+                : 'url(/assets/images/default.jpg)'
+            }"
           >
             <label
               class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
@@ -36,10 +40,10 @@
               <img
                 :src="
                   user.avatar
-                    ? user.avatar
+                    ? rootUrl + user.avatar
                     : '/assets/images/default_avatar.jpg'
                 "
-                class="rounded-full border-solid border-white border-2"
+                class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"
               />
               <label
                 class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
@@ -197,6 +201,7 @@ export default {
   },
   computed: {
     ...mapState({
+      rootUrl: state => state.rootUrl,
       user: state => state.user.user
     })
   },
