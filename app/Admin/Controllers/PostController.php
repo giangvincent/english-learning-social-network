@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Repositories\ExportJson;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -180,36 +181,9 @@ class PostController extends AdminController
         $form->saved(function (Form $form) {
             $post = Post::find($form->model()->id);
             $this->checkFolderContent();
-            $this->exportPost($post);
+            ExportJson::exportPost($post);
         });
         return $form;
-    }
-
-    private function exportPost($post)
-    {
-        // $authorData = $post->user()->first()->toArray();
-        $exportData = array([
-            'id' => $post->id,
-            'url' => $post->pid,
-            'subject' => $post->subject,
-            'content' => json_decode($post->content, true),
-            'author' =>
-            $post->user()->select(['id', 'nick_name', 'full_name', 'avatar'])->first()->toArray(),
-            'category' =>
-            $post->categoryRelated()->select(['id', 'name', 'slug'])->first()->toArray(),
-            'tags' =>
-            $post->tags()->select(['id', 'name', 'slug'])->get()->toArray(),
-            'type' => $post->type,
-            'datetime' => $post->updated_at,
-            'nums_bagged' => $post->nums_bagged,
-            'nums_good' => $post->nums_good,
-            'nums_bad' => $post->nums_bad,
-            'nums_share' => $post->nums_share,
-            'nums_comment' => $post->nums_comment,
-            'interact' => array('bagged' => [], 'good' => [], 'bad' => []),
-            'comments' => array(),
-        ]);
-        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }
 
     public function checkFolderContent()

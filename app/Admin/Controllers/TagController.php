@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Tag;
+use App\Repositories\ExportJson;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -96,7 +97,7 @@ class TagController extends AdminController
             $tag = Tag::find($form->model()->id);
             $this->checkFolderContent();
             $this->exportToJson($tag);
-            $this->exportTags();
+            ExportJson::exportTags();
         });
 
         return $form;
@@ -119,15 +120,4 @@ class TagController extends AdminController
         file_put_contents(public_path() . '/content/tags/' . $tag->slug . '.json', json_encode($data));
     }
 
-    public function exportTags()
-    {
-        $allTags = Tag::where('status', 'publish')->get();
-        $allTagsData = [];
-        foreach ($allTags as $tag) {
-            $tagData = $tag->toArray();
-            $tagData['posts'] = $tag->posts()->count();
-            array_push($allTagsData, $tagData);
-        }
-        file_put_contents(public_path() . '/content/tags.json', json_encode($allTagsData));
-    }
 }
