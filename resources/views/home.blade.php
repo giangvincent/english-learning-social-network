@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>THATS GOOD</title>
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
 </head>
 
 <body class="bg-gray-100 text-sm">
@@ -15,7 +17,7 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script src="/js/main.js"></script>
+    <script src="{{ mix('/js/main.js') }}"></script>
 </body>
 
 </html>

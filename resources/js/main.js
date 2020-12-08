@@ -4,8 +4,6 @@ import router from "./router";
 import store from "./store/";
 import "./registerServiceWorker";
 
-import "./assets/css/tailwind.css";
-import "./assets/css/main.css";
 import helperFunc from "./helperFunc";
 
 import VueMasonry from "vue-masonry-css";

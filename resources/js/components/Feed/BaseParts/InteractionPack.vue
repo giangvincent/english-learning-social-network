@@ -215,7 +215,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
-import BaggedIcon from "../../Icons/BadVoted";
+import BaggedIcon from "../../Icons/BaggedIcon";
 import GoodVoted from "../../Icons/GoodVoted.vue";
 import BadVoted from "../../Icons/BadVoted.vue";
 export default {

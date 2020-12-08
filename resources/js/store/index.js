@@ -9,23 +9,23 @@ import user from "./User";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    rootUrl: "http://thatsgood-backend.local/",
-    apiUrl: "http://thatsgood-backend.local/api",
-    popupEditor: false,
-    currentTab: "home",
-    currentPage: 1,
-    currentFeed: [],
-    tags: [],
-    categories: [],
-    posts: [],
-    showPanelRight: false,
-    showPanelLeft: false
-  },
-  mutations: mutations,
-  actions: actions,
-  modules: {
-    creator,
-    user
-  }
+    state: {
+        rootUrl: "",
+        apiUrl: "/api",
+        popupEditor: false,
+        currentTab: "home",
+        currentPage: 1,
+        currentFeed: [],
+        tags: [],
+        categories: [],
+        posts: [],
+        showPanelRight: false,
+        showPanelLeft: false
+    },
+    mutations: mutations,
+    actions: actions,
+    modules: {
+        creator,
+        user
+    }
 });
