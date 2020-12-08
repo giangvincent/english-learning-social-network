@@ -17,7 +17,8 @@
         "laravel-admin-ext/cropper": "^1.0",
         "laravel/framework": "^8.0",
         "laravel/passport": "^10.0",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.1"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
