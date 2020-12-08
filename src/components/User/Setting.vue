@@ -14,7 +14,7 @@
             v-model="user.full_name"
             placeholder
             type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <div class="py-1">
@@ -23,7 +23,7 @@
             v-model="user.nick_name"
             placeholder
             type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <div class="py-1">
@@ -33,7 +33,7 @@
             placeholder
             readonly
             type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
 
@@ -41,7 +41,7 @@
           <span class="px-1 text-sm text-gray-600">Giới thiệu ngắn</span>
           <textarea
             placeholder
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
             v-model="user.bio"
           ></textarea>
         </div>
@@ -51,7 +51,7 @@
             v-model="user.birthday"
             placeholder
             type="date"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <button
@@ -75,7 +75,7 @@
           <input
             placeholder
             type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <button
@@ -99,7 +99,7 @@
             placeholder
             type="password"
             v-model="cur_password"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <div class="py-1">
@@ -108,7 +108,7 @@
             placeholder
             type="password"
             v-model="password"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <div class="py-1">
@@ -117,7 +117,7 @@
             placeholder
             type="password"
             v-model="c_password"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow-md"
+            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
           />
         </div>
         <button
