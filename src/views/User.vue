@@ -8,11 +8,16 @@
       <div class="w-full px-4 mt-10 md:mt-6 md:px-6 lg:px-8 md:w-4/5 pt-16">
         <div class="sm:rounded sm:rounded-t-lg shadow bg-white">
           <div
-            class="h-40 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
-            style="background-image: url(/assets/images/default.jpg)"
+            class="h-64 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
+            :style="{
+              'background-image': user.cover_image
+                ? 'url(' + rootUrl + user.cover_image + ')'
+                : 'url(/assets/images/default.jpg)'
+            }"
           >
             <label
               class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+              @click="selectImage('cover')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,13 +40,14 @@
               <img
                 :src="
                   user.avatar
-                    ? user.avatar
+                    ? rootUrl + user.avatar
                     : '/assets/images/default_avatar.jpg'
                 "
-                class="rounded-full border-solid border-white border-2"
+                class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"
               />
               <label
                 class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+                @click="selectImage('avatar')"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -122,6 +128,47 @@
     <saved-post v-if="$route.query.cur === 'saved'"></saved-post>
     <setting v-if="$route.query.cur === 'setting'"></setting>
     <to-creator></to-creator>
+    <input
+      ref="imageInput"
+      type="file"
+      class="hidden"
+      accept="image/*"
+      @change="onImageSelect"
+    />
+    <div
+      class="modal-bg transition-all duration-500 fixed left-0 overflow-auto z-50 top-0 bottom-0 right-0 flex"
+      v-show="showModal"
+    >
+      <div
+        class="absolute w-full h-full bg-opacity-50 bg-black"
+        @click="showModal = false"
+      ></div>
+      <div
+        class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
+      >
+        <div class="py-3 px-3 flex flex-wrap">
+          <vue-cropper
+            ref="cropper"
+            :aspect-ratio="aspectRatio"
+            :src="cropperImg"
+          />
+        </div>
+        <div class="mb-3 flex flex-wrap justify-center  text-white">
+          <button
+            class="font-semibold rounded-lg btn-hover gradient-black px-3 py-1"
+            @click="cropImage"
+          >
+            Cắt và tải hình lên
+          </button>
+          <button
+            class="font-semibold rounded-lg btn-hover bg-gray-900 px-3 py-1"
+            @click="showModal = false"
+          >
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -132,20 +179,29 @@ import SavedPost from "@/components/User/SavedPost.vue";
 import UserCreated from "@/components/User/UserCreated.vue";
 import Setting from "@/components/User/Setting.vue";
 
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
+
 export default {
   name: "home",
   components: {
     SavedPost,
     UserCreated,
-    Setting
+    Setting,
+    VueCropper
   },
   data() {
     return {
-      items: []
+      showModal: false,
+      items: [],
+      cropperImg: "/assets/images/default.jpg",
+      croperType: "avatar",
+      aspectRatio: 1 / 1
     };
   },
   computed: {
     ...mapState({
+      rootUrl: state => state.rootUrl,
       user: state => state.user.user
     })
   },
@@ -163,7 +219,54 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_PAGE"]),
-    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"])
+    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"]),
+    selectImage(type) {
+      if (type === "avatar") {
+        this.croperType = "avatar";
+        this.aspectRatio = 1 / 1;
+      }
+      if (type === "cover") {
+        this.croperType = "cover";
+        this.aspectRatio = 16 / 9;
+      }
+      this.$refs.cropper.setAspectRatio(this.aspectRatio);
+      this.$refs.imageInput.click();
+    },
+    onImageSelect(e) {
+      const file = e.target.files[0];
+      if (file.type.indexOf("image/") === -1) {
+        alert("Please select an image file");
+        return;
+      }
+      if (typeof FileReader === "function") {
+        const reader = new FileReader();
+        let self = this;
+        reader.onload = event => {
+          self.cropperImg = event.target.result;
+          // rebuild cropperjs with the updated source
+          self.$refs.cropper.replace(event.target.result);
+          self.showModal = true;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Sorry, FileReader API not supported");
+      }
+    },
+
+    cropImage() {
+      // get image data for post processing, e.g. upload or setting image src
+      let image = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      if (this.croperType === "avatar") {
+        this.ChangeAvatar(image)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+      }
+      if (this.croperType === "cover") {
+        this.ChangeCover(image)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+      }
+    }
   }
 };
 </script>

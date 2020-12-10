@@ -189,7 +189,7 @@ export default {
         .then(
           function(result) {
             if (result.success) {
-              res(result.data);
+              res(1);
             } else {
               rej(result.message);
             }
@@ -218,7 +218,7 @@ export default {
         .then(
           function(result) {
             if (result.success) {
-              res(result.data);
+              res(1);
             } else {
               rej(result.message);
             }

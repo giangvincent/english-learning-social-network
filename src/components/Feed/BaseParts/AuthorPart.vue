@@ -8,7 +8,7 @@
         <img
           :src="
             postData.author.avatar
-              ? postData.author.avatar
+              ? rootUrl + postData.author.avatar
               : '/assets/images/default_avatar.jpg'
           "
           alt="profilepic"
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "author-part",
   props: {
@@ -38,6 +39,11 @@ export default {
     shortTimer: String,
     detailPostType: String,
     pid: String
+  },
+  computed: {
+    ...mapState({
+      rootUrl: state => state.rootUrl
+    })
   }
 };
 </script>

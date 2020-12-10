@@ -1,13 +1,12 @@
 @tailwind base;
-h1 {
-  @apply text-3xl;
-}
+
 h2 {
   @apply text-2xl;
 }
 h3 {
   @apply text-xl;
 }
+h1,
 h4 {
   @apply text-lg;
 }

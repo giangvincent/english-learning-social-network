@@ -3,7 +3,7 @@
     class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white"
   >
     <div class="w-full p-3 font-bold">
-      <h4>{{ postData.subject }}</h4>
+      <h1>{{ postData.subject }}</h1>
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
     <!-- End relation label -->
@@ -242,36 +242,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.flip-in-ver-right {
-  -webkit-animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both;
-  animation: flip-in-ver-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
-
-@-webkit-keyframes flip-in-ver-right {
-  0% {
-    -webkit-transform: rotateY(-80deg);
-    transform: rotateY(-80deg);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: rotateY(0);
-    transform: rotateY(0);
-    opacity: 1;
-  }
-}
-@keyframes flip-in-ver-right {
-  0% {
-    -webkit-transform: rotateY(-80deg);
-    transform: rotateY(-80deg);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: rotateY(0);
-    transform: rotateY(0);
-    opacity: 1;
-  }
-}
-</style>

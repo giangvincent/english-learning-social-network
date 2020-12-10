@@ -35,6 +35,27 @@
       <div class="order-2 md:order-3 flex md:w-1/3 flex-wrap justify-end">
         <div
           class="inline-block no-underline hover:text-black relative"
+          title="Tìm kiếm"
+        >
+          <svg
+            class="hover:text-black"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            width="24"
+            height="24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+        <div
+          class="inline-block no-underline hover:text-black relative ml-2"
           title="Thông báo"
           @click="toggle_right_panel"
         >
@@ -61,25 +82,40 @@
           </svg>
           <!-- Notify icon -->
         </div>
-        <router-link
-          :to="userNavigateUrl"
-          class="inline-block no-underline hover:text-black ml-2"
+        <div
+          class="inline-block no-underline ml-2"
           title="User"
+          @click="userMenu()"
         >
-          <svg
-            class="fill-current hover:text-black"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <circle fill="none" cx="12" cy="7" r="3" />
-            <path
-              d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z"
+          <div class="rounded-full flex overflow-hidden">
+            <img
+              src="/assets/images/default_avatar.jpg"
+              alt="profilepic"
+              width="24"
+              height="24"
             />
-          </svg>
+          </div>
           <!-- User icon -->
-        </router-link>
+          <div
+            class="absolute top-0 right-0 bg-white mt-12 mr-2 rounded-lg shadow font-bold"
+            v-show="showUserMenu"
+          >
+            <ul class="flex flex-col py-2 px-4">
+              <li class="my-1">
+                <router-link :to="userUploaded">Bài đã đăng</router-link>
+              </li>
+              <li class="my-1">
+                <router-link :to="userBagged">Bài đang học</router-link>
+              </li>
+              <li class="my-1">
+                <router-link :to="userSetting">Cài đặt</router-link>
+              </li>
+              <li class="my-1">
+                <router-link :to="userLogout">Thoát</router-link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
     <!-- End top bar lvl0 -->
@@ -111,8 +147,12 @@ export default {
   },
   data() {
     return {
-      userNavigateUrl: "/auth/login",
+      userUploaded: "/auth/login",
+      userBagged: "/auth/login",
+      userSetting: "/auth/login",
+      userLogout: "/auth/logout",
       showNavbar: true,
+      showUserMenu: false,
       lastScrollPosition: 0
     };
   },
@@ -120,7 +160,9 @@ export default {
     user: {
       handler: function(val) {
         if (this.user.id) {
-          this.userNavigateUrl = "/u/" + this.user.id;
+          this.userUploaded = "/u/" + this.user.id;
+          this.userBagged = "/u/" + this.user.id + "?cur=saved";
+          this.userSetting = "/u/" + this.user.id + "?cur=setting";
         }
       },
       deep: true
@@ -137,7 +179,9 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.onScroll);
     if (this.user.id) {
-      this.userNavigateUrl = "/u/" + this.user.id;
+      this.userUploaded = "/u/" + this.user.id;
+      this.userBagged = "/u/" + this.user.id + "?cur=saved";
+      this.userSetting = "/u/" + this.user.id + "?cur=setting";
     }
     if (
       typeof this.$route.params.name !== "undefined" &&
@@ -151,6 +195,13 @@ export default {
     navigate(goto) {
       this.CHANGE_TAB(goto);
       this.$router.push("/" + goto);
+    },
+    userMenu() {
+      if (this.user.id) {
+        this.showUserMenu = !this.showUserMenu;
+      } else {
+        this.$router.push("/auth/login");
+      }
     },
     onScroll() {
       const currentScrollPosition =
@@ -171,50 +222,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.slide-out-top {
-  -webkit-animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
-    both;
-  animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-}
-
-.slide-in-top {
-  -webkit-animation: slide-in-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
-    both;
-  animation: slide-in-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-}
-@-webkit-keyframes slide-out-top {
-  0% {
-    margin-top: 2.5rem;
-  }
-  100% {
-    margin-top: -2.5rem;
-  }
-}
-@keyframes slide-out-top {
-  0% {
-    margin-top: 2.5rem;
-  }
-  100% {
-    margin-top: -2.5rem;
-  }
-}
-
-@-webkit-keyframes slide-in-top {
-  0% {
-    margin-top: -2.5rem;
-  }
-  100% {
-    margin-top: 2.5rem;
-  }
-}
-@keyframes slide-in-top {
-  0% {
-    margin-top: -2.5rem;
-  }
-  100% {
-    margin-top: 2.5rem;
-  }
-}
-</style>
