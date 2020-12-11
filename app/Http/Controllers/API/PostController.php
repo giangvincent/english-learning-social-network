@@ -34,7 +34,7 @@ class PostController extends Controller
         $this->attachTags($request->tags, $newPost);
 
         $this->CreateContentFol();
-        ExportJson::exportPost($post);
+        ExportJson::exportPost($newPost);
         return response()->json(['success' => $request->all()], $this->successStatus);
     }
 
