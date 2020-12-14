@@ -1,6 +1,7 @@
 <template>
   <div
     class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white"
+    v-if="enable"
   >
     <div class="w-full p-3 font-bold">
       <h1>{{ postData.subject }}</h1>
@@ -150,6 +151,7 @@ export default {
   },
   data() {
     return {
+      enable: true,
       shortTimer: "",
       currentCardIndex: 0,
       currentBackCard: false,
@@ -206,7 +208,7 @@ export default {
   },
   mounted() {
     var self = this;
-    fetch("/content/posts/" + this.pid + ".json")
+    fetch(this.rootUrl + "api/get-json/post/" + this.pid)
       .then(res => res.json())
       .then(res => {
         // console.log(res);
@@ -216,7 +218,10 @@ export default {
         );
         self.shortTimer = self.evaluateTime(self.postData.datetime);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        self.enable = false;
+      });
   },
   methods: {
     ...mapActions(["ReqInteract", "FinishPostLearnt"]),
