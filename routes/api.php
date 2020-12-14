@@ -47,3 +47,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::get('feed-home', 'FeedController@home');
 Route::get('feed-category/{slug}', 'FeedController@feedCategory');
 Route::get('feed-tag/{slug}', 'FeedController@feedTag');
+
+Route::prefix('get-json')->group(function () {
+    Route::get('post/{id}', 'JsonController@getPost');
+
+    Route::get('category/{slug}', 'JsonController@getCategory');
+    Route::get('categories', 'JsonController@getCategories');
+    Route::get('tag/{slug}', 'JsonController@getTag');
+    Route::get('tags', 'JsonController@getTags');
+
+    Route::get('progress/{link}', 'JsonController@getUserProgress');
+});
