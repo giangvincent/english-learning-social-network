@@ -208,7 +208,7 @@ export default {
   },
   mounted() {
     var self = this;
-    fetch(this.rootUrl + "api/get-json/post/" + this.pid)
+    fetch(this.rootUrl + "get-json/post/" + this.pid)
       .then(res => res.json())
       .then(res => {
         // console.log(res);

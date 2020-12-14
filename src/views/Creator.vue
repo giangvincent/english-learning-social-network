@@ -137,11 +137,13 @@ export default {
       postContent: null,
       tags: [],
       processPost: false,
-      processUpImages: false
+      processUpImages: false,
+      errors: []
     };
   },
   computed: {
     ...mapState({
+      rootUrl: state => state.rootUrl,
       categories: state => state.categories,
       user: state => state.user.user,
       user_token: state => state.user.token,
@@ -164,7 +166,7 @@ export default {
 
     if (this.currentAction === "edit" && this.editPostId) {
       let self = this;
-      fetch("/content/posts/" + this.editPostId + ".json")
+      fetch(this.rootUrl + "get-json/post/" + this.editPostId)
         .then(res => res.json())
         .then(res => {
           // console.log(res);
@@ -234,17 +236,34 @@ export default {
           .SUBMIT_POST(postData)
           .then(res => {
             console.log(res);
+            if (res) {
+              self.$router.push("/");
+            } else {
+              self.handleErr(res);
+            }
           })
           .catch(error => {
             console.log(error);
+            self.handleErr(error);
           })
           .finally(() => {
             self.processPost = false;
           });
       });
+    },
+    handleErr(err) {},
+    resetData() {
+      (this.postType = "normalPost"),
+        (this.category = 0),
+        (this.subject = ""),
+        (this.postContent = null),
+        (this.tags = []),
+        (this.errors = []);
     }
   },
-  beforeDestroy() {}
+  beforeDestroy() {
+    this.resetData();
+  }
 };
 </script>
 
