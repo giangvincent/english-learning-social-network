@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
 class JsonController extends Controller
 {
     public $contentPath = 'content';
+
     public function getPost($id)
     {
         return file_get_contents(public_path($this->contentPath . '/posts') . '/' . $id . '.json');

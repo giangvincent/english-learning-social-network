@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JsonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +18,16 @@ Route::get('/share', function () {
 });
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group([
+    'prefix' => 'get-json',
+], function () {
+    Route::get('post/{id}', [JsonController::class, 'getPost']);
+    Route::get('category/{slug}', [JsonController::class, 'getCategory']);
+    Route::get('categories', [JsonController::class, 'getCategories']);
+    Route::get('tag/{slug}', [JsonController::class, 'getTag']);
+    Route::get('tags', [JsonController::class, 'getTags']);
+
+    Route::get('progress/{link}', [JsonController::class, 'getUserProgress']);
 });
