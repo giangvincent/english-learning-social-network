@@ -1,6 +1,6 @@
 export default {
   LOAD_TAGS: function({ state, commit }) {
-    fetch("/content/tags.json")
+    fetch(state.apiUrl + "/get-json/tags")
       .then(res => res.json())
       .then(res => {
         console.log(res);
@@ -9,7 +9,7 @@ export default {
       .catch(err => console.log(err));
   },
   LOAD_CATEGORIES: function({ state, commit }) {
-    fetch("/content/categories.json")
+    fetch(state.apiUrl + "/get-json/categories")
       .then(res => res.json())
       .then(res => {
         console.log(res);

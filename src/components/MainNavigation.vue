@@ -89,7 +89,11 @@
         >
           <div class="rounded-full flex overflow-hidden">
             <img
-              src="/assets/images/default_avatar.jpg"
+              :src="
+                user.avatar
+                  ? rootUrl + user.avatar
+                  : '/assets/images/default_avatar.jpg'
+              "
               alt="profilepic"
               width="24"
               height="24"
@@ -173,7 +177,8 @@ export default {
       currentTab: state => state.currentTab,
       user: state => state.user.user,
       categories: state => state.categories,
-      notification: state => state.user.notification
+      notification: state => state.user.notification,
+      rootUrl: state => state.rootUrl
     })
   },
   mounted() {

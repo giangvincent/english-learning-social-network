@@ -42,7 +42,7 @@ import BadVoted from "@/components/Icons/BadVoted.vue";
 export default {
   name: "interaction-pack",
   props: {
-    post_id: String,
+    post_id: String
   },
   components: {},
   data() {
@@ -50,14 +50,15 @@ export default {
       datesArray: [1],
       datesIndex: 0,
       defaultLength: 8,
-      dataProgress: [],
+      dataProgress: []
     };
   },
   computed: {
     ...mapState({
-      user: (state) => state.user.user,
-      baggedPosts: (state) => state.user.baggedPosts,
-    }),
+      user: state => state.user.user,
+      baggedPosts: state => state.user.baggedPosts,
+      rootUrl: state => state.rootUrl
+    })
   },
   mounted() {
     this.fibonacciDates();
@@ -68,15 +69,19 @@ export default {
     ...mapMutations(["setBaggedPosts"]),
     loadProgressData() {
       let fileProgress =
-        "/content/progress/" + this.user.id + "_" + this.post_id + ".json";
+        this.rootUrl +
+        "/get-json/progress/" +
+        this.user.id +
+        "_" +
+        this.post_id;
       let self = this;
       if (this.isExist(fileProgress))
         fetch(fileProgress)
-          .then((res) => res.json())
-          .then((res) => {
+          .then(res => res.json())
+          .then(res => {
             self.dataProgress = res;
           })
-          .catch((err) => console.log(err));
+          .catch(err => console.log(err));
     },
     unLearn() {
       let newBaggedPosts = this.baggedPosts;
@@ -87,10 +92,10 @@ export default {
       }
       this.setBaggedPosts(newBaggedPosts);
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self.ReqInteract({
           post_id: self.post_id,
-          interact: "un-bagged",
+          interact: "un-bagged"
         });
       }, 500);
     },
@@ -106,7 +111,7 @@ export default {
       this.datesArray.push(nextDate);
       this.datesIndex++;
       return this.fibonacciDates();
-    },
-  },
+    }
+  }
 };
 </script>
