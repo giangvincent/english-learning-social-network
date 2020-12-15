@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('create-post', 'PostController@CreatePost');
     Route::post('update-post', 'PostController@updatePost');
     Route::post('delete-post', 'PostController@deletePost');
+    Route::post('report-post', 'PostController@reportPost');
 
     Route::post('upload-image', 'TempController@uploadTempImg');
 

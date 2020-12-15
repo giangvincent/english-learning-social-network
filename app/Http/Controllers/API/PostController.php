@@ -34,4 +34,11 @@ class PostController extends Controller
         return $postApi->handleDeletePost($post);
     }
 
+    public function reportPost(PostIDRequest $request)
+    {
+        $post = Post::where('pid', $request->pid)->firstOrFail();
+
+        return response()->json(['success' => 1]);
+    }
+
 }
