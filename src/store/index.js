@@ -20,7 +20,8 @@ export default new Vuex.Store({
     categories: [],
     posts: [],
     showPanelRight: false,
-    showPanelLeft: false
+    showPanelLeft: false,
+    welcomeEnable: false
   },
   mutations: mutations,
   actions: actions,

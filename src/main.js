@@ -10,6 +10,8 @@ import helperFunc from "./helperFunc";
 
 import VueMasonry from "vue-masonry-css";
 import ReadMore from "vue-read-more";
+import VueToast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 Vue.config.productionTip = false;
 
@@ -46,6 +48,10 @@ Vue.component("SidePanelRight", () =>
 );
 Vue.use(ReadMore);
 Vue.use(VueMasonry);
+Vue.use(VueToast, {
+  // One of the options
+  position: "top-right"
+});
 
 new Vue({
   router,

@@ -1,3 +1,7 @@
+.min-h-1 {
+  min-height: 2.5rem;
+}
+
 .mirror {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);

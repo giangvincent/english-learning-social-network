@@ -237,6 +237,7 @@ export default {
           .then(res => {
             console.log(res);
             if (res) {
+              self.$toast.success("Bài viết đã được đăng thành công.");
               self.$router.push("/");
             } else {
               self.handleErr(res);

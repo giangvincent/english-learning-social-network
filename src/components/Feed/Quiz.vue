@@ -48,17 +48,25 @@
               currentQuizIndex
             ].correctAnswers.includes(index),
             'border-green-800 bg-green-400':
-              reviewCorrectAns &&
-              postData.content[currentQuizIndex].correctAnswers.includes(
-                numAnswer
-              ) &&
-              numAnswer === index,
+              (reviewCorrectAns &&
+                postData.content[currentQuizIndex].correctAnswers.includes(
+                  numAnswer
+                ) &&
+                numAnswer === index) ||
+              (reviewCorrectAns &&
+                postData.content[currentQuizIndex].correctAnswers.includes(
+                  index
+                )),
             'border-red-700 bg-red-400':
-              reviewCorrectAns &&
-              !postData.content[currentQuizIndex].correctAnswers.includes(
-                numAnswer
-              ) &&
-              numAnswer !== index
+              (reviewCorrectAns &&
+                !postData.content[currentQuizIndex].correctAnswers.includes(
+                  numAnswer
+                ) &&
+                numAnswer === index) ||
+              (reviewCorrectAns &&
+                postData.content[currentQuizIndex].correctAnswers.includes(
+                  index
+                ))
           }"
           v-for="(answer, index) in postData.content[currentQuizIndex].answers"
           :key="'answers-' + index"
@@ -79,8 +87,16 @@
         class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center py-1"
         @click="toNextQuiz()"
         v-show="reviewCorrectAns"
+        v-if="!resetEnable"
       >
         Next
+      </button>
+      <button
+        class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center py-1"
+        @click="resetLearning()"
+        v-if="resetEnable"
+      >
+        Học lại
       </button>
     </div>
 
@@ -97,6 +113,8 @@
           $route.name !== 'user-page'
       "
       :post_id="pid"
+      detailPostType="quiz"
+      :author="postData.author"
       :indicatorNum="interactIndicatorNumber"
       :interactOb="postData.interact"
     ></interaction-pack>
@@ -129,6 +147,7 @@ export default {
     return {
       enable: true,
       nextQuiz: false,
+      resetEnable: false,
       currentQuizIndex: 0,
       reviewCorrectAns: false,
       answered: false,
@@ -192,11 +211,13 @@ export default {
       .then(res => res.json())
       .then(res => {
         // console.log(res);
-        self.postData = res[0];
-        self.postData.content = self.postData.content.sort(
-          () => Math.random() - 0.5
-        );
-        self.shortTimer = self.evaluateTime(self.postData.datetime);
+        if (typeof res[0] !== "undefined") {
+          self.postData = res[0];
+          self.postData.content = self.postData.content.sort(
+            () => Math.random() - 0.5
+          );
+          self.shortTimer = self.evaluateTime(self.postData.datetime);
+        } else self.enable = false;
       })
       .catch(err => {
         console.log(err);
@@ -209,15 +230,17 @@ export default {
       if (!this.answered) {
         this.answered = true;
         this.numAnswer = index;
-        this.ReqInteract({ post_id: this.pid, interact: "bagged" });
+
         var self = this;
         setTimeout(() => {
           self.reviewCorrectAns = true;
         }, 1000);
         if (this.currentQuizIndex >= this.postData.content.length - 1) {
+          this.resetEnable = true;
           this.FinishPostLearnt(this.pid)
             .then(res => {
               console.log("finish learning this post", res);
+              self.$toast.info("Thanks for learnt.");
             })
             .catch(error => console.log(error));
         }
@@ -232,6 +255,17 @@ export default {
         this.currentQuizIndex < this.postData.content.length - 1
           ? this.currentQuizIndex + 1
           : this.currentQuizIndex;
+    },
+    resetLearning() {
+      this.resetEnable = false;
+      this.postData.content = this.postData.content.sort(
+        () => Math.random() - 0.5
+      );
+      this.nextQuiz = false;
+      this.reviewCorrectAns = false;
+      this.answered = false;
+      this.numAnswer = null;
+      this.currentQuizIndex = 0;
     }
   }
 };

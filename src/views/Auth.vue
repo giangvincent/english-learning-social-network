@@ -336,6 +336,7 @@ export default {
         localStorage.clear();
         this.SET_USER({});
         this.SET_TOKEN(null);
+        this.$toast.success("Đăng xuất thành công.");
         this.$router.push("/");
       }
     }

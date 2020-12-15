@@ -22,5 +22,8 @@ export default {
   },
   SET_CATEGORIES: function(state, payload) {
     state.categories = payload;
+  },
+  SET_WELCOME: function(state, payload) {
+    state.welcomeEnable = payload;
   }
 };
