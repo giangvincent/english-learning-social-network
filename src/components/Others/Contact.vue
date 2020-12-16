@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="container mx-auto p-6 md:p-12 mt-6 relative flex flex-wrap md:w-6/12"
-  >
+  <div class="container mx-auto p-6 md:p-12 mt-6 relative flex flex-wrap">
     <div class="w-full mb-5 pb-1border-b-2 text-center font-base text-gray-700">
       <router-link
         class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
@@ -43,7 +41,7 @@
       </div>
       <div class="py-1">
         <span class="px-1 text-sm text-gray-600">Nội dung</span>
-        <div class="relative">
+        <div class="relative rounded-lg bg-white border-2 border-gray-300">
           <div id="editor-container">
             <div
               id="editor"
