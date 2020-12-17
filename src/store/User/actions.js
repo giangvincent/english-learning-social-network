@@ -320,16 +320,18 @@ export default {
     });
   },
   SeenNotification: function({ rootState, state, commit }, payload) {
-    fetch(rootState.apiUrl + "/seen-notification/" + payload, {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + rootState.user.token
-      }
-    })
-      .then(res => {
-        console.log(res);
+    if (rootState.user && rootState.user.token) {
+      fetch(rootState.apiUrl + "/seen-notification/" + payload, {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + rootState.user.token
+        }
       })
-      .catch(err => console.log(err));
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => console.log(err));
+    }
   }
 };

@@ -44,6 +44,11 @@ const router = new Router({
       path: "/:name",
       name: "category-feed",
       component: () => import("./views/Category.vue")
+    },
+    {
+      path: "/about/:page",
+      name: "other-pages",
+      component: () => import("./views/About.vue")
     }
   ]
 });

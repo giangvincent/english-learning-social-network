@@ -117,7 +117,7 @@
         @click="showModal = false"
       ></div>
       <div
-        class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
+        class="modal-content bg-white relative m-auto max-w-lg shadow-lg rounded-lg"
       >
         <div
           class="closeBtn absolute right-0 top-0 font-bold text-4xl w-10 h-10 flex justify-center items-center bg-gray-900 text-white rounded-full -m-4"
@@ -126,8 +126,9 @@
           &times;
         </div>
         <div class="py-3 px-3 flex flex-wrap">
-          <div
-            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+          <router-link
+            class="mx-2 p-2 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+            :to="`/p/${detailPostType}/${post_id}`"
           >
             <svg
               class="w-8"
@@ -144,9 +145,11 @@
               />
             </svg>
             <span class="font-bold text-center">Bình luận</span>
-          </div>
+          </router-link>
           <div
-            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+            class="mx-2 p-2 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+            v-if="user.id !== author.id"
+            @click="RequestReportPost()"
           >
             <svg
               class="w-8"
@@ -165,8 +168,9 @@
             <span class="text-center font-bold">Báo cáo</span>
           </div>
           <div
-            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg focus:bg-gray-300"
+            class="mx-2 p-2 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
             @click="goEditPost"
+            v-if="user.id === author.id"
           >
             <svg
               class="w-8"
@@ -185,8 +189,9 @@
             <span class="text-center font-bold">Thay đổi</span>
           </div>
           <div
-            class="w-1/2 md:w-1/4 p-1 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
+            class="mx-2 p-2 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
             @click="RequestDeletePost()"
+            v-if="user.id === author.id"
           >
             <svg
               class="w-8"
@@ -221,6 +226,8 @@ export default {
   name: "interaction-pack",
   props: {
     post_id: String,
+    detailPostType: String,
+    author: Object,
     indicatorNum: Object,
     interactOb: Object
   },
@@ -266,10 +273,24 @@ export default {
       this.SET_edit_post_id(this.post_id);
       this.$router.push("/creator");
     },
+    RequestReportPost() {
+      var self = this;
+      setTimeout(function() {
+        self
+          .ReqInteract({
+            post_id: self.post_id,
+            interact: "report"
+          })
+          .then(res => {
+            self.$toast.success("Báo cáo đã được gửi đi.");
+          });
+      }, 500);
+    },
     RequestDeletePost() {
       this.REQ_DEL_POST(this.post_id)
         .then(res => {
           console.log(res);
+          self.$toast.success("Bài viết đã xóa.");
         })
         .catch(error => {
           console.log(error);

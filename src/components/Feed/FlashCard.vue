@@ -82,9 +82,9 @@
         </div>
       </section>
       <!-- End content text -->
-      <div class="px-3 pb-4 flex flex-row">
+      <div class="px-3 pb-4 flex flex-row" v-if="!resetEnable">
         <div
-          class="flex flex-wrap content-center justify-center text-md md:text-lg font-semibold py-2 border-gray-600 focus:outline-none rounded-lg border-2 w-3/4"
+          class="flex flex-wrap content-center justify-center text-md md:text-lg font-semibold py-2 border-gray-600 focus:outline-none rounded-lg border-2 w-3/4 min-h-1"
         >
           {{ currentAnswer }}
         </div>
@@ -93,6 +93,14 @@
           @click="toNextCard()"
         >
           Next
+        </button>
+      </div>
+      <div class="px-3 pb-4 flex flex-row" v-if="resetEnable">
+        <button
+          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center min-h-1 mx-auto"
+          @click="resetLearning()"
+        >
+          Học lại
         </button>
       </div>
       <!-- Review back card -->
@@ -120,6 +128,8 @@
           $route.name !== 'user-page'
       "
       :post_id="pid"
+      detailPostType="flash-card"
+      :author="postData.author"
       :indicatorNum="interactIndicatorNumber"
       :interactOb="postData.interact"
     ></interaction-pack>
@@ -156,6 +166,7 @@ export default {
       currentCardIndex: 0,
       currentBackCard: false,
       currentAnswer: null,
+      resetEnable: false,
       postData: {
         id: 0,
         pid: "",
@@ -208,15 +219,17 @@ export default {
   },
   mounted() {
     var self = this;
-    fetch(this.rootUrl + "api/get-json/post/" + this.pid)
+    fetch(this.rootUrl + "get-json/post/" + this.pid)
       .then(res => res.json())
       .then(res => {
         // console.log(res);
-        self.postData = res[0];
-        self.postData.content = self.postData.content.sort(
-          () => Math.random() - 0.5
-        );
-        self.shortTimer = self.evaluateTime(self.postData.datetime);
+        if (typeof res[0] !== "undefined") {
+          self.postData = res[0];
+          self.postData.content = self.postData.content.sort(
+            () => Math.random() - 0.5
+          );
+          self.shortTimer = self.evaluateTime(self.postData.datetime);
+        } else self.enable = false;
       })
       .catch(err => {
         console.log(err);
@@ -227,11 +240,13 @@ export default {
     ...mapActions(["ReqInteract", "FinishPostLearnt"]),
     reviewBackCard() {
       this.currentBackCard = true;
-      this.ReqInteract({ post_id: this.pid, interact: "bagged" });
+
       if (this.currentCardIndex >= this.postData.content.length - 1) {
+        this.resetEnable = true;
         this.FinishPostLearnt(this.pid)
           .then(res => {
             console.log("finish learning this post", res);
+            self.$toast.info("Thanks for learnt.");
           })
           .catch(error => console.log(error));
       }
@@ -243,6 +258,15 @@ export default {
         this.currentCardIndex < this.postData.content.length - 1
           ? this.currentCardIndex + 1
           : this.currentCardIndex;
+    },
+    resetLearning() {
+      this.resetEnable = false;
+      this.postData.content = this.postData.content.sort(
+        () => Math.random() - 0.5
+      );
+      this.currentCardIndex = 0;
+      this.currentBackCard = false;
+      this.currentAnswer = null;
     }
   }
 };

@@ -38,7 +38,12 @@
 
       <!-- End content text -->
     </div>
-
+    <button
+      class="font-semibold text-white rounded-lg w-1/4 flex justify-center items-center py-1 mx-auto bg-gray-600 hover:bg-gray-800"
+      @click="checkLearnt()"
+    >
+      Đã đọc hết
+    </button>
     <author
       :postData="postData"
       :shortTimer="shortTimer"
@@ -52,6 +57,8 @@
           $route.name !== 'user-page'
       "
       :post_id="pid"
+      detailPostType="post"
+      :author="postData.author"
       :indicatorNum="interactIndicatorNumber"
       :interactOb="postData.interact"
     ></interaction-pack>
@@ -65,7 +72,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 // import slideImages from "./SlideImages";
 import interactionPack from "./BaseParts/InteractionPack";
 import ProcessBar from "./BaseParts/ProcessBar";
@@ -140,17 +147,30 @@ export default {
   },
   mounted() {
     var self = this;
-    fetch(this.rootUrl + "api/get-json/post/" + this.pid)
+    fetch(this.rootUrl + "get-json/post/" + this.pid)
       .then(res => res.json())
       .then(res => {
-        // console.log(res);
-        self.postData = res[0];
-        self.shortTimer = self.evaluateTime(self.postData.datetime);
+        if (typeof res[0] !== "undefined") {
+          self.postData = res[0];
+          self.shortTimer = self.evaluateTime(self.postData.datetime);
+        } else self.enable = false;
       })
       .catch(err => {
         console.log(err);
         self.enable = false;
       });
+  },
+  methods: {
+    ...mapActions(["FinishPostLearnt"]),
+    checkLearnt() {
+      let self = this;
+      this.FinishPostLearnt(this.pid)
+        .then(res => {
+          console.log("finish learning this post", res);
+          self.$toast.info("Thanks for learnt.");
+        })
+        .catch(error => console.log(error));
+    }
   }
 };
 </script>

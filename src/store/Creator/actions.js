@@ -57,8 +57,8 @@ export default {
         })
         .then(function(data) {
           console.log(data);
-          if (typeof data.success !== "undefined") {
-            let successData = data.success;
+          if (typeof data.status !== "undefined") {
+            let successData = data.status;
             res(successData);
           } else {
             rej(data.error);
@@ -75,6 +75,37 @@ export default {
 
     return new Promise((res, rej) => {
       fetch(rootState.apiUrl + "/delete-post", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + rootState.user.token
+        },
+        body: data
+      })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(function(data) {
+          console.log(data);
+          if (typeof data.success !== "undefined") {
+            let successData = data.success;
+            res(successData);
+          } else {
+            rej(data.error);
+          }
+        })
+        .catch(err => {
+          rej(err);
+        });
+    });
+  },
+
+  REQ_REPORT_POST: function({ rootState, state, commit }, payload) {
+    var data = new FormData();
+    data.append("pid", payload);
+
+    return new Promise((res, rej) => {
+      fetch(rootState.apiUrl + "/report-post", {
         method: "POST",
         headers: {
           Accept: "application/json",

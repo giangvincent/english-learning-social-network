@@ -34,17 +34,26 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentFeed", "currentPage"])
+    ...mapState(["currentFeed", "currentPage", "welcomeEnable"])
   },
   mounted() {
     this.CHANGE_TAB("home");
     this.SET_CURRENTFEED([]);
     this.SET_PAGE(1);
     // this.LOAD_HOME();
+    if (!this.welcomeEnable) {
+      this.$toast.info("Chào mừng bạn đã đến Thatsgood.");
+      this.SET_WELCOME(true);
+    }
   },
   methods: {
     ...mapActions(["LOAD_HOME"]),
-    ...mapMutations(["CHANGE_TAB", "SET_PAGE", "SET_CURRENTFEED"]),
+    ...mapMutations([
+      "CHANGE_TAB",
+      "SET_PAGE",
+      "SET_CURRENTFEED",
+      "SET_WELCOME"
+    ]),
     infiniteHandler($state) {
       var self = this;
       this.LOAD_HOME()
