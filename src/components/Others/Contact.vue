@@ -51,9 +51,21 @@
         </div>
       </div>
 
+      <div class="py-1">
+        <ul>
+          <li
+            class=" text-red-600 "
+            v-for="(err, index) in errors"
+            :key="'err-' + index"
+          >
+            - {{ err }}
+          </li>
+        </ul>
+      </div>
+
       <button
         class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
-        @click="sendRegister()"
+        @click="sendContact()"
       >
         <span v-if="!processApi">
           Gửi liên hệ
@@ -67,21 +79,32 @@
 </template>
 
 <script>
+import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import { mapState } from "vuex";
 export default {
   name: "contact",
+  components: {
+    LoadingIcon
+  },
   data() {
     return {
       processApi: false,
       email: null,
       name: null,
       subject: null,
-      content: null
+      content: null,
+      errors: []
     };
   },
   mounted() {
     this.initEditor();
+  },
+  computed: {
+    ...mapState({
+      apiUrl: state => state.apiUrl
+    })
   },
   methods: {
     initEditor() {
@@ -120,11 +143,59 @@ export default {
       this.editor.on("text-change", function(delta, oldDelta, source) {
         self.content = self.editor.root.innerHTML;
       });
-
-      changeHeightEleByClass(document.getElementsByClassName("editor"));
-      changeHeightEleByClass(document.getElementsByClassName("ql-editor"));
     },
-    sendContact() {}
+    sendContact() {
+      this.errors = [];
+      if (!this.email) {
+        this.errors.push("Email còn trống");
+      }
+      if (!this.name) {
+        this.errors.push("Tên còn trống");
+      }
+      if (!this.subject) {
+        this.errors.push("Vấn đề còn trống");
+      }
+      if (!this.content) {
+        this.errors.push("Nội dung còn trống");
+      }
+      var data = new FormData();
+      data.append("email", this.email);
+      data.append("name", this.name);
+      data.append("subject", this.subject);
+      data.append("content", this.content);
+      let url = this.apiUrl + "/new-contact";
+      this.processApi = true;
+      let self = this;
+      fetch(url, {
+        method: "POST",
+        body: data
+      })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(function(data) {
+          console.log(data);
+          self.processApi = false;
+          if (typeof data.status !== "undefined" && data.status) {
+            self.$toast.success("Liên hệ đã được gửi thành công.");
+            self.$toast.info(
+              "Cảm ơn bạn đã liên hệ. Ban quản trị sẽ trả lời lại bạn trong thời gian sớm nhất."
+            );
+            self.$router.push("/");
+          } else {
+            self.$toast.error(
+              "Đã xảy lỗi. Vui lòng xem lại thông tin liên hệ."
+            );
+            for (var key in data.error) {
+              self.errors.push(data.error[key][0]);
+            }
+          }
+        })
+        .catch(err => {
+          self.$toast.error("Đã xảy lỗi.", err);
+          console.log(err);
+        });
+    }
   }
 };
 </script>
