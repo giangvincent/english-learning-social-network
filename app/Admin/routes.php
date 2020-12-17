@@ -18,5 +18,6 @@ Route::group([
     $router->resource('posts', PostController::class);
     $router->resource('tags', TagController::class);
     $router->resource('users', UserController::class);
+    $router->resource('contacts', ContactController::class);
 
 });

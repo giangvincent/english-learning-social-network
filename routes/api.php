@@ -19,6 +19,7 @@ return $request->user();
 
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
+Route::post('new-contact', 'ContactController@handleCreateContact');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user-detail', 'UserController@details');

@@ -111,8 +111,8 @@ class PostApi extends Controller
             $pid = (string) Str::uuid();
             $newPost = new Post();
             $newPost->pid = $pid;
-            $newPost->subject = $request->subject;
-            $newPost->content = $request->content;
+            $newPost->subject = strip_tags($request->subject);
+            $newPost->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
             $newPost->type = $request->post_type;
             $newPost->category = $request->cat_id;
             $newPost->author = Auth::user()->id;
@@ -128,8 +128,8 @@ class PostApi extends Controller
     private static function changePostDB($request, $post)
     {
         try {
-            $post->subject = $request->subject;
-            $post->content = $request->content;
+            $post->subject = strip_tags($request->subject);
+            $post->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
             $post->type = $request->post_type;
             $post->category = $request->cat_id;
             $post->save();
