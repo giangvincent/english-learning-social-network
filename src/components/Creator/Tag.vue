@@ -10,7 +10,7 @@
     />
     <div
       :class="{ hidden: !initSugguest }"
-      class="absolute shadow-lg bg-white top-0 z-40 w-full left-0 mt-16 rounded max-h-select overflow-y-auto"
+      class="absolute shadow-md bg-white bottom-0 z-40 w-full mb-18 rounded max-h-select overflow-y-auto"
       @click="initSugguest = false"
     >
       <div class="flex flex-col w-full">
@@ -125,6 +125,9 @@ export default {
 };
 </script>
 <style>
+.mb-18 {
+  margin-bottom: 4.5rem;
+}
 .max-h-select {
   max-height: 10rem;
 }
