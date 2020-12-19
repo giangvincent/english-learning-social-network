@@ -12,7 +12,7 @@
             :style="{
               'background-image': user.cover_image
                 ? 'url(' + rootUrl + user.cover_image + ')'
-                : 'url(/assets/images/default.jpg)'
+                : 'url(/assets/images/default.jpg)',
             }"
           >
             <label
@@ -71,7 +71,7 @@
               >({{ user.nick_name }})</span
             >
             <p class="mt-2 text-grey-dark">
-              Hello, i'm from another the other side!
+              {{ user.bio }}
             </p>
           </div>
           <!-- End bio -->
@@ -80,13 +80,13 @@
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: user.id }
+                params: { id: user.id },
               }"
               class="w-1/3 py-3"
               replace
               :class="{
                 'border-b-2 border-gray-900':
-                  typeof $route.query.cur === 'undefined'
+                  typeof $route.query.cur === 'undefined',
               }"
               >Đã đăng</router-link
             >
@@ -94,12 +94,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'saved' }
+                query: { cur: 'saved' },
               }"
               replace
               class="w-1/3 py-3"
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'saved'
+                'border-b-2 border-gray-900': $route.query.cur === 'saved',
               }"
               >Đang học</router-link
             >
@@ -107,12 +107,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'setting' }
+                query: { cur: 'setting' },
               }"
               class="w-1/3 py-3"
               replace
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'setting'
+                'border-b-2 border-gray-900': $route.query.cur === 'setting',
               }"
               >Cài đặt</router-link
             >
@@ -153,7 +153,7 @@
             :src="cropperImg"
           />
         </div>
-        <div class="mb-3 flex flex-wrap justify-center  text-white">
+        <div class="mb-3 flex flex-wrap justify-center text-white">
           <button
             class="font-semibold rounded-lg btn-hover gradient-black px-3 py-1"
             @click="cropImage"
@@ -188,7 +188,7 @@ export default {
     SavedPost,
     UserCreated,
     Setting,
-    VueCropper
+    VueCropper,
   },
   data() {
     return {
@@ -196,26 +196,26 @@ export default {
       items: [],
       cropperImg: "/assets/images/default.jpg",
       croperType: "avatar",
-      aspectRatio: 1 / 1
+      aspectRatio: 1 / 1,
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl,
-      user: state => state.user.user
-    })
+      rootUrl: (state) => state.rootUrl,
+      user: (state) => state.user.user,
+    }),
   },
   mounted() {
     this.SET_PAGE("user");
     let self = this;
     this.LoadUserInfo()
-      .then(userInfo => {
+      .then((userInfo) => {
         // console.log(userInfo);
         if (self.isLocalStorage()) {
           localStorage.setItem("user", JSON.stringify(userInfo));
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   },
   methods: {
     ...mapMutations(["SET_PAGE"]),
@@ -241,7 +241,7 @@ export default {
       if (typeof FileReader === "function") {
         const reader = new FileReader();
         let self = this;
-        reader.onload = event => {
+        reader.onload = (event) => {
           self.cropperImg = event.target.result;
           // rebuild cropperjs with the updated source
           self.$refs.cropper.replace(event.target.result);
@@ -258,15 +258,15 @@ export default {
       let image = this.$refs.cropper.getCroppedCanvas().toDataURL();
       if (this.croperType === "avatar") {
         this.ChangeAvatar(image)
-          .then(res => console.log(res))
-          .catch(err => console.log(err));
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
       }
       if (this.croperType === "cover") {
         this.ChangeCover(image)
-          .then(res => console.log(res))
-          .catch(err => console.log(err));
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
       }
-    }
-  }
+    },
+  },
 };
 </script>

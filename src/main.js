@@ -9,7 +9,6 @@ import "@/assets/css/main.css";
 import helperFunc from "./helperFunc";
 
 import VueMasonry from "vue-masonry-css";
-import ReadMore from "vue-read-more";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
@@ -46,7 +45,7 @@ Vue.component("SidePanelLeft", () =>
 Vue.component("SidePanelRight", () =>
   import("@/components/Navigator/SidePanelRight.vue")
 );
-Vue.use(ReadMore);
+
 Vue.use(VueMasonry);
 Vue.use(VueToast, {
   // One of the options
