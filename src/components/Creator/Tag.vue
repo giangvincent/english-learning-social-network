@@ -1,5 +1,5 @@
 <template>
-  <div class="py-1">
+  <div class="py-1 relative">
     <span class="px-1  text-gray-600">Gắn Tag</span>
     <input
       placeholder="Tên của Tag"
@@ -8,6 +8,30 @@
       v-model="curTag"
       v-on:keyup.enter="createHashtag()"
     />
+    <div
+      :class="{ hidden: !initSugguest }"
+      class="absolute shadow-md bg-white bottom-0 z-40 w-full mb-18 rounded max-h-select overflow-y-auto"
+      @click="initSugguest = false"
+    >
+      <div class="flex flex-col w-full">
+        <div
+          class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
+          v-for="(tag, index) in sugguestTags"
+          @click="addSugguestTag(index)"
+          :key="`select-${index}`"
+        >
+          <div
+            class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100"
+          >
+            <div class="w-full items-center flex">
+              <div class="mx-2 -mt-1">
+                {{ tag }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="py-3">
       <span
         v-for="(tag, index) in tags"
@@ -38,6 +62,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "tags",
   props: {
@@ -45,10 +70,37 @@ export default {
   },
   data() {
     return {
+      initSugguest: false,
+      sugguestTags: [],
       curTag: ""
     };
   },
   mounted() {},
+  computed: {
+    ...mapState({
+      allTags: state => state.tags
+    })
+  },
+  watch: {
+    curTag: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.initSugguest = true;
+        let regexStr = new RegExp("^.*" + newVal + ".*", "g");
+        this.sugguestTags = [];
+        this.allTags.forEach(tag => {
+          if (
+            regexStr.exec(tag.name) !== null &&
+            !this.tags.includes(tag.name)
+          ) {
+            this.sugguestTags.push(tag.name);
+          }
+        });
+      }
+      if (newVal === "") {
+        this.initSugguest = false;
+      }
+    }
+  },
   methods: {
     removeTag(index) {
       this.tags.splice(index, 1);
@@ -63,7 +115,20 @@ export default {
         this.curTag = "";
         this.$emit("updateTags", this.tags);
       }
+    },
+    addSugguestTag(index) {
+      console.log(this.sugguestTags[index]);
+      this.curTag = this.sugguestTags[index];
+      this.createHashtag();
     }
   }
 };
 </script>
+<style>
+.mb-18 {
+  margin-bottom: 4.5rem;
+}
+.max-h-select {
+  max-height: 10rem;
+}
+</style>
