@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1  text-gray-600">Nội dung gợi ý</span>
+        <span class="px-1 text-gray-600">Nội dung gợi ý</span>
         <content-editor
           :contentHtml="card.contentHtml"
           :contentOrigin="card.contentOrigin"
@@ -42,7 +42,7 @@
       ></image-preview>
 
       <div class="py-1">
-        <span class="px-1  text-gray-600">Kết quả</span>
+        <span class="px-1 text-gray-600">Kết quả</span>
         <content-editor
           :paraIndex="'-flip-content-' + index"
           :contentHtml="card.flipContentHtml"
@@ -76,13 +76,14 @@ export default {
   name: "flash-card",
   components: {
     ContentEditor,
-    ImagePreview
+    ImagePreview,
   },
   props: {
-    data: Array
+    data: Array,
   },
   data() {
     return {
+      maxCards: 15,
       flashCards: [
         {
           contentHtml: "",
@@ -90,9 +91,9 @@ export default {
           images: [],
           flipContentHtml: "",
           flipContentOrigin: { ops: [] },
-          flipImages: []
-        }
-      ]
+          flipImages: [],
+        },
+      ],
     };
   },
   watch: {
@@ -100,15 +101,15 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.flashCards);
       },
-      deep: true
+      deep: true,
     },
     data: {
-      handler: function(val) {
+      handler: function (val) {
         console.log(val);
         this.flashCards = this.data;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     console.log(this.data);
@@ -127,7 +128,7 @@ export default {
         images: [],
         flipContentHtml: "",
         flipContentOrigin: { ops: [] },
-        flipImages: []
+        flipImages: [],
       });
     },
     updateContent(content, paraIndex) {
@@ -144,7 +145,7 @@ export default {
     },
     updateFlipImages(images, paraIndex) {
       this.flashCards[paraIndex].flipImages = images;
-    }
-  }
+    },
+  },
 };
 </script>

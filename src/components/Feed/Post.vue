@@ -8,38 +8,47 @@
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
     <!-- End relation label -->
-
-    <div
-      v-for="(content, index) in postData.content"
-      :key="`PostData-${index}`"
-    >
-      <div class="mx-auto bg-color-black">
-        <img
-          v-for="(image, imgIndex) in content.images"
-          :key="`content.images.${imgIndex}`"
-          class="w-full"
-          :src="rootUrl + image"
-        />
-      </div>
-      <!-- End media -->
-      <section>
-        <div class="ql-snow" style="height: auto; border: none">
-          <div class="ql-editor" style="height: auto">
-            <read-more
-              more-str="Đọc hết"
-              :text="content.contentHtml"
-              link="#"
-              less-str="Che đi"
-              :max-chars="700"
-            ></read-more>
-          </div>
+    <div :class="{ 'max-post-view': readmore }">
+      <div
+        v-for="(content, index) in postData.content"
+        :key="`PostData-${index}`"
+      >
+        <div class="mx-auto bg-color-black">
+          <img
+            v-for="(image, imgIndex) in content.images"
+            :key="`content.images.${imgIndex}`"
+            class="w-full"
+            :src="rootUrl + image"
+          />
         </div>
-      </section>
+        <!-- End media -->
+        <section>
+          <div class="ql-snow" style="height: auto; border: none">
+            <div
+              class="ql-editor"
+              style="height: auto"
+              v-html="content.contentHtml"
+            ></div>
+          </div>
+        </section>
 
-      <!-- End content text -->
+        <!-- End content text -->
+      </div>
     </div>
+    <span
+      class="px-3 text-blue-600 underline"
+      v-if="readmore"
+      @click="readmore = false"
+      >... Show more</span
+    >
+    <span
+      class="px-3 text-blue-600 underline"
+      v-if="!readmore && numberString > 400"
+      @click="readmore = true"
+      >Show less</span
+    >
     <button
-      class="font-semibold text-white rounded-lg w-1/4 flex justify-center items-center py-1 mx-auto bg-gray-600 hover:bg-gray-800"
+      class="font-semibold text-white rounded-lg w-1/4 flex justify-center items-center py-1 my-1 mx-auto bg-gray-600 hover:bg-gray-800"
       @click="checkLearnt()"
     >
       Đã đọc hết
@@ -54,7 +63,7 @@
     <interaction-pack
       v-if="
         ($route.name === 'user-page' && !$route.query.cur) ||
-          $route.name !== 'user-page'
+        $route.name !== 'user-page'
       "
       :post_id="pid"
       detailPostType="post"
@@ -82,16 +91,18 @@ import Author from "./BaseParts/AuthorPart";
 export default {
   name: "image-item",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     ProcessBar,
     interactionPack,
     CatsAndTags,
-    Author
+    Author,
   },
   data() {
     return {
+      readmore: false,
+      numberString: 0,
       enable: true,
       shortTimer: "",
       postData: {
@@ -101,40 +112,40 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         subject: "",
         content: [
           {
             contentHtml: "<p>loading...</p>",
-            images: [""]
-          }
+            images: [""],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
+        nums_bad: 0,
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
-      }
+        nums_bad: 0,
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   watch: {
     postData: {
-      handler: function(val) {
+      handler: function (val) {
         this.interactIndicatorNumber.nums_bagged =
           this.postData.nums_bagged !== null ? this.postData.nums_bagged : 0;
         this.interactIndicatorNumber.nums_good =
@@ -142,35 +153,50 @@ export default {
         this.interactIndicatorNumber.nums_bad =
           this.postData.nums_bad !== null ? this.postData.nums_bad : 0;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     var self = this;
     fetch(this.rootUrl + "get-json/post/" + this.pid)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (typeof res[0] !== "undefined") {
           self.postData = res[0];
           self.shortTimer = self.evaluateTime(self.postData.datetime);
+          self.checkReadmore();
         } else self.enable = false;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         self.enable = false;
       });
   },
   methods: {
     ...mapActions(["FinishPostLearnt"]),
+    checkReadmore() {
+      this.postData.content.forEach((content) => {
+        this.numberString += content.contentHtml.length;
+      });
+
+      if (this.numberString > 400) this.readmore = true;
+    },
     checkLearnt() {
       let self = this;
       this.FinishPostLearnt(this.pid)
-        .then(res => {
+        .then((res) => {
           console.log("finish learning this post", res);
           self.$toast.info("Thanks for learnt.");
         })
-        .catch(error => console.log(error));
-    }
-  }
+        .catch((error) => console.log(error));
+    },
+  },
 };
 </script>
+
+<style>
+.max-post-view {
+  max-height: 15rem;
+  overflow: hidden;
+}
+</style>

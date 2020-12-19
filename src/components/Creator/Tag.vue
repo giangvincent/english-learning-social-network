@@ -1,6 +1,6 @@
 <template>
   <div class="py-1 relative">
-    <span class="px-1  text-gray-600">Gắn Tag</span>
+    <span class="px-1 text-gray-600">Gắn Tag</span>
     <input
       placeholder="Tên của Tag"
       type="text"
@@ -66,28 +66,29 @@ import { mapState } from "vuex";
 export default {
   name: "tags",
   props: {
-    tags: Array
+    maxTag: 4,
+    tags: Array,
   },
   data() {
     return {
       initSugguest: false,
       sugguestTags: [],
-      curTag: ""
+      curTag: "",
     };
   },
   mounted() {},
   computed: {
     ...mapState({
-      allTags: state => state.tags
-    })
+      allTags: (state) => state.tags,
+    }),
   },
   watch: {
-    curTag: function(newVal, oldVal) {
+    curTag: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.initSugguest = true;
         let regexStr = new RegExp("^.*" + newVal + ".*", "g");
         this.sugguestTags = [];
-        this.allTags.forEach(tag => {
+        this.allTags.forEach((tag) => {
           if (
             regexStr.exec(tag.name) !== null &&
             !this.tags.includes(tag.name)
@@ -99,7 +100,7 @@ export default {
       if (newVal === "") {
         this.initSugguest = false;
       }
-    }
+    },
   },
   methods: {
     removeTag(index) {
@@ -120,8 +121,8 @@ export default {
       console.log(this.sugguestTags[index]);
       this.curTag = this.sugguestTags[index];
       this.createHashtag();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

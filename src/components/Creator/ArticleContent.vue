@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1  text-gray-600">Nội dung</span>
+        <span class="px-1 text-gray-600">Nội dung</span>
         <content-editor
           :contentHtml="paragraph.contentHtml"
           :contentOrigin="paragraph.contentOrigin"
@@ -58,14 +58,15 @@ export default {
   name: "article-content",
   components: {
     ContentEditor,
-    ImagePreview
+    ImagePreview,
   },
   props: {
-    data: Array
+    data: Array,
   },
   data() {
     return {
-      paragraphs: [{ contentHtml: "", contentOrigin: { ops: [] }, images: [] }]
+      maxParas: 4,
+      paragraphs: [{ contentHtml: "", contentOrigin: { ops: [] }, images: [] }],
     };
   },
   watch: {
@@ -73,15 +74,15 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.paragraphs);
       },
-      deep: true
+      deep: true,
     },
     data: {
-      handler: function(val) {
-        console.log(val);
+      handler: function (val) {
+        // console.log(val);
         this.paragraphs = this.data;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     console.log(this.data);
@@ -97,7 +98,7 @@ export default {
       this.paragraphs.push({
         contentHtml: "",
         contentOrigin: { ops: [] },
-        images: []
+        images: [],
       });
     },
     updateContent(content, paraIndex) {
@@ -108,7 +109,7 @@ export default {
     updateImages(images, paraIndex) {
       // console.log(images, paraIndex);
       this.paragraphs[paraIndex].images = images;
-    }
-  }
+    },
+  },
 };
 </script>
