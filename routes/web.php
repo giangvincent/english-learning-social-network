@@ -13,8 +13,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
-Route::get('/share', function () {
-    return view('share');
+Route::get('/share/{postId}', function ($postId) {
+    $postJson = new JsonController();
+    $data = $postJson->getPost($postId);
+
+    if (!is_array($data)) {
+        $data = json_decode($data, true)[0];
+    }
+    return view('share', ['data' => $data]);
 });
 Route::get('/', function () {
     return view('welcome');

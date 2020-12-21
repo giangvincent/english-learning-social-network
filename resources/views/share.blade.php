@@ -1,33 +1,42 @@
+<?php 
+    $defaultInfo = array(
+        'title' => 'THATS GOOD',
+        'description' => 'Welcome to Thatsgood',
+        'url' => 'thatsgood.net',
+        'image' => ''
+);
+$res = $defaultInfo;
+if (count($data) > 0) {
+    $res['title'] = $data['subject'];
+    $res['description'] = json_encode($data['content']);
+    $res['url'] = $res['url']. 'p/post/' . $data['url'];
+}
+?>
 <html lang="vi">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>THATS GOOD</title>
+    <title>{{ $res['title'] }}</title>
 
     <!-- Primary Meta Tags -->
-    <meta name="title" content="Meta Tags — Preview, Edit and Generate">
-    <meta name="description"
-        content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
+    <meta name="title" content="{{ $res['title'] }}">
+    <meta name="description" content="{{ $res['description'] }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://metatags.io/">
-    <meta property="og:title" content="Meta Tags — Preview, Edit and Generate">
-    <meta property="og:description"
-        content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
-    <meta property="og:image"
-        content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+    <meta property="og:url" content="{{ $res['url'] }}">
+    <meta property="og:title" content="{{ $res['title'] }}">
+    <meta property="og:description" content="{{ $res['description'] }}">
+    <meta property="og:image" content="{{ $res['image'] }}">
     <meta property="fb:app_id" content="865567664256189">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://metatags.io/">
-    <meta property="twitter:title" content="Meta Tags — Preview, Edit and Generate">
-    <meta property="twitter:description"
-        content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
-    <meta property="twitter:image"
-        content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+    <meta property="twitter:url" content="{{$res['url']}}">
+    <meta property="twitter:title" content="{{$res['title']}}">
+    <meta property="twitter:description" content="{{$res['description']}}">
+    <meta property="twitter:image" content="{{$res['image']}}">
 
 </head>
 
@@ -37,4 +46,4 @@
     </script>
 </body>
 
-</html>share
+</html>
