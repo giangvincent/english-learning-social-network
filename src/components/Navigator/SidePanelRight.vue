@@ -89,18 +89,7 @@ export default {
     };
   },
   components: {},
-  watch: {
-    user: {
-      handler: function(val) {
-        if (this.user.id) {
-          this.userUploaded = "/u/" + this.user.id;
-          this.userBagged = "/u/" + this.user.id + "?cur=saved";
-          this.userSetting = "/u/" + this.user.id + "?cur=setting";
-        }
-      },
-      deep: true
-    }
-  },
+
   computed: {
     ...mapState({
       showPanelRight: state => state.showPanelRight,
@@ -111,6 +100,11 @@ export default {
   mounted() {
     this.customStyle =
       "height: calc(100vh - " + this.$refs.userMenu.clientHeight + "px)";
+    if (this.user.id) {
+      this.userUploaded = "/u/" + this.user.id;
+      this.userBagged = "/u/" + this.user.id + "?cur=saved";
+      this.userSetting = "/u/" + this.user.id + "?cur=setting";
+    }
   },
   methods: {
     ...mapMutations(["toggle_right_panel"])

@@ -22,17 +22,18 @@ export default {
   },
   data() {
     return {
+      userId: 0,
+      uploadedPosts: [],
       items: []
     };
   },
   computed: {
     ...mapState({
-      uploadedPosts: state => state.user.uploadedPosts,
       currentPage: state => state.currentPage
     })
   },
   mounted() {
-    this.setUploadedPosts([]);
+    this.userId = this.$route.params.id;
     this.SET_PAGE(1);
   },
   methods: {
@@ -40,11 +41,9 @@ export default {
     ...mapMutations(["SET_PAGE", "setUploadedPosts"]),
     infiniteHandler($state) {
       var self = this;
-      this.GetUploadedPosts()
+      this.GetUploadedPosts(this.userId)
         .then(content => {
-          var feedData = self.uploadedPosts;
-          feedData.push(...content.data);
-          self.setUploadedPosts(feedData);
+          self.uploadedPosts.push(...content.data);
           self.SET_PAGE(self.currentPage + 1);
           if (content.data.length >= 10) {
             $state.loaded();

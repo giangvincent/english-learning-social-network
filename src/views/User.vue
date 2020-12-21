@@ -10,13 +10,14 @@
           <div
             class="h-64 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
             :style="{
-              'background-image': user.cover_image
-                ? 'url(' + rootUrl + user.cover_image + ')'
-                : 'url(/assets/images/default.jpg)',
+              'background-image': curUser.cover_image
+                ? 'url(' + rootUrl + curUser.cover_image + ')'
+                : 'url(/assets/images/default.jpg)'
             }"
           >
             <label
               class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+              v-if="user && user.id"
               @click="selectImage('cover')"
             >
               <svg
@@ -39,14 +40,15 @@
             <div class="-mt-3 relative">
               <img
                 :src="
-                  user.avatar
-                    ? rootUrl + user.avatar
+                  curUser.avatar
+                    ? rootUrl + curUser.avatar
                     : '/assets/images/default_avatar.jpg'
                 "
                 class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"
               />
               <label
                 class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+                v-if="user && user.id"
                 @click="selectImage('avatar')"
               >
                 <svg
@@ -66,27 +68,30 @@
           </div>
           <!-- End avatar image -->
           <div class="text-center px-3 pb-6 pt-2">
-            <h3 class="font-bold text-2xl inline">{{ user.full_name }}</h3>
-            <span class="inline" v-if="user.nick_name"
-              >({{ user.nick_name }})</span
+            <h3 class="font-bold text-2xl inline">{{ curUser.full_name }}</h3>
+            <span class="inline" v-if="curUser.nick_name"
+              >({{ curUser.nick_name }})</span
             >
             <p class="mt-2 text-grey-dark">
-              {{ user.bio }}
+              {{ curUser.bio }}
             </p>
           </div>
           <!-- End bio -->
 
-          <div class="w-full mx-auto flex text-center font-bold">
+          <div
+            class="w-full mx-auto flex text-center font-bold"
+            v-if="user && user.id"
+          >
             <router-link
               :to="{
                 name: 'user-page',
-                params: { id: user.id },
+                params: { id: user.id }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
                 'border-b-2 border-gray-900':
-                  typeof $route.query.cur === 'undefined',
+                  typeof $route.query.cur === 'undefined'
               }"
               >Đã đăng</router-link
             >
@@ -94,12 +99,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'saved' },
+                query: { cur: 'saved' }
               }"
               replace
               class="w-1/3 py-3"
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'saved',
+                'border-b-2 border-gray-900': $route.query.cur === 'saved'
               }"
               >Đang học</router-link
             >
@@ -107,12 +112,12 @@
               :to="{
                 name: 'user-page',
                 params: { id: user.id },
-                query: { cur: 'setting' },
+                query: { cur: 'setting' }
               }"
               class="w-1/3 py-3"
               replace
               :class="{
-                'border-b-2 border-gray-900': $route.query.cur === 'setting',
+                'border-b-2 border-gray-900': $route.query.cur === 'setting'
               }"
               >Cài đặt</router-link
             >
@@ -188,7 +193,7 @@ export default {
     SavedPost,
     UserCreated,
     Setting,
-    VueCropper,
+    VueCropper
   },
   data() {
     return {
@@ -197,25 +202,24 @@ export default {
       cropperImg: "/assets/images/default.jpg",
       croperType: "avatar",
       aspectRatio: 1 / 1,
+      curUser: {}
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-      user: (state) => state.user.user,
-    }),
+      rootUrl: state => state.rootUrl,
+      user: state => state.user.user
+    })
   },
   mounted() {
+    this.curUser.id = this.$route.params.id;
     this.SET_PAGE("user");
     let self = this;
-    this.LoadUserInfo()
-      .then((userInfo) => {
-        // console.log(userInfo);
-        if (self.isLocalStorage()) {
-          localStorage.setItem("user", JSON.stringify(userInfo));
-        }
+    this.LoadUserInfo(this.curUser.id)
+      .then(userInfo => {
+        this.curUser = userInfo;
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   },
   methods: {
     ...mapMutations(["SET_PAGE"]),
@@ -241,7 +245,7 @@ export default {
       if (typeof FileReader === "function") {
         const reader = new FileReader();
         let self = this;
-        reader.onload = (event) => {
+        reader.onload = event => {
           self.cropperImg = event.target.result;
           // rebuild cropperjs with the updated source
           self.$refs.cropper.replace(event.target.result);
@@ -258,15 +262,15 @@ export default {
       let image = this.$refs.cropper.getCroppedCanvas().toDataURL();
       if (this.croperType === "avatar") {
         this.ChangeAvatar(image)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
       }
       if (this.croperType === "cover") {
         this.ChangeCover(image)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
       }
-    },
-  },
+    }
+  }
 };
 </script>

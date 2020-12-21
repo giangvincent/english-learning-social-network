@@ -297,6 +297,7 @@ export default {
         });
     },
     saveClick(status) {
+      this.checkLogin();
       this.saved = !this.saved;
       var self = this;
       setTimeout(function() {
@@ -307,6 +308,7 @@ export default {
       }, 500);
     },
     goodClick(status) {
+      this.checkLogin();
       this.goodVoted = !this.goodVoted;
       var self = this;
       setTimeout(function() {
@@ -317,6 +319,7 @@ export default {
       }, 500);
     },
     badClick(status) {
+      this.checkLogin();
       this.badVoted = !this.badVoted;
       var self = this;
       setTimeout(function() {
@@ -325,6 +328,11 @@ export default {
           interact: status ? "bad" : "un-bad"
         });
       }, 500);
+    },
+    checkLogin() {
+      if (!this.user.id) {
+        this.$router.push("/auth/login");
+      }
     }
   }
 };

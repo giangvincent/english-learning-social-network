@@ -49,6 +49,7 @@
     >
     <button
       class="font-semibold text-white rounded-lg w-1/4 flex justify-center items-center py-1 my-1 mx-auto bg-gray-600 hover:bg-gray-800"
+      v-if="this.user.id"
       @click="checkLearnt()"
     >
       Đã đọc hết
@@ -63,7 +64,7 @@
     <interaction-pack
       v-if="
         ($route.name === 'user-page' && !$route.query.cur) ||
-        $route.name !== 'user-page'
+          $route.name !== 'user-page'
       "
       :post_id="pid"
       detailPostType="post"
@@ -91,13 +92,13 @@ import Author from "./BaseParts/AuthorPart";
 export default {
   name: "image-item",
   props: {
-    pid: String,
+    pid: String
   },
   components: {
     ProcessBar,
     interactionPack,
     CatsAndTags,
-    Author,
+    Author
   },
   data() {
     return {
@@ -112,40 +113,41 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: "",
+          avatar: ""
         },
         subject: "",
         content: [
           {
             contentHtml: "<p>loading...</p>",
-            images: [""],
-          },
+            images: [""]
+          }
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading",
+          slug: "loading"
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
+        nums_bad: 0
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0,
-      },
+        nums_bad: 0
+      }
     };
   },
   computed: {
     ...mapState({
-      rootUrl: (state) => state.rootUrl,
-    }),
+      rootUrl: state => state.rootUrl,
+      user: state => state.user.user
+    })
   },
   watch: {
     postData: {
-      handler: function (val) {
+      handler: function(val) {
         this.interactIndicatorNumber.nums_bagged =
           this.postData.nums_bagged !== null ? this.postData.nums_bagged : 0;
         this.interactIndicatorNumber.nums_good =
@@ -153,21 +155,21 @@ export default {
         this.interactIndicatorNumber.nums_bad =
           this.postData.nums_bad !== null ? this.postData.nums_bad : 0;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     var self = this;
     fetch(this.rootUrl + "get-json/post/" + this.pid)
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         if (typeof res[0] !== "undefined") {
           self.postData = res[0];
           self.shortTimer = self.evaluateTime(self.postData.datetime);
           self.checkReadmore();
         } else self.enable = false;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         self.enable = false;
       });
@@ -175,7 +177,7 @@ export default {
   methods: {
     ...mapActions(["FinishPostLearnt"]),
     checkReadmore() {
-      this.postData.content.forEach((content) => {
+      this.postData.content.forEach(content => {
         this.numberString += content.contentHtml.length;
       });
 
@@ -184,13 +186,13 @@ export default {
     checkLearnt() {
       let self = this;
       this.FinishPostLearnt(this.pid)
-        .then((res) => {
+        .then(res => {
           console.log("finish learning this post", res);
           self.$toast.info("Thanks for learnt.");
         })
-        .catch((error) => console.log(error));
-    },
-  },
+        .catch(error => console.log(error));
+    }
+  }
 };
 </script>
 
