@@ -21,13 +21,15 @@ Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::post('new-contact', 'ContactController@handleCreateContact');
 
+Route::get('user-detail/{id}', 'UserController@details');
+Route::get('uploaded-posts/{id}', 'UserController@uploadedPosts');
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('user-detail', 'UserController@details');
+
     Route::post('update-info', 'UserController@updateInfo');
     Route::post('change-password', 'UserController@changePassword');
     Route::post('change-avatar', 'UserController@changeAvatar');
     Route::post('change-cover', 'UserController@changeCover');
-    Route::get('uploaded-posts', 'UserController@uploadedPosts');
+
     Route::get('bagged-posts', 'UserController@baggedPosts');
     Route::post('req-interact', 'UserController@interactPost');
 

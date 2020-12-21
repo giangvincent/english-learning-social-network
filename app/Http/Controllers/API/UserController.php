@@ -28,7 +28,9 @@ class UserController extends Controller
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $success['token'] = $user->createToken(env('APP_NAME'))->accessToken;
-            $success['user'] = $user;
+            $userInfo = $user->info()->first()->toArray();
+            unset($userInfo['id'], $userInfo['user_id']);
+            $success['user'] = array_merge($user->toArray(), $userInfo);
             return response()->json(['success' => $success], $this->successStatus);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
@@ -70,14 +72,29 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function details()
+    public function details($id)
     {
-        $user = Auth::user()->toArray();
-        $userInfo = Auth::user()->info()->first()->toArray();
-        unset($userInfo['id']);
-        unset($userInfo['user_id']);
 
-        return response()->json(['success' => array_merge($user, $userInfo)], $this->successStatus);
+        $user = User::with('info')->where('id', $id)->firstOrFail();
+
+        $userArray = $user->toArray();
+        $returnArr = array(
+            'full_name' => $userArray['full_name'],
+            'nick_name' => $userArray['nick_name'],
+            'avatar' => $userArray['avatar'],
+            'bio' => $userArray['info']['bio'],
+            'cover_image' => $userArray['info']['cover_image'],
+        );
+
+        return response()->json(['success' => $returnArr], $this->successStatus);
+    }
+
+    public function uploadedPosts($id)
+    {
+        $user = User::findOrFail($id);
+        $posts = $user->posts()->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
+
+        return response()->json($posts, $this->successStatus);
     }
 
     public function updateInfo(Request $request)
@@ -294,14 +311,6 @@ class UserController extends Controller
             public_path('content/posts') . '/' . $post->pid . '.json',
             json_encode($postJsonData)
         );
-    }
-
-    public function uploadedPosts()
-    {
-        $user = Auth::user();
-        $posts = $user->posts()->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
-
-        return response()->json($posts, $this->successStatus);
     }
 
     public function baggedPosts()
