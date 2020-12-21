@@ -34,56 +34,7 @@
 
       <div class="order-2 md:order-3 flex md:w-1/3 flex-wrap justify-end">
         <div
-          class="inline-block no-underline hover:text-black relative"
-          title="Tìm kiếm"
-        >
-          <svg
-            class="hover:text-black"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            width="24"
-            height="24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <div
-          class="inline-block no-underline hover:text-black relative ml-2"
-          title="Thông báo"
-          @click="toggle_right_panel"
-        >
-          <label
-            class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-            v-show="notification.length > 0"
-            >{{ notification.length > 10 ? "9+" : notification.length }}</label
-          >
-          <svg
-            class="hover:text-black"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            width="24"
-            height="24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-            />
-          </svg>
-          <!-- Notify icon -->
-        </div>
-        <div
-          class="inline-block no-underline ml-2"
+          class="inline-block no-underline ml-2 relative"
           title="User"
           @click="userMenu()"
         >
@@ -95,30 +46,18 @@
                   : '/assets/images/default_avatar.jpg'
               "
               alt="profilepic"
-              width="24"
-              height="24"
+              width="28"
+              height="28"
             />
+            <label
+              class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
+              v-show="notification.length > 0"
+              >{{
+                notification.length > 10 ? "9+" : notification.length
+              }}</label
+            >
           </div>
           <!-- User icon -->
-          <div
-            class="absolute top-0 right-0 bg-white mt-12 mr-2 rounded-lg shadow font-bold"
-            v-show="showUserMenu"
-          >
-            <ul class="flex flex-col py-2 px-4">
-              <li class="my-1">
-                <router-link :to="userUploaded">Bài đã đăng</router-link>
-              </li>
-              <li class="my-1">
-                <router-link :to="userBagged">Bài đang học</router-link>
-              </li>
-              <li class="my-1">
-                <router-link :to="userSetting">Cài đặt</router-link>
-              </li>
-              <li class="my-1">
-                <router-link :to="userLogout">Thoát</router-link>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
@@ -203,7 +142,7 @@ export default {
     },
     userMenu() {
       if (this.user.id) {
-        this.showUserMenu = !this.showUserMenu;
+        this.toggle_right_panel();
       } else {
         this.$router.push("/auth/login");
       }
