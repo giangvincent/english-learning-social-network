@@ -65,4 +65,13 @@ class JsonController extends Controller
 
         return response()->json([]);
     }
+
+    public function getUserNotification($link)
+    {
+        if (file_exists(public_path($this->contentPath . '/notification') . '/' . $link . '.json')) {
+            return @file_get_contents(public_path($this->contentPath . '/notification') . '/' . $link . '.json');
+        }
+
+        return response()->json([]);
+    }
 }

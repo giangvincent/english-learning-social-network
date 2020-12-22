@@ -36,4 +36,6 @@ Route::group([
     Route::get('tags', [JsonController::class, 'getTags']);
 
     Route::get('progress/{link}', [JsonController::class, 'getUserProgress']);
+
+    Route::get('notification/{link}', [JsonController::class, 'getUserNotification']);
 });

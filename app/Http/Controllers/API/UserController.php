@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\userInteract;
 use App\Models\UserNotification;
 use App\Models\UserProgress;
+use App\Repositories\ExportJson;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -344,13 +345,14 @@ class UserController extends Controller
         $learntSaved = UserProgress::where([
             ['user_id', Auth::user()->id],
             ['post_id', $post->id],
-        ])->orderBy('learnt_at')->get();
+        ])->orderBy('learnt_at', 'asc')->get();
 
         // Carbon::parse($dateString)
         $dataExport = [];
         $firstDay = null;
-        $supposedLearnt = $this->fibonacciDates();
         $index = 0;
+
+        $supposedLearnt = $this->fibonacciDates();
         foreach ($learntSaved as $userLearnt) {
             if (!$firstDay) {
                 $firstDay = $userLearnt->learnt_at;
@@ -361,6 +363,11 @@ class UserController extends Controller
             if ($currentDay === $supposedDay) {
                 array_push($dataExport, $userLearnt->learnt_at);
                 $index++;
+            } else {
+                $index = 0;
+                $firstDay = $userLearnt->learnt_at;
+                $dataExport = [];
+                array_push($dataExport, $userLearnt->learnt_at);
             }
         }
 
@@ -423,7 +430,7 @@ class UserController extends Controller
             ];
             UserNotification::firstOrCreate($dataSaveArray);
         }
-
+        ExportJson::SaveNotification();
         return ["success" => 1];
     }
 
@@ -440,6 +447,7 @@ class UserController extends Controller
 
         $userNotification->seen = 1;
         $userNotification->save();
+        ExportJson::SaveNotification();
 
         return response()->json(['success' => 1], $this->successStatus);
     }
