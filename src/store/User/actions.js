@@ -6,12 +6,12 @@ export default {
       })
         .then(res => res.json())
         .then(res => {
-          // console.log(res);
-          let dayNow = new Date().getDate();
+          console.log(res);
+          let dayNow = new Date();
           let dayCur = 0;
           let notificationData = [];
           for (let index = 0; index < res.length; index++) {
-            dayCur = new Date(res[index].date).getDate();
+            dayCur = new Date(res[index].date);
             if (dayCur === dayNow) {
               notificationData.push(res[index]);
             }
