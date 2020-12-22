@@ -4,7 +4,7 @@
       :id="'editor-' + paraIndex"
       class="editor h-64 rounded-b-lg border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
     ></div>
-    <span class="italic">(Tối đa: 500 ký tự)</span>
+    <span class="italic">(Tối đa: 1000 ký tự)</span>
   </div>
 </template>
 
@@ -19,30 +19,30 @@ export default {
     paraIndex: String,
     contentHtml: String,
     contentOrigin: Object,
-    toolbar: Boolean,
+    toolbar: Boolean
   },
   data() {
     return {
       editor: null,
-      reinitEditor: true,
+      reinitEditor: true
     };
   },
   watch: {
-    contentHtml: function (newVal, oldVal) {
+    contentHtml: function(newVal, oldVal) {
       if (this.currentAction === "edit" && this.reinitEditor) {
         this.initEditor();
         this.reinitEditor = false;
       }
     },
-    paraIndex: function (newVal, oldVal) {
+    paraIndex: function(newVal, oldVal) {
       console.log("reinit Editor");
       this.initEditor();
-    },
+    }
   },
   computed: {
     ...mapState({
-      currentAction: (state) => state.creator.currentAction,
-    }),
+      currentAction: state => state.creator.currentAction
+    })
   },
   mounted() {
     console.log("para index: ", this.paraIndex);
@@ -66,25 +66,25 @@ export default {
         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
         [{ align: [] }],
 
-        ["clean"], // remove formatting button
+        ["clean"] // remove formatting button
       ];
       this.editor =
         this.editor ||
         new Quill("#editor-" + this.paraIndex, {
           modules: {
-            toolbar: this.toolbar || toolbarOptions,
+            toolbar: this.toolbar || toolbarOptions
           },
           scrollingContainer: "#editor-container-" + this.paraIndex,
           theme: "snow",
-          height: 200,
+          height: 200
         });
 
       const importContent = this.editor.clipboard.convert(this.contentHtml);
       console.log(this.contentOrigin);
       this.editor.setContents(importContent);
       var self = this;
-      let limit = 400;
-      this.editor.on("text-change", function (delta, oldDelta, source) {
+      let limit = 1000;
+      this.editor.on("text-change", function(delta, oldDelta, source) {
         /* if (source == "api") {
           console.log("An API call triggered this change.");
         } else if (source == "user") {
@@ -95,7 +95,7 @@ export default {
         }
         let contentChanged = {
           html: self.editor.root.innerHTML,
-          origin: self.editor.getContents(),
+          origin: self.editor.getContents()
         };
         // console.log(delta, self.editor.root.innerHTML);
         self.$emit("updateContent", contentChanged, self.paraIndex);
@@ -103,8 +103,8 @@ export default {
 
       changeHeightEleByClass(document.getElementsByClassName("editor"));
       changeHeightEleByClass(document.getElementsByClassName("ql-editor"));
-    },
-  },
+    }
+  }
 };
 function changeHeightEleByClass(elements) {
   for (var i = 0, len = elements.length; i < len; i++) {
