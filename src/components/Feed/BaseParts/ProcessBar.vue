@@ -69,16 +69,13 @@ export default {
     ...mapMutations(["setBaggedPosts"]),
     loadProgressData() {
       let fileProgress =
-        this.rootUrl +
-        "/get-json/progress/" +
-        this.user.id +
-        "_" +
-        this.post_id;
+        this.rootUrl + "get-json/progress/" + this.user.id + "_" + this.post_id;
       let self = this;
       if (this.isExist(fileProgress))
         fetch(fileProgress)
           .then(res => res.json())
           .then(res => {
+            console.log(res);
             self.dataProgress = res;
           })
           .catch(err => console.log(err));

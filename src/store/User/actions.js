@@ -1,18 +1,21 @@
 export default {
   LoadNotification: function({ rootState, state, commit }) {
     if (rootState.user && rootState.user.token) {
-      fetch("/content/notification/" + rootState.user.user.id + ".json", {
-        method: "GET"
-      })
+      fetch(
+        rootState.rootUrl + "get-json/notification/" + rootState.user.user.id,
+        {
+          method: "GET"
+        }
+      )
         .then(res => res.json())
         .then(res => {
           console.log(res);
-          let dayNow = new Date();
+          let dayNow = new Date().toDateString();
           let dayCur = 0;
           let notificationData = [];
           for (let index = 0; index < res.length; index++) {
-            dayCur = new Date(res[index].date);
-            if (dayCur === dayNow) {
+            dayCur = new Date(res[index].date).toDateString();
+            if (dayCur == dayNow) {
               notificationData.push(res[index]);
             }
           }
