@@ -51,7 +51,6 @@
 
     <div
       class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
-      @click="shareClicked = !shareClicked"
     >
       <svg
         class="w-8 mx-auto"
@@ -59,6 +58,7 @@
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
+        @click="shareClicked = !shareClicked"
       >
         <path
           stroke-linecap="round"
@@ -67,18 +67,44 @@
           d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
         />
       </svg>
-      <span>Share</span>
+      <span @click="shareClicked = !shareClicked">Share</span>
       <div
         class="bg-white absolute top-0 -mt-16 p-2 shadow-2xl rounded-lg"
         v-show="shareClicked"
       >
         <ul class="flex">
-          <li
-            class="m-1 w-10 h-10"
-            v-for="(shareIcon, index) in socialShareIcons"
-            :key="'social-icon-' + index"
-          >
-            <img :src="shareIcon" class="w-full rounded-lg" />
+          <li class="m-1 w-10 h-10" @click="shareInit('facebook')">
+            <img
+              src="/assets/icons/fb_share.png"
+              class="w-full rounded-lg"
+              alt="facebook"
+              width="40"
+              height="40"
+            />
+          </li>
+          <li class="m-1 w-10 h-10" @click="shareInit('link')">
+            <svg
+              class="w-full"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+              />
+            </svg>
+          </li>
+          <li class="m-1">
+            <input
+              class="h-10"
+              ref="linkShare"
+              type="text"
+              :value="linkShare"
+            />
           </li>
         </ul>
       </div>
@@ -243,16 +269,17 @@ export default {
       badVoted: false,
       socialShareIcons: [
         "/assets/icons/fb_share.png",
-        "/assets/icons/twittershare.png",
-        "/assets/icons/zalo_share.png"
+        "/assets/icons/twittershare.png"
       ],
       shareClicked: false,
-      showModal: false
+      showModal: false,
+      linkShare: ""
     };
   },
   computed: {
     ...mapState({
-      user: state => state.user.user
+      user: state => state.user.user,
+      rootUrl: state => state.rootUrl
     })
   },
   watch: {
@@ -264,6 +291,9 @@ export default {
       },
       deep: true
     }
+  },
+  mounted() {
+    this.linkShare = this.rootUrl + "share/" + this.post_id;
   },
   methods: {
     ...mapActions(["ReqInteract", "REQ_DEL_POST"]),
@@ -297,6 +327,7 @@ export default {
         });
     },
     saveClick(status) {
+      this.checkLogin();
       this.saved = !this.saved;
       var self = this;
       setTimeout(function() {
@@ -307,6 +338,7 @@ export default {
       }, 500);
     },
     goodClick(status) {
+      this.checkLogin();
       this.goodVoted = !this.goodVoted;
       var self = this;
       setTimeout(function() {
@@ -317,6 +349,7 @@ export default {
       }, 500);
     },
     badClick(status) {
+      this.checkLogin();
       this.badVoted = !this.badVoted;
       var self = this;
       setTimeout(function() {
@@ -325,6 +358,26 @@ export default {
           interact: status ? "bad" : "un-bad"
         });
       }, 500);
+    },
+    checkLogin() {
+      if (!this.user.id) {
+        this.$router.push("/auth/login");
+      }
+    },
+    shareInit(type) {
+      this.shareClicked = !this.shareClicked;
+      if (type === "facebook") {
+        window.open(
+          "https://www.facebook.com/sharer.php?u=" +
+            encodeURIComponent(this.linkShare)
+        );
+      }
+
+      if (type === "link") {
+        this.$refs.linkShare.select();
+        document.execCommand("copy");
+        this.$toast.info("URL chia sẻ đã copy!");
+      }
     }
   }
 };

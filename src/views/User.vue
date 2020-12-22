@@ -10,13 +10,14 @@
           <div
             class="h-64 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
             :style="{
-              'background-image': user.cover_image
-                ? 'url(' + rootUrl + user.cover_image + ')'
+              'background-image': curUser.cover_image
+                ? 'url(' + rootUrl + curUser.cover_image + ')'
                 : 'url(/assets/images/default.jpg)'
             }"
           >
             <label
               class="m-1 absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+              v-if="user && user.id"
               @click="selectImage('cover')"
             >
               <svg
@@ -39,14 +40,15 @@
             <div class="-mt-3 relative">
               <img
                 :src="
-                  user.avatar
-                    ? rootUrl + user.avatar
+                  curUser.avatar
+                    ? rootUrl + curUser.avatar
                     : '/assets/images/default_avatar.jpg'
                 "
                 class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"
               />
               <label
                 class="absolute bg-gray-600 font-semibold h-6 p-1 right-0 rounded-full text-center text-white text-xs top-0 w-6 hover:bg-gray-300"
+                v-if="user && user.id"
                 @click="selectImage('avatar')"
               >
                 <svg
@@ -66,17 +68,20 @@
           </div>
           <!-- End avatar image -->
           <div class="text-center px-3 pb-6 pt-2">
-            <h3 class="font-bold text-2xl inline">{{ user.full_name }}</h3>
-            <span class="inline" v-if="user.nick_name"
-              >({{ user.nick_name }})</span
+            <h3 class="font-bold text-2xl inline">{{ curUser.full_name }}</h3>
+            <span class="inline" v-if="curUser.nick_name"
+              >({{ curUser.nick_name }})</span
             >
             <p class="mt-2 text-grey-dark">
-              Hello, i'm from another the other side!
+              {{ curUser.bio }}
             </p>
           </div>
           <!-- End bio -->
 
-          <div class="w-full mx-auto flex text-center font-bold">
+          <div
+            class="w-full mx-auto flex text-center font-bold"
+            v-if="user && user.id"
+          >
             <router-link
               :to="{
                 name: 'user-page',
@@ -153,7 +158,7 @@
             :src="cropperImg"
           />
         </div>
-        <div class="mb-3 flex flex-wrap justify-center  text-white">
+        <div class="mb-3 flex flex-wrap justify-center text-white">
           <button
             class="font-semibold rounded-lg btn-hover gradient-black px-3 py-1"
             @click="cropImage"
@@ -196,7 +201,8 @@ export default {
       items: [],
       cropperImg: "/assets/images/default.jpg",
       croperType: "avatar",
-      aspectRatio: 1 / 1
+      aspectRatio: 1 / 1,
+      curUser: {}
     };
   },
   computed: {
@@ -206,14 +212,12 @@ export default {
     })
   },
   mounted() {
+    this.curUser.id = this.$route.params.id;
     this.SET_PAGE("user");
     let self = this;
-    this.LoadUserInfo()
+    this.LoadUserInfo(this.curUser.id)
       .then(userInfo => {
-        // console.log(userInfo);
-        if (self.isLocalStorage()) {
-          localStorage.setItem("user", JSON.stringify(userInfo));
-        }
+        this.curUser = userInfo;
       })
       .catch(e => console.log(e));
   },

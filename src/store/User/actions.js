@@ -1,25 +1,27 @@
 export default {
   LoadNotification: function({ rootState, state, commit }) {
-    fetch("/content/notification/" + rootState.user.user.id + ".json", {
-      method: "GET"
-    })
-      .then(res => res.json())
-      .then(res => {
-        // console.log(res);
-        let dayNow = new Date().getDate();
-        let dayCur = 0;
-        let notificationData = [];
-        for (let index = 0; index < res.length; index++) {
-          dayCur = new Date(res[index].date).getDate();
-          if (dayCur === dayNow) {
-            notificationData.push(res[index]);
-          }
-        }
-        rootState.user.notification = notificationData;
+    if (rootState.user && rootState.user.token) {
+      fetch("/content/notification/" + rootState.user.user.id + ".json", {
+        method: "GET"
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res);
+          let dayNow = new Date().getDate();
+          let dayCur = 0;
+          let notificationData = [];
+          for (let index = 0; index < res.length; index++) {
+            dayCur = new Date(res[index].date).getDate();
+            if (dayCur === dayNow) {
+              notificationData.push(res[index]);
+            }
+          }
+          rootState.user.notification = notificationData;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
   LOGIN: function({ rootState, state, commit }, payload) {
     var data = new FormData();
@@ -34,7 +36,7 @@ export default {
           return res.json();
         })
         .then(function(data) {
-          console.log(data);
+          // console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
             commit("SET_TOKEN", successData.token);
@@ -81,12 +83,15 @@ export default {
   GetUploadedPosts: function({ rootState, state, commit }, payload) {
     return new Promise((response, reject) => {
       fetch(
-        rootState.apiUrl + "/uploaded-posts?page=" + rootState.currentPage,
+        rootState.apiUrl +
+          "/uploaded-posts/" +
+          payload +
+          "?page=" +
+          rootState.currentPage,
         {
           method: "GET",
           headers: {
-            Accept: "application/json",
-            Authorization: "Bearer " + rootState.user.token
+            Accept: "application/json"
           }
         }
       )
@@ -145,13 +150,12 @@ export default {
         console.log(err);
       });
   },
-  LoadUserInfo: function({ rootState, state, commit }) {
+  LoadUserInfo: function({ rootState, state, commit }, payload) {
     return new Promise((res, rej) => {
-      fetch(rootState.apiUrl + "/user-detail", {
+      fetch(rootState.apiUrl + "/user-detail/" + payload, {
         method: "GET",
         headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + rootState.user.token
+          Accept: "application/json"
         }
       })
         .then(function(res) {
@@ -160,7 +164,6 @@ export default {
         .then(function(data) {
           if (typeof data.success !== "undefined") {
             let successData = data.success;
-            commit("SET_USER", successData);
             res(successData);
           } else {
             rej(data.error);
@@ -292,32 +295,34 @@ export default {
   },
   UpdateNotificationConn: function() {},
   FinishPostLearnt: function({ rootState, state, commit }, payload) {
-    var data = new FormData();
-    data.append("post_id", payload);
+    if (rootState.user && rootState.user.token) {
+      var data = new FormData();
+      data.append("post_id", payload);
 
-    return new Promise((res, rej) => {
-      fetch(rootState.apiUrl + "/update-learning-progress", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + rootState.user.token
-        },
-        body: data
-      })
-        .then(function(res) {
-          return res.json();
+      return new Promise((res, rej) => {
+        fetch(rootState.apiUrl + "/update-learning-progress", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + rootState.user.token
+          },
+          body: data
         })
-        .then(function(result) {
-          if (result) {
-            res(result);
-          } else {
-            rej(result);
-          }
-        })
-        .catch(err => {
-          rej(err);
-        });
-    });
+          .then(function(res) {
+            return res.json();
+          })
+          .then(function(result) {
+            if (result) {
+              res(result);
+            } else {
+              rej(result);
+            }
+          })
+          .catch(err => {
+            rej(err);
+          });
+      });
+    }
   },
   SeenNotification: function({ rootState, state, commit }, payload) {
     if (rootState.user && rootState.user.token) {

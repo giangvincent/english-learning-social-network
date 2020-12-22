@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1  text-gray-600">Câu hỏi</span>
+        <span class="px-1 text-gray-600">Câu hỏi</span>
         <content-editor
           :contentHtml="quiz.contentHtml"
           :contentOrigin="quiz.contentOrigin"
@@ -40,9 +40,7 @@
         :paraIndex="paraIndex"
       ></image-preview>
       <div class="relative my-2 p-3">
-        <div class="font-bold">
-          Các câu trả lời
-        </div>
+        <div class="font-bold">Các câu trả lời</div>
         <div
           class="py-1 flex"
           v-for="(answer, index) in quiz.answers"
@@ -53,6 +51,7 @@
             type="text"
             class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
             v-on:change="updateAnswer($event.target.value, index, paraIndex)"
+            maxlength="100"
             :value="answer"
           />
 
@@ -60,7 +59,7 @@
             class="mx-1 border border-2 border-green-600 rounded w-10"
             @click="makeCorrectAnswer(index, paraIndex)"
             :class="{
-              'bg-green-600': quiz.correctAnswers.includes(index)
+              'bg-green-600': quiz.correctAnswers.includes(index),
             }"
             title="Đánh dấu câu trả lời đúng"
           >
@@ -68,7 +67,7 @@
               class="w-full h-full inline"
               :class="{
                 'text-green-600': !quiz.correctAnswers.includes(index),
-                'text-white': quiz.correctAnswers.includes(index)
+                'text-white': quiz.correctAnswers.includes(index),
               }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -132,22 +131,23 @@ export default {
   name: "quizs",
   components: {
     ContentEditor,
-    ImagePreview
+    ImagePreview,
   },
   props: {
-    data: Array
+    data: Array,
   },
   data() {
     return {
+      maxAns: 5,
       quizs: [
         {
           contentHtml: "",
           contentOrigin: { ops: [] },
           images: [],
           answers: [],
-          correctAnswers: []
-        }
-      ]
+          correctAnswers: [],
+        },
+      ],
     };
   },
   watch: {
@@ -155,14 +155,14 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.quizs);
       },
-      deep: true
+      deep: true,
     },
     data: {
-      handler: function(val) {
+      handler: function (val) {
         this.quizs = this.data;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     if (this.data) {
@@ -176,7 +176,7 @@ export default {
         contentOrigin: { ops: [] },
         images: [],
         answers: [],
-        correctAnswers: []
+        correctAnswers: [],
       });
     },
     removeCard(paraIndex) {
@@ -212,7 +212,7 @@ export default {
     },
     updateAnswer(value, index, paraIndex) {
       this.quizs[paraIndex].answers[index] = value;
-    }
-  }
+    },
+  },
 };
 </script>

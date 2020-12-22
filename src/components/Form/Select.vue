@@ -54,7 +54,7 @@
     </div>
     <div
       :class="{ hidden: !initPick }"
-      class="absolute shadow-lg bg-white top-0 z-40 w-full left-0 mt-16 rounded max-h-select overflow-y-auto svelte-5uyqqj"
+      class="absolute shadow-lg bg-white top-0 z-40 w-full left-0 mt-16 rounded max-h-select overflow-y-auto"
       @click="initPick = false"
     >
       <div class="flex flex-col w-full">
