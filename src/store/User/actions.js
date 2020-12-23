@@ -9,7 +9,7 @@ export default {
       )
         .then(res => res.json())
         .then(res => {
-          console.log(res);
+          // console.log(res);
           let dayNow = new Date().toDateString();
           let dayCur = 0;
           let notificationData = [];

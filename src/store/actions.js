@@ -3,7 +3,7 @@ export default {
     fetch(state.rootUrl + "get-json/tags")
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         commit("SET_TAGS", res);
       })
       .catch(err => console.log(err));
@@ -12,7 +12,7 @@ export default {
     fetch(state.rootUrl + "get-json/categories")
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         commit("SET_CATEGORIES", res);
       })
       .catch(err => console.log(err));

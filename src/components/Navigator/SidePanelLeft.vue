@@ -92,7 +92,7 @@ export default {
     ...mapMutations(["toggle_left_panel"])
   },
   mounted() {
-    console.log(this.footerHeight);
+    // console.log(this.footerHeight);
   }
 };
 </script>

@@ -154,7 +154,7 @@ export default {
   watch: {
     postContent: function(newVal, oldVal) {
       if (newVal !== oldVal) {
-        console.log(newVal);
+        // console.log(newVal);
       }
     }
   },
@@ -190,14 +190,14 @@ export default {
       this.postType = type;
     },
     changeCategory(index) {
-      console.log(index);
+      // console.log(index);
       this.category = index;
     },
     changePostContent(data) {
       this.postContent = data;
     },
     changeTags(data) {
-      console.log(data);
+      // console.log(data);
       this.tags = data;
     },
     submitContent() {
@@ -219,7 +219,7 @@ export default {
             self
               .Upload_image(image)
               .then(imageUrl => {
-                console.log(imageUrl);
+                // console.log(imageUrl);
                 postData.postContent[contentIndex].images[imgIndex] = imageUrl;
               })
               .catch(error => {
@@ -235,7 +235,7 @@ export default {
         self
           .SUBMIT_POST(postData)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             if (res) {
               self.$toast.success("Bài viết đã được đăng thành công.");
               self.$router.push("/");

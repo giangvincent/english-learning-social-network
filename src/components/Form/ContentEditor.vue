@@ -45,7 +45,7 @@ export default {
     })
   },
   mounted() {
-    console.log("para index: ", this.paraIndex);
+    // console.log("para index: ", this.paraIndex);
     this.initEditor();
   },
   methods: {
@@ -78,9 +78,15 @@ export default {
           theme: "snow",
           height: 200
         });
+      if (this.toolbar) {
+        this.editor.once("text-change", function(delta, oldDelta, source) {
+          self.editor.format("header", "2");
+          self.editor.format("italic", true);
+        });
+      }
 
       const importContent = this.editor.clipboard.convert(this.contentHtml);
-      console.log(this.contentOrigin);
+      // console.log(this.contentOrigin);
       this.editor.setContents(importContent);
       var self = this;
       let limit = 1000;

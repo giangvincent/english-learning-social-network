@@ -41,10 +41,6 @@ export default {
     this.SET_CURRENTFEED([]);
     this.SET_PAGE(1);
     // this.LOAD_HOME();
-    if (!this.welcomeEnable) {
-      this.$toast.info("Chào mừng bạn đã đến Thatsgood.");
-      this.SET_WELCOME(true);
-    }
   },
   methods: {
     ...mapActions(["LOAD_HOME"]),
