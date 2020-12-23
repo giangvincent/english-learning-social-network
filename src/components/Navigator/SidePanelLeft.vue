@@ -85,7 +85,7 @@ export default {
   },
   watch: {
     footerHeight: function(val) {
-      this.customStyle = "height: calc(100vh - " + val + "px)";
+      this.customStyle = "height: calc(100vh - " + (val + 50) + "px)";
     }
   },
   methods: {

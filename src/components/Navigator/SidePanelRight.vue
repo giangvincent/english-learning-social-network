@@ -52,7 +52,7 @@
       <div
         ref="userMenu"
         id="user-menu"
-        class="border-t-2 border-gray-300 bottom-0 px-3 py-2 z-10 bg-white fixed w-64 md:w-1/5 lg:w-1/6"
+        class="border-t-2 border-gray-300 bottom-0 px-3 py-2 mb-10 z-10 bg-white fixed w-64 md:w-1/5 lg:w-1/6"
       >
         <ul class="flex flex-col w-full font-bold">
           <li class="my-1">
@@ -99,7 +99,7 @@ export default {
   },
   mounted() {
     this.customStyle =
-      "height: calc(100vh - " + this.$refs.userMenu.clientHeight + "px)";
+      "height: calc(100vh - " + (this.$refs.userMenu.clientHeight + 50) + "px)";
     if (this.user.id) {
       this.userUploaded = "/u/" + this.user.id;
       this.userBagged = "/u/" + this.user.id + "?cur=saved";
