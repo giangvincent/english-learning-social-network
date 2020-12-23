@@ -13,6 +13,11 @@ import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 Vue.config.productionTip = false;
+Vue.use(VueMasonry);
+Vue.use(VueToast, {
+  // One of the options
+  position: "top-right"
+});
 
 if (helperFunc.isLocalStorage()) {
   try {
@@ -23,6 +28,12 @@ if (helperFunc.isLocalStorage()) {
       store.commit("SET_USER", user);
       store.commit("SET_TOKEN", user_token);
       store.dispatch("LoadNotification");
+    }
+    let welcomeEnable = localStorage.getItem("welcomeEnable");
+    if (!welcomeEnable) {
+      Vue.$toast.info("Chào mừng bạn đã đến Thatsgood.");
+      localStorage.setItem("welcomeEnable", true);
+      store.commit("SET_WELCOME", true);
     }
   } catch (err) {
     console.log(err);
@@ -45,12 +56,6 @@ Vue.component("SidePanelLeft", () =>
 Vue.component("SidePanelRight", () =>
   import("@/components/Navigator/SidePanelRight.vue")
 );
-
-Vue.use(VueMasonry);
-Vue.use(VueToast, {
-  // One of the options
-  position: "top-right"
-});
 
 new Vue({
   router,
