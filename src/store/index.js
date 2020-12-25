@@ -10,8 +10,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    rootUrl: "http://thatsgood.givenews.net/",
-    apiUrl: "http://thatsgood.givenews.net/api",
+    rootUrl: "https://thatsgood.info/",
+    apiUrl: "https://api.thatsgood.info/",
     popupEditor: false,
     currentTab: "home",
     currentPage: 1,

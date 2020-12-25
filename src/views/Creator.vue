@@ -166,7 +166,7 @@ export default {
 
     if (this.currentAction === "edit" && this.editPostId) {
       let self = this;
-      fetch(this.rootUrl + "get-json/post/" + this.editPostId)
+      fetch("/content/post/" + this.editPostId + ".json")
         .then(res => res.json())
         .then(res => {
           // console.log(res);

@@ -279,7 +279,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user.user,
-      rootUrl: state => state.rootUrl
+      apiUrl: state => state.apiUrl
     })
   },
   watch: {
@@ -293,7 +293,7 @@ export default {
     }
   },
   mounted() {
-    this.linkShare = this.rootUrl + "share/" + this.post_id;
+    this.linkShare = this.apiUrl + "share/" + this.post_id;
   },
   methods: {
     ...mapActions(["ReqInteract", "REQ_DEL_POST"]),
