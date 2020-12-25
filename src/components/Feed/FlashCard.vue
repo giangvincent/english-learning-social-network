@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white"
+    class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white overflow-hidden"
     v-if="enable"
   >
     <div class="w-full p-3 font-bold">
@@ -13,17 +13,16 @@
       ref="frontCard"
       class=" flex flex-col m-2 shadow rounded"
       :class="{
-        'flip-in-ver-right block': !currentBackCard,
+        'slide-in-right block': !currentBackCard,
         hidden: currentBackCard
       }"
     >
-      <div class="mx-auto bg-color-black">
-        <img
-          v-for="(image, imgIndex) in postData.content[currentCardIndex].images"
-          :key="`content.images.${imgIndex}`"
-          class="w-full"
-          :src="rootUrl + image"
-        />
+      <div
+        class="mx-auto bg-color-black"
+        v-for="(image, imgIndex) in postData.content[currentCardIndex].images"
+        :key="`content.images.${imgIndex}`"
+      >
+        <img v-if="image !== ''" class="w-full" :src="rootUrl + image" />
       </div>
       <!-- End media -->
       <section>
@@ -63,14 +62,13 @@
         hidden: !currentBackCard
       }"
     >
-      <div class="mx-auto bg-color-black">
-        <img
-          v-for="(image, imgIndex) in postData.content[currentCardIndex]
-            .flipImages"
-          :key="`content.images.${imgIndex}`"
-          class="w-full"
-          :src="rootUrl + image"
-        />
+      <div
+        class="mx-auto bg-color-black"
+        v-for="(image, imgIndex) in postData.content[currentCardIndex]
+          .flipImages"
+        :key="`content.images.${imgIndex}`"
+      >
+        <img v-if="image !== ''" class="w-full" :src="rootUrl + image" />
       </div>
       <!-- End media -->
       <section>

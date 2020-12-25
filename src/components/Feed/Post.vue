@@ -13,13 +13,12 @@
         v-for="(content, index) in postData.content"
         :key="`PostData-${index}`"
       >
-        <div class="mx-auto bg-color-black">
-          <img
-            v-for="(image, imgIndex) in content.images"
-            :key="`content.images.${imgIndex}`"
-            class="w-full"
-            :src="rootUrl + image"
-          />
+        <div
+          class="mx-auto bg-color-black"
+          v-for="(image, imgIndex) in content.images"
+          :key="`content.images.${imgIndex}`"
+        >
+          <img v-if="image !== ''" class="w-full" :src="rootUrl + image" />
         </div>
         <!-- End media -->
         <section>
