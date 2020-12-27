@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+Route::get('/policies-and-service-terms', function () {
+    return view('static_page');
+});
 Route::get('/share/{postId}', function ($postId) {
     $postJson = new JsonController();
     $data = $postJson->getPost($postId);
