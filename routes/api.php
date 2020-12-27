@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\JsonController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,6 @@ Route::post('new-contact', 'ContactController@handleCreateContact');
 Route::get('user-detail/{id}', 'UserController@details');
 Route::get('uploaded-posts/{id}', 'UserController@uploadedPosts');
 Route::group(['middleware' => 'auth:api'], function () {
-
     Route::post('update-info', 'UserController@updateInfo');
     Route::post('change-password', 'UserController@changePassword');
     Route::post('change-avatar', 'UserController@changeAvatar');
@@ -52,7 +52,6 @@ Route::get('feed-home', 'FeedController@home');
 Route::get('feed-category/{slug}', 'FeedController@feedCategory');
 Route::get('feed-tag/{slug}', 'FeedController@feedTag');
 
-use Illuminate\Support\Facades\Route;
 
 Route::get('/share/{postId}', function ($postId) {
     $postJson = new JsonController();

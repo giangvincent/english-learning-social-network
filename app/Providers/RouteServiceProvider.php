@@ -59,21 +59,4 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60);
         });
     }
-/**
- * Define the "api" routes for the application.
- *
- * These routes are typically stateless.
- *
- * @return void
- */
-    protected function mapApiRoutes()
-    {
-        Route::group([
-            'middleware' => 'api',
-            'namespace' => $this->namespace,
-            'prefix' => 'api',
-        ], function ($router) {
-            require base_path('routes/api.php');
-        });
-    }
 }
