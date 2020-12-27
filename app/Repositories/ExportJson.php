@@ -12,12 +12,11 @@ class ExportJson extends Controller
 {
     public static function SaveNotification()
     {
-        if (!file_exists(public_path('content/notification'))) {
-            mkdir(public_path('content/notification'), 0777);
+        if (!file_exists(public_path('dist/content/notification'))) {
+            mkdir(public_path('dist/content/notification'), 0777);
         }
         $users = User::all();
         foreach ($users as $user) {
-
             $notifyDB = $user->notify()->where([
                 ['time_notification', '<=', Carbon::today()],
                 ['seen', 0],
@@ -30,19 +29,18 @@ class ExportJson extends Controller
                 array_push($notifyData, $data);
             }
 
-            file_put_contents(public_path('content/notification') . '/' . $user->id . '.json', json_encode($notifyData));
+            file_put_contents(public_path('dist/content/notification') . '/' . $user->id . '.json', json_encode($notifyData));
         }
     }
 
     public static function SaveLearningProgress()
     {
-        if (!file_exists(public_path('content/learn_progress'))) {
-            mkdir(public_path('content/learn_progress'), 0777);
+        if (!file_exists(public_path('dist/content/learn_progress'))) {
+            mkdir(public_path('dist/content/learn_progress'), 0777);
         }
 
         $users = User::all();
         foreach ($users as $user) {
-
         }
     }
 
@@ -77,7 +75,7 @@ class ExportJson extends Controller
             'interact' => $interactsArr,
             'comments' => array(),
         ]);
-        return file_put_contents(public_path('content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
+        return file_put_contents(public_path('dist/content/posts') . '/' . $post->pid . '.json', json_encode($exportData));
     }
 
     public static function exportTag($tag)
@@ -85,7 +83,7 @@ class ExportJson extends Controller
         $data = Tag::find($tag);
         $data = $data->toArray();
 
-        file_put_contents(public_path() . '/content/tags/' . $tag->slug . '.json', json_encode($data));
+        file_put_contents(public_path() . '/dist/content/tags/' . $tag->slug . '.json', json_encode($data));
     }
 
     public static function exportTags()
@@ -97,6 +95,6 @@ class ExportJson extends Controller
             $tagData['posts'] = $tag->posts()->count();
             array_push($allTagsData, $tagData);
         }
-        file_put_contents(public_path() . '/content/tags.json', json_encode($allTagsData));
+        file_put_contents(public_path() . '/dist/content/tags.json', json_encode($allTagsData));
     }
 }

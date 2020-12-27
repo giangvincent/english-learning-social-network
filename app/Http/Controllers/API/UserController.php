@@ -75,7 +75,6 @@ class UserController extends Controller
      */
     public function details($id)
     {
-
         $user = User::with('info')->where('id', $id)->firstOrFail();
 
         $userArray = $user->toArray();
@@ -274,7 +273,7 @@ class UserController extends Controller
         }
         $interact = str_replace('un-', '', $reqInteract->interact);
         $postJsonData = file_get_contents(
-            public_path('content/posts') . '/' . $post->pid . '.json'
+            public_path('dist/content/posts') . '/' . $post->pid . '.json'
         );
         $postJsonData = json_decode($postJsonData, true);
 
@@ -309,7 +308,7 @@ class UserController extends Controller
         }
 
         return file_put_contents(
-            public_path('content/posts') . '/' . $post->pid . '.json',
+            public_path('dist/content/posts') . '/' . $post->pid . '.json',
             json_encode($postJsonData)
         );
     }
@@ -371,12 +370,12 @@ class UserController extends Controller
             }
         }
 
-        if (!file_exists(public_path('content/progress'))) {
-            mkdir(public_path('content/progress'), 0777);
+        if (!file_exists(public_path('dist/content/progress'))) {
+            mkdir(public_path('dist/content/progress'), 0777);
         }
 
         return file_put_contents(
-            public_path('content/progress') . '/' . Auth::user()->id . '_' . $post->pid . '.json',
+            public_path('dist/content/progress') . '/' . Auth::user()->id . '_' . $post->pid . '.json',
             json_encode($dataExport)
         );
     }

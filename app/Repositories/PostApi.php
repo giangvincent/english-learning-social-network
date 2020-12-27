@@ -44,7 +44,7 @@ class PostApi extends Controller
             $this->removeMedias($post);
             $post->tags()->detach();
 
-            @unlink(public_path('content/posts/') . $post->pid . '.json');
+            @unlink(public_path('dist/content/posts/') . $post->pid . '.json');
             $post->interacts()->delete();
             $post->answers()->delete();
             $post->comments()->delete();
@@ -57,7 +57,6 @@ class PostApi extends Controller
             report($e);
             return response()->json(['status' => false], 200);
         }
-
     }
 
     private static function removeMedias($post)
@@ -80,7 +79,6 @@ class PostApi extends Controller
             report($e);
             return false;
         }
-
     }
 
     public static function attachTags($requestTags, $post)
@@ -122,7 +120,6 @@ class PostApi extends Controller
             report($e);
             return false;
         }
-
     }
 
     private static function changePostDB($request, $post)
@@ -138,6 +135,5 @@ class PostApi extends Controller
             report($e);
             return false;
         }
-
     }
 }
