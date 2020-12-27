@@ -11,10 +11,10 @@
     <!-- card indicator -->
     <div
       ref="frontCard"
-      class=" flex flex-col m-2 shadow rounded"
+      class="flex flex-col m-2 shadow rounded"
       :class="{
         'slide-in-right block': !currentBackCard,
-        hidden: currentBackCard
+        hidden: currentBackCard,
       }"
     >
       <div
@@ -56,10 +56,10 @@
 
     <div
       ref="backCard"
-      class=" flex flex-col m-2 shadow rounded"
+      class="flex flex-col m-2 shadow rounded"
       :class="{
         'flip-in-ver-right block': currentBackCard,
-        hidden: !currentBackCard
+        hidden: !currentBackCard,
       }"
     >
       <div
@@ -123,7 +123,7 @@
     <interaction-pack
       v-if="
         ($route.name === 'user-page' && !$route.query.cur) ||
-          $route.name !== 'user-page'
+        $route.name !== 'user-page'
       "
       :post_id="pid"
       detailPostType="flash-card"
@@ -149,13 +149,13 @@ import Author from "./BaseParts/AuthorPart";
 export default {
   name: "Feed-flash-card",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     ProcessBar: () => import("./BaseParts/ProcessBar"),
     interactionPack: () => import("./BaseParts/InteractionPack"),
     CatsAndTags,
-    Author
+    Author,
   },
   data() {
     return {
@@ -172,7 +172,7 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         subject: "",
         content: [
@@ -180,46 +180,46 @@ export default {
             contentHtml: "",
             images: [],
             flipContentHtml: "",
-            flipImages: []
-          }
+            flipImages: [],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
+        nums_bad: 0,
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
-      }
+        nums_bad: 0,
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   watch: {
     postData: {
-      handler: function(val) {
+      handler: function (val) {
         this.interactIndicatorNumber.nums_bagged = this.postData.nums_bagged;
         this.interactIndicatorNumber.nums_good = this.postData.nums_good;
         this.interactIndicatorNumber.nums_bad = this.postData.nums_bad;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     var self = this;
-    fetch("/content/post/" + this.pid + ".json")
-      .then(res => res.json())
-      .then(res => {
+    fetch("/content/posts/" + this.pid + ".json")
+      .then((res) => res.json())
+      .then((res) => {
         // console.log(res);
         if (typeof res[0] !== "undefined") {
           self.postData = res[0];
@@ -229,7 +229,7 @@ export default {
           self.shortTimer = self.evaluateTime(self.postData.datetime);
         } else self.enable = false;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         self.enable = false;
       });
@@ -242,11 +242,11 @@ export default {
       if (this.currentCardIndex >= this.postData.content.length - 1) {
         this.resetEnable = true;
         this.FinishPostLearnt(this.pid)
-          .then(res => {
+          .then((res) => {
             console.log("finish learning this post", res);
             self.$toast.info("Thanks for learnt.");
           })
-          .catch(error => console.log(error));
+          .catch((error) => console.log(error));
       }
     },
     toNextCard() {
@@ -265,7 +265,7 @@ export default {
       this.currentCardIndex = 0;
       this.currentBackCard = false;
       this.currentAnswer = null;
-    }
-  }
+    },
+  },
 };
 </script>
