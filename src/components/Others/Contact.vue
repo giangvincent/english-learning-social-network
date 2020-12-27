@@ -1,15 +1,13 @@
 <template>
   <div class="container mx-auto p-6 md:p-12 mt-6 relative flex flex-wrap">
-    <div class="w-full mb-5 pb-1border-b-2 text-center font-base text-gray-700">
-      <router-link
-        class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
-        to="/"
-        >ohitsgood</router-link
-      >
-    </div>
     <div class="w-full">
-      <div class="text-center font-semibold">Lorem ipsum dolor</div>
-      <div class="text-center font-base">Sed ut perspiciatis unde?</div>
+      <div class="text-center font-semibold">
+        Nếu bạn có ý kiến hay câu hỏi gì xin gửi về cho chúng tôi theo form sau.
+      </div>
+      <div class="text-center font-base">
+        Mọi ý kiến của bạn đều là động lực để chúng tôi tiếp tục phát triển
+        Website này.
+      </div>
     </div>
     <div class="mt-8 mx-auto w-full">
       <div class="py-1">
@@ -54,7 +52,7 @@
       <div class="py-1">
         <ul>
           <li
-            class=" text-red-600 "
+            class="text-red-600"
             v-for="(err, index) in errors"
             :key="'err-' + index"
           >
@@ -67,9 +65,7 @@
         class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
         @click="sendContact()"
       >
-        <span v-if="!processApi">
-          Gửi liên hệ
-        </span>
+        <span v-if="!processApi"> Gửi liên hệ </span>
         <div v-if="processApi">
           <loading-icon></loading-icon>
         </div>
@@ -86,7 +82,7 @@ import { mapState } from "vuex";
 export default {
   name: "contact",
   components: {
-    LoadingIcon
+    LoadingIcon,
   },
   data() {
     return {
@@ -95,7 +91,7 @@ export default {
       name: null,
       subject: null,
       content: null,
-      errors: []
+      errors: [],
     };
   },
   mounted() {
@@ -103,8 +99,8 @@ export default {
   },
   computed: {
     ...mapState({
-      apiUrl: state => state.apiUrl
-    })
+      apiUrl: (state) => state.apiUrl,
+    }),
   },
   methods: {
     initEditor() {
@@ -124,23 +120,23 @@ export default {
         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
         [{ align: [] }],
 
-        ["clean"] // remove formatting button
+        ["clean"], // remove formatting button
       ];
       this.editor =
         this.editor ||
         new Quill("#editor", {
           modules: {
-            toolbar: this.toolbar || toolbarOptions
+            toolbar: this.toolbar || toolbarOptions,
           },
           scrollingContainer: "#editor-container",
           theme: "snow",
-          height: 200
+          height: 200,
         });
 
       const importContent = this.editor.clipboard.convert(this.content);
       this.editor.setContents(importContent);
       var self = this;
-      this.editor.on("text-change", function(delta, oldDelta, source) {
+      this.editor.on("text-change", function (delta, oldDelta, source) {
         self.content = self.editor.root.innerHTML;
       });
     },
@@ -168,12 +164,12 @@ export default {
       let self = this;
       fetch(url, {
         method: "POST",
-        body: data
+        body: data,
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           self.processApi = false;
           if (typeof data.status !== "undefined" && data.status) {
@@ -191,11 +187,11 @@ export default {
             }
           }
         })
-        .catch(err => {
+        .catch((err) => {
           self.$toast.error("Đã xảy lỗi.", err);
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
