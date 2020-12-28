@@ -66,7 +66,7 @@
               (reviewCorrectAns &&
                 postData.content[currentQuizIndex].correctAnswers.includes(
                   index
-                ))
+                )),
           }"
           v-for="(answer, index) in postData.content[currentQuizIndex].answers"
           :key="'answers-' + index"
@@ -110,7 +110,7 @@
     <interaction-pack
       v-if="
         ($route.name === 'user-page' && !$route.query.cur) ||
-          $route.name !== 'user-page'
+        $route.name !== 'user-page'
       "
       :post_id="pid"
       detailPostType="quiz"
@@ -135,13 +135,13 @@ import Author from "./BaseParts/AuthorPart";
 export default {
   name: "feed-quiz",
   props: {
-    pid: String
+    pid: String,
   },
   components: {
     ProcessBar,
     interactionPack,
     CatsAndTags,
-    Author
+    Author,
   },
   data() {
     return {
@@ -160,7 +160,7 @@ export default {
           id: 1,
           full_name: "loading",
           nick_name: "loading",
-          avatar: ""
+          avatar: "",
         },
         subject: "",
         content: [
@@ -169,47 +169,47 @@ export default {
             contentOrigin: { ops: [] },
             images: [],
             answers: [],
-            correctAnswers: []
-          }
+            correctAnswers: [],
+          },
         ],
         category: {
           id: 1,
           name: "loading",
-          slug: "loading"
+          slug: "loading",
         },
         tags: [],
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
+        nums_bad: 0,
       },
       interactIndicatorNumber: {
         nums_bagged: 0,
         nums_good: 0,
-        nums_bad: 0
-      }
+        nums_bad: 0,
+      },
     };
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+      rootUrl: (state) => state.rootUrl,
+    }),
   },
   watch: {
     postData: {
-      handler: function(val) {
+      handler: function (val) {
         this.interactIndicatorNumber.nums_bagged = this.postData.nums_bagged;
         this.interactIndicatorNumber.nums_good = this.postData.nums_good;
         this.interactIndicatorNumber.nums_bad = this.postData.nums_bad;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     console.log(this.$route.name, this.$route.query.cur);
     var self = this;
-    fetch("/content/post/" + this.pid + ".json")
-      .then(res => res.json())
-      .then(res => {
+    fetch("/content/posts/" + this.pid + ".json")
+      .then((res) => res.json())
+      .then((res) => {
         // console.log(res);
         if (typeof res[0] !== "undefined") {
           self.postData = res[0];
@@ -219,7 +219,7 @@ export default {
           self.shortTimer = self.evaluateTime(self.postData.datetime);
         } else self.enable = false;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         self.enable = false;
       });
@@ -238,11 +238,11 @@ export default {
         if (this.currentQuizIndex >= this.postData.content.length - 1) {
           this.resetEnable = true;
           this.FinishPostLearnt(this.pid)
-            .then(res => {
+            .then((res) => {
               console.log("finish learning this post", res);
               self.$toast.info("Thanks for learnt.");
             })
-            .catch(error => console.log(error));
+            .catch((error) => console.log(error));
         }
       }
     },
@@ -266,8 +266,8 @@ export default {
       this.answered = false;
       this.numAnswer = null;
       this.currentQuizIndex = 0;
-    }
-  }
+    },
+  },
 };
 </script>
 

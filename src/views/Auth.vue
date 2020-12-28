@@ -1,18 +1,12 @@
 <template>
   <div>
+    <simpleTopNav></simpleTopNav>
     <div
       v-if="page === 'login'"
       class="container mx-auto p-6 mnd:p-12 mt-6 relative flex flex-wrap md:w-6/12"
     >
-      <div class="w-full mb-5 pb-1 text-center font-base text-gray-700">
-        <router-link
-          class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
-          to="/"
-          >ohitsgood</router-link
-        >
-      </div>
       <div class="w-full text-sm text-center font-semibold">
-        Lorem ipsum dolor, sit amet?
+        Bạn hãy vui lòng điền đầy đủ thông tin bên dưới.
       </div>
 
       <div class="mt-8 w-full mx-auto">
@@ -85,9 +79,7 @@
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="sendLogin()"
         >
-          <span v-if="!processApi">
-            Đăng nhập
-          </span>
+          <span v-if="!processApi"> Đăng nhập </span>
           <div v-if="processApi">
             <loading-icon></loading-icon>
           </div>
@@ -120,18 +112,14 @@
       v-if="page === 'register'"
       class="container mx-auto p-6 md:p-12 mt-6 relative flex flex-wrap md:w-6/12"
     >
-      <div
-        class="w-full mb-5 pb-1border-b-2 text-center font-base text-gray-700"
-      >
-        <router-link
-          class="items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"
-          to="/"
-          >ohitsgood</router-link
-        >
-      </div>
       <div class="w-full">
-        <div class="text-center font-semibold">Lorem ipsum dolor</div>
-        <div class="text-center font-base">Sed ut perspiciatis unde?</div>
+        <div class="text-center font-semibold">
+          Bạn hãy vui lòng điền đầy đủ thông tin bên dưới
+        </div>
+        <div class="text-center font-base">
+          Mọi thông tin của bạn đều được chúng tôi bảo mật trong CSDL của chúng
+          tôi.
+        </div>
       </div>
       <div class="mt-8 mx-auto w-full">
         <div class="py-1">
@@ -250,9 +238,7 @@
           class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
           @click="sendRegister()"
         >
-          <span v-if="!processApi">
-            Đăng ký tài khoản
-          </span>
+          <span v-if="!processApi"> Đăng ký tài khoản </span>
           <div v-if="processApi">
             <loading-icon></loading-icon>
           </div>
@@ -273,6 +259,7 @@
 </template>
 
 <script>
+import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
 
@@ -284,7 +271,8 @@ function validateEmail(email) {
 export default {
   name: "Authenticate",
   components: {
-    LoadingIcon
+    LoadingIcon,
+    simpleTopNav,
   },
   data() {
     return {
@@ -297,27 +285,27 @@ export default {
         email: "",
         password: "",
         password_confirm: "",
-        accept_term: false
+        accept_term: false,
       },
       email: "",
       password: "",
       page: "login",
-      keepLogin: true
+      keepLogin: true,
     };
   },
   watch: {
-    email: function(newVal, oldVal) {
+    email: function (newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
         console.log(checkEmail);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   created() {
     this.page = "login";
@@ -372,7 +360,7 @@ export default {
         this.processApi = true;
         let self = this;
         this.LOGIN({ email: this.email, password: this.password })
-          .then(res => {
+          .then((res) => {
             self.processApi = false;
             if (self.keepLogin && self.isLocalStorage()) {
               localStorage.setItem("user", JSON.stringify(res.user));
@@ -380,14 +368,14 @@ export default {
             }
             self.$router.go(-1);
           })
-          .catch(err => {
+          .catch((err) => {
             self.processApi = false;
           });
       }
     },
     sendRegister() {
       const isEmpty = !Object.values(this.registerData).some(
-        data => data !== null && data !== ""
+        (data) => data !== null && data !== ""
       );
       if (
         !isEmpty &&
@@ -397,7 +385,7 @@ export default {
         this.processApi = true;
         let self = this;
         this.REGISTER(this.registerData)
-          .then(res => {
+          .then((res) => {
             self.processApi = false;
             if (self.isLocalStorage()) {
               localStorage.setItem("user", JSON.stringify(res.success.user));
@@ -408,11 +396,11 @@ export default {
             }
             self.$router.go(-1);
           })
-          .catch(err => {
+          .catch((err) => {
             self.processApi = false;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
