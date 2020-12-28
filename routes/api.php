@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 /* Route::middleware('auth:api')->get('/user', function (Request $request) {
 return $request->user();
 }); */
+Route::get('webhook', 'BotController@verify_token');
+Route::post('webhook', 'BotController@handle_query');
 Route::post('social-login/{provider}', 'SocialAuthController@login');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
@@ -51,7 +53,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::get('feed-home', 'FeedController@home');
 Route::get('feed-category/{slug}', 'FeedController@feedCategory');
 Route::get('feed-tag/{slug}', 'FeedController@feedTag');
-
 
 Route::get('/share/{postId}', function ($postId) {
     $postJson = new JsonController();
