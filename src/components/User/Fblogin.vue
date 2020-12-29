@@ -71,10 +71,10 @@ export default {
       if (window.FB) {
         window.FB.login(
           function(response) {
-            console.log(response);
+            // console.log(response);
             var data = new FormData();
             data.append("social_token", response.authResponse.accessToken);
-            data.append("user_id", response.authResponse.UserId);
+            data.append("user_id", response.authResponse.userID);
             fetch(self.apiUrl + "/social-login/facebook", {
               method: "POST",
               body: data
