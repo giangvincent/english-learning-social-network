@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Validator;
-use Carbon\Carbon;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Validator;
 
 class SocialAuthController extends Controller
 {
@@ -46,7 +47,7 @@ class SocialAuthController extends Controller
 
             return $this->checkUserByEmail($responseGoogle);
         } catch (\Exception $e) {
-            return $this->responseBadRequest(['message' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 401);
         }
     }
 
@@ -57,14 +58,12 @@ class SocialAuthController extends Controller
     public function checkFacebook($user_id, $social_token)
     {
         try {
-            $checkToken = file_get_contents("https://graph.facebook.com/$user_id
-            ?fields=name,email
-            &access_token=$social_token");
+            $checkToken = file_get_contents("https://graph.facebook.com/$user_id?fields=name,email&access_token=$social_token");
             $responseFacebook = json_decode($checkToken, true);
 
             return $this->checkUserByEmail($responseFacebook);
         } catch (\Exception $e) {
-            return $this->responseBadRequest(['message' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 401);
         }
     }
 
@@ -79,9 +78,15 @@ class SocialAuthController extends Controller
             $user = User::create([
                 'full_name' => $profile['name'],
                 'email' => $profile['email'],
-                'password' => bcrypt(str_random(8)),
+                'password' => bcrypt(Str::random(8)),
             ]);
-            $userInfo = $user->info()->create();
+            $userInfo = $user->info()->create([
+                'bio' => '',
+                'socials_conn' => '{}',
+                'notification_conn' => '{}',
+                'others' => '{}',
+                'cover_image' => null,
+            ]);
         }
 
         $user->forceFill([

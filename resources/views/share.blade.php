@@ -42,7 +42,7 @@ if (count($data) > 0) {
 
 <body>
     <script>
-        window.location.replace("http://thatsgood-vi.givenews.net");
+        window.location.replace("https://thatsgood.info");
     </script>
 </body>
 
