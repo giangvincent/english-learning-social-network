@@ -46,8 +46,9 @@
                   : '/assets/images/default_avatar.jpg'
               "
               alt="profilepic"
-              width="28"
-              height="28"
+              width="28px"
+              height="28px"
+              style="width: 28px; height: 28px"
             />
             <label
               class="-m-2 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"

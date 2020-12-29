@@ -140,6 +140,7 @@ var googleAuth = (function() {
 })();
 
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "google-login",
   components: {
@@ -149,6 +150,11 @@ export default {
     return {
       processApi: false
     };
+  },
+  computed: {
+    ...mapState({
+      apiUrl: state => state.apiUrl
+    })
   },
   mounted() {
     const gauthOption = {
@@ -160,13 +166,45 @@ export default {
     googleAuth.load(gauthOption, prompt);
   },
   methods: {
+    ...mapMutations(["SET_TOKEN", "SET_USER"]),
     GgLogin() {
       this.processApi = true;
+      let self = this;
       googleAuth.signIn().then(googleUser => {
         this.processApi = false;
         // console.log(googleUser);
-        var id_token = googleUser.getAuthResponse().id_token;
+        let id_token = googleUser.getAuthResponse().id_token;
         // console.log(id_token);
+        let data = new FormData();
+        data.append("social_token", id_token);
+        fetch(self.apiUrl + "/social-login/google", {
+          method: "POST",
+          body: data
+        })
+          .then(function(res) {
+            return res.json();
+          })
+          .then(function(data) {
+            // console.log(data);
+            if (typeof data.success !== "undefined") {
+              let successData = data.success;
+              if (self.isLocalStorage()) {
+                localStorage.setItem("user", JSON.stringify(successData.user));
+                localStorage.setItem(
+                  "user_token",
+                  JSON.stringify(successData.token)
+                );
+              }
+              self.SET_TOKEN(successData.token);
+              self.SET_USER(successData.user);
+              self.$router.go(-1);
+            } else {
+              console.log(data.error);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
       });
     }
   }

@@ -4,7 +4,7 @@
       :id="'editor-' + paraIndex"
       class="editor h-64 rounded-b-lg border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
     ></div>
-    <span class="italic">(Tối đa: 1000 ký tự)</span>
+    <!-- <span class="italic">(Tối đa: 1000 ký tự)</span> -->
   </div>
 </template>
 
@@ -89,16 +89,16 @@ export default {
       // console.log(this.contentOrigin);
       this.editor.setContents(importContent);
       var self = this;
-      let limit = 1000;
+      // let limit = 1000;
       this.editor.on("text-change", function(delta, oldDelta, source) {
         /* if (source == "api") {
           console.log("An API call triggered this change.");
         } else if (source == "user") {
           console.log("A user action triggered this change.");
         } */
-        if (self.editor.getLength() > limit) {
+        /* if (self.editor.getLength() > limit) {
           self.editor.deleteText(limit, self.editor.getLength());
-        }
+        } */
         let contentChanged = {
           html: self.editor.root.innerHTML,
           origin: self.editor.getContents()

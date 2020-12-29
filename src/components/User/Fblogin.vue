@@ -44,6 +44,7 @@ function initSdk(locale = "vi_VN") {
   });
 }
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "fb-login",
   components: {
@@ -54,17 +55,57 @@ export default {
       processApi: false
     };
   },
+  computed: {
+    ...mapState({
+      apiUrl: state => state.apiUrl
+    })
+  },
   mounted() {
     initSdk();
   },
   methods: {
+    ...mapMutations(["SET_TOKEN", "SET_USER"]),
     fbLogin() {
       this.processApi = true;
+      let self = this;
       if (window.FB) {
         window.FB.login(
           function(response) {
-            this.processApi = false;
-            console.log(response.authResponse.accessToken);
+            console.log(response);
+            var data = new FormData();
+            data.append("social_token", response.authResponse.accessToken);
+            data.append("user_id", response.authResponse.UserId);
+            fetch(self.apiUrl + "/social-login/facebook", {
+              method: "POST",
+              body: data
+            })
+              .then(function(res) {
+                return res.json();
+              })
+              .then(function(data) {
+                // console.log(data);
+                if (typeof data.success !== "undefined") {
+                  let successData = data.success;
+                  if (self.isLocalStorage()) {
+                    localStorage.setItem(
+                      "user",
+                      JSON.stringify(successData.user)
+                    );
+                    localStorage.setItem(
+                      "user_token",
+                      JSON.stringify(successData.token)
+                    );
+                  }
+                  self.SET_TOKEN(successData.token);
+                  self.SET_USER(successData.user);
+                  self.$router.go(-1);
+                } else {
+                  console.log(data.error);
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
           },
           { scope: "email", return_scopes: true }
         );
