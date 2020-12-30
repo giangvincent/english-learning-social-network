@@ -2,14 +2,18 @@
     $defaultInfo = array(
         'title' => 'THATS GOOD',
         'description' => 'Welcome to Thatsgood',
-        'url' => 'thatsgood.net',
-        'image' => ''
+        'url' => 'https://thatsgood.info',
+        'image' => 'https://thatsgood.info/upload/1.jpg'
 );
 $res = $defaultInfo;
 if (count($data) > 0) {
     $res['title'] = $data['subject'];
-    $res['description'] = json_encode($data['content']);
-    $res['url'] = $res['url']. 'p/post/' . $data['url'];
+    $description = '';
+    foreach ($data['content'] as $content) {
+        $description .= strip_tags($content['contentHtml']). ' ';
+    }
+    $res['description'] = mb_substr($description, 0, 255, "UTF-8");
+    $res['url'] = $res['url']. '/p/post/' . $data['url'];
 }
 ?>
 <html lang="vi">
