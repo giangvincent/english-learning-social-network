@@ -1,4 +1,8 @@
 export default {
+  URL_DEV: function(state) {
+    state.rootUrl = "http://thatsgood-backend.local";
+    state.apiUrl = "http://thatsgood-backend.local/api";
+  },
   Toggle_popupEditor: function(state) {
     state.popupEditor = !state.popupEditor;
   },

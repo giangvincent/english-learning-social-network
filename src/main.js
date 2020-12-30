@@ -40,6 +40,10 @@ if (helperFunc.isLocalStorage()) {
   }
 }
 
+if (process.env.NODE_ENV === "development") {
+  store.commit("URL_DEV");
+}
+
 Vue.mixin({
   methods: helperFunc
 });
