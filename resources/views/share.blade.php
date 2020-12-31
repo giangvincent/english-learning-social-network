@@ -3,7 +3,7 @@
         'title' => 'THATS GOOD',
         'description' => 'Welcome to Thatsgood',
         'url' => 'https://thatsgood.info',
-        'image' => 'https://thatsgood.info/upload/1.jpg'
+        'image' => 'https://backend.thatsgood.info/dist/upload/1.jpg'
 );
 $res = $defaultInfo;
 if (count($data) > 0) {
