@@ -21,8 +21,9 @@ export default {
   SET_CURRENTFEED: function(state, payload) {
     state.currentFeed = payload;
   },
-  SET_TAGS: function(state, payload) {
-    state.tags = payload;
+  SET_TAGS: function(state, tags) {
+    tags.sort((a, b) => (a.posts < b.posts ? 1 : b.posts < a.posts ? -1 : 0));
+    state.tags = tags;
   },
   SET_CATEGORIES: function(state, payload) {
     state.categories = payload;
