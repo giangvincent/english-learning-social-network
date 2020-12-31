@@ -2,34 +2,58 @@
   <div
     class="content-center flex items-center justify-between flex-wrap mt-3 px-1 text-gray-600 text-sm "
   >
-    <span>Hình ảnh</span>
-    <button
-      type="button"
-      class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-blue"
-      @click="selectImages()"
-    >
-      <svg
-        class="text-white w-5 inline"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+    <span>Media</span>
+    <div>
+      <button
+        type="button"
+        class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-purple mr-1"
+        @click="selectAudio()"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-        />
-      </svg>
-      Chọn hình ảnh
-    </button>
+        <svg
+          class="text-white w-5 inline"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+          />
+        </svg>
+
+        Chọn Audio
+      </button>
+      <button
+        type="button"
+        class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-blue"
+        @click="selectImages()"
+      >
+        <svg
+          class="text-white w-5 inline"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        Chọn hình ảnh
+      </button>
+    </div>
+
     <input
       ref="imgInput"
       type="file"
       class="hidden"
       accept="images/*"
-      multiple
       @change="onImagesSelect"
     />
     <div
@@ -95,11 +119,14 @@
     >
       <!-- component changes when vm.currentView changes! -->
     </component>
+    <audio-input></audio-input>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import AudioInput from "./AudioInput.vue";
+
 var blobToBase64 = function(blob, callback) {
   var reader = new FileReader();
   reader.onload = function() {
@@ -115,7 +142,8 @@ export default {
     paraIndex: Number
   },
   components: {
-    ImageEditor: () => import("./ImageEditor.vue")
+    ImageEditor: () => import("./ImageEditor.vue"),
+    AudioInput: () => import("./AudioInput.vue")
   },
   data() {
     return {
@@ -172,7 +200,8 @@ export default {
     onCancelEvent() {
       this.indexImageChange = null;
       this.imageChange = null;
-    }
+    },
+    selectAudio() {}
   }
 };
 function isScriptAlreadyIncluded(src) {

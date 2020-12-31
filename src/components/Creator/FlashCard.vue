@@ -36,10 +36,10 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateImages"
         :paraIndex="index"
-      ></image-preview>
+      ></media-input>
 
       <div class="py-1">
         <span class="px-1 text-gray-600">Kết quả</span>
@@ -53,10 +53,10 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateFlipImages"
         :paraIndex="index"
-      ></image-preview>
+      ></media-input>
     </fieldset>
     <div class="flex justify-center">
       <button
@@ -71,12 +71,12 @@
 
 <script>
 import ContentEditor from "@/components/Form/ContentEditor.vue";
-import ImagePreview from "@/components/Form/ImagePreview.vue";
+import MediaInput from "@/components/Form/MediaInput.vue";
 export default {
   name: "flash-card",
   components: {
     ContentEditor,
-    ImagePreview
+    MediaInput
   },
   props: {
     data: Array

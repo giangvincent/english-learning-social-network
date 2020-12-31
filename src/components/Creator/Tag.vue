@@ -2,6 +2,7 @@
   <div class="py-1 relative">
     <span class="px-1 text-gray-600">Gắn Tag</span>
     <input
+      autocapitalize="none"
       placeholder="Tên của Tag"
       type="text"
       class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
@@ -67,28 +68,29 @@ export default {
   name: "tags",
   props: {
     maxTag: 4,
-    tags: Array,
+    tags: Array
   },
   data() {
     return {
       initSugguest: false,
       sugguestTags: [],
-      curTag: "",
+      curTag: ""
     };
   },
   mounted() {},
   computed: {
     ...mapState({
-      allTags: (state) => state.tags,
-    }),
+      allTags: state => state.tags
+    })
   },
   watch: {
-    curTag: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
+    curTag: function(newVal, oldVal) {
+      this.curTag = newVal.toLowerCase();
+      if (newVal.toLowerCase() !== oldVal) {
         this.initSugguest = true;
         let regexStr = new RegExp("^.*" + newVal + ".*", "g");
         this.sugguestTags = [];
-        this.allTags.forEach((tag) => {
+        this.allTags.forEach(tag => {
           if (
             regexStr.exec(tag.name) !== null &&
             !this.tags.includes(tag.name)
@@ -100,7 +102,7 @@ export default {
       if (newVal === "") {
         this.initSugguest = false;
       }
-    },
+    }
   },
   methods: {
     removeTag(index) {
@@ -121,8 +123,8 @@ export default {
       console.log(this.sugguestTags[index]);
       this.curTag = this.sugguestTags[index];
       this.createHashtag();
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
