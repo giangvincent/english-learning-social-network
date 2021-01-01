@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.35824426b8909603d6053183ba89f962.js"
+  "/precache-manifest.835e7cb62feb292567d2fea41b32d7dd.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "thatsgood-frontend"});

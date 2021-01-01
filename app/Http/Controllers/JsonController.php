@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 class JsonController extends Controller
 {
-    public $contentPath = 'content';
+    public $contentPath = 'dist/content';
 
     public function getPost($id)
     {

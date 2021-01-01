@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /public/upload
-/public/dist/upload
+/public/dist
 /public/content/categories/*.*
 /public/content/posts/*.*
 /public/content/tags/*.*
