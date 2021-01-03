@@ -11,32 +11,37 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public $root_folder = "dist/";
+
     public function CreateUploadFol()
     {
-        if (!file_exists(public_path('upload'))) {
-            mkdir(public_path('upload'), 0777);
+        if (!file_exists(public_path($root_folder . 'upload'))) {
+            mkdir(public_path($root_folder . 'upload'), 0777);
         }
-        if (!file_exists(public_path('upload/post'))) {
-            mkdir(public_path('upload/post'), 0777);
+        if (!file_exists(public_path($root_folder . 'upload/post'))) {
+            mkdir(public_path($root_folder . 'upload/post'), 0777);
         }
-        if (!file_exists(public_path('upload/temp'))) {
-            mkdir(public_path('upload/temp'), 0777);
+        if (!file_exists(public_path($root_folder . 'upload/temp'))) {
+            mkdir(public_path($root_folder . 'upload/temp'), 0777);
         }
     }
 
     public function CreateContentFol()
     {
-        if (!file_exists(public_path('content'))) {
-            mkdir(public_path('content'), 0777);
+        if (!file_exists(public_path($root_folder . 'content'))) {
+            mkdir(public_path($root_folder . 'content'), 0777);
         }
-        if (!file_exists(public_path('content/posts'))) {
-            mkdir(public_path('content/posts'), 0777);
+        if (!file_exists(public_path($root_folder . 'content/posts'))) {
+            mkdir(public_path($root_folder . 'content/posts'), 0777);
         }
-        if (!file_exists(public_path('content/categories'))) {
-            mkdir(public_path('content/categories'), 0777);
+        if (!file_exists(public_path($root_folder . 'content/categories'))) {
+            mkdir(public_path($root_folder . 'content/categories'), 0777);
         }
-        if (!file_exists(public_path('content/tags'))) {
-            mkdir(public_path('content/tags'), 0777);
+        if (!file_exists(public_path($root_folder . 'content/tags'))) {
+            mkdir(public_path($root_folder . 'content/tags'), 0777);
+        }
+        if (!file_exists(public_path($root_folder . 'content/audios'))) {
+            mkdir(public_path($root_folder . 'content/tags'), 0777);
         }
     }
 

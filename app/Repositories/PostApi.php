@@ -15,6 +15,7 @@ class PostApi extends Controller
     {
         $this->CreateUploadFol();
         $this->CreateContentFol();
+        $request->content = $this->createAudios($request);
 
         $newPost = $this->newPostDB($request);
         if (!$newPost) {
@@ -135,5 +136,40 @@ class PostApi extends Controller
             report($e);
             return false;
         }
+    }
+
+    public function createAudios($req)
+    {
+        $content = $request->content;
+        $audios = array();
+        foreach ($content as $para) {
+            if (isset($para['audios'])) {
+                # code...
+                $audios[] = $para['audios'];
+            }
+        }
+
+        foreach ($audios as $audio) {
+            $audio_slug = Str::slug($audio[0]);
+            $audio_path = public_path('dist/content/audios') . $audio_slug . '.mp3';
+            if (!file_exists($audio_path)) {
+                $audio_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q='. urlencode($audio[0]) .'&tl=en&client=tw-ob';
+                
+                $fp = fopen($audio_path, 'w');
+                $handle = curl_init();
+                curl_setopt($handle, CURLOPT_URL, $audio_url);
+                curl_setopt($handle, CURLOPT_FILE, $fp);
+                curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Referer: http://translate.google.com/',
+                    'User-Agent: stagefright/1.2 (Linux;Android 5.0)'
+                ));
+
+                curl_exec($handle);
+                curl_close($handle);
+            }
+        }
+
+        return $content;
     }
 }
