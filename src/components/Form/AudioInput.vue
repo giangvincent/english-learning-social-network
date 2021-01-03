@@ -26,9 +26,12 @@
           <div class="py-1">
             <input
               autocapitalize="none"
-              placeholder="Chữ cần phát âm ..."
+              placeholder="Chữ cần phát âm ...(Tối đa 100 ký tự)"
               type="text"
               class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+              maxlength="100"
+              v-model="textInput"
+              v-on:keyup.enter="addAudio"
             />
           </div>
         </fieldset>
@@ -43,8 +46,15 @@ export default {
   name: "audio-input",
   data() {
     return {
-      showModal: true
+      showModal: true,
+      textInput: "",
     };
-  }
+  },
+  methods: {
+    addAudio() {
+      if (this.textInput !== "") {
+      }
+    },
+  },
 };
 </script>

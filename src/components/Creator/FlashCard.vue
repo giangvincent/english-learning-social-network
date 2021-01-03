@@ -76,10 +76,10 @@ export default {
   name: "flash-card",
   components: {
     ContentEditor,
-    MediaInput
+    MediaInput,
   },
   props: {
-    data: Array
+    data: Array,
   },
   data() {
     return {
@@ -89,11 +89,12 @@ export default {
           contentHtml: "",
           contentOrigin: { ops: [] },
           images: [],
+          audios: [],
           flipContentHtml: "",
           flipContentOrigin: { ops: [] },
-          flipImages: []
-        }
-      ]
+          flipImages: [],
+        },
+      ],
     };
   },
   watch: {
@@ -101,15 +102,15 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.flashCards);
       },
-      deep: true
+      deep: true,
     },
     data: {
-      handler: function(val) {
+      handler: function (val) {
         // console.log(val);
         this.flashCards = this.data;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     console.log(this.data);
@@ -128,7 +129,7 @@ export default {
         images: [],
         flipContentHtml: "",
         flipContentOrigin: { ops: [] },
-        flipImages: []
+        flipImages: [],
       });
     },
     updateContent(content, paraIndex) {
@@ -145,7 +146,7 @@ export default {
     },
     updateFlipImages(images, paraIndex) {
       this.flashCards[paraIndex].flipImages = images;
-    }
-  }
+    },
+  },
 };
 </script>

@@ -1,5 +1,5 @@
 export default {
-  Upload_image: async function({ rootState, state, commit }, payload) {
+  Upload_image: async function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("base64", payload);
     return new Promise((res, rej) => {
@@ -11,24 +11,24 @@ export default {
         },
         body: data
       })
-        .then(function(response) {
+        .then(function (response) {
           return response.json();
         })
         .then(
-          function(result) {
+          function (result) {
             if (result.success) {
               res(result.data);
             } else {
               rej(result.message);
             }
           },
-          function(e) {
+          function (e) {
             rej(e.messages);
           }
         );
     });
   },
-  SUBMIT_POST: function({ rootState, state, commit }, payload) {
+  SUBMIT_POST: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("cat_id", payload.cat_id);
     data.append("post_type", payload.postType);
@@ -52,10 +52,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.status !== "undefined") {
             let successData = data.status;
@@ -69,7 +69,7 @@ export default {
         });
     });
   },
-  REQ_DEL_POST: function({ rootState, state, commit }, payload) {
+  REQ_DEL_POST: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("pid", payload);
 
@@ -82,10 +82,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
@@ -100,7 +100,7 @@ export default {
     });
   },
 
-  REQ_REPORT_POST: function({ rootState, state, commit }, payload) {
+  REQ_REPORT_POST: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("pid", payload);
 
@@ -113,10 +113,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
@@ -129,5 +129,8 @@ export default {
           rej(err);
         });
     });
+  },
+  callForGoogleAudio: function ({ state, commit }, payload) {
+
   }
 };
