@@ -15,9 +15,9 @@ class PostApi extends Controller
     {
         $this->CreateUploadFol();
         $this->CreateContentFol();
-        $request->content = $this->createAudios($request);
+        $content = $this->createAudios($request);
 
-        $newPost = $this->newPostDB($request);
+        $newPost = $this->newPostDB($request, $content);
         if (!$newPost) {
             return response()->json(['status' => false], 200);
         }
@@ -28,7 +28,8 @@ class PostApi extends Controller
 
     public function handleUpdatePost($request, $post)
     {
-        $updatePost = $this->changePostDB($request, $post);
+        $content = $this->createAudios($request);
+        $updatePost = $this->changePostDB($request, $post, $content);
         if (!$updatePost) {
             return response()->json(['status' => false], 200);
         }
@@ -104,14 +105,14 @@ class PostApi extends Controller
         }
     }
 
-    private static function newPostDB($request)
+    private static function newPostDB($request, $content)
     {
         try {
             $pid = (string) Str::uuid();
             $newPost = new Post();
             $newPost->pid = $pid;
             $newPost->subject = strip_tags($request->subject);
-            $newPost->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
+            $newPost->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content);
             $newPost->type = $request->post_type;
             $newPost->category = $request->cat_id;
             $newPost->author = Auth::user()->id;
@@ -123,11 +124,11 @@ class PostApi extends Controller
         }
     }
 
-    private static function changePostDB($request, $post)
+    private static function changePostDB($request, $post, $content)
     {
         try {
             $post->subject = strip_tags($request->subject);
-            $post->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
+            $post->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content);
             $post->type = $request->post_type;
             $post->category = $request->cat_id;
             $post->save();
@@ -140,36 +141,47 @@ class PostApi extends Controller
 
     public function createAudios($req)
     {
-        $content = $request->content;
-        $audios = array();
-        foreach ($content as $para) {
-            if (isset($para['audios'])) {
-                # code...
-                $audios[] = $para['audios'];
+        $content = json_decode($req->content, true);
+        for ($i = 0; $i < count($content); $i++) {
+            if (
+                isset($content[$i]['audios']) &&
+                count($content[$i]['audios']) > 0
+            ) {
+                $audios = $content[$i]['audios'];
+                $audio_slug = Str::slug($audios[0]);
+                $audio_path = public_path('dist/content/audios') . '/' . $audio_slug . '.mp3';
+
+                if (!file_exists($audio_path)) {
+                    self::saveAudioFromGoogleTranslate($audios[0], $audio_path);
+                }
+                $content[$i]['audios'][0] = '/content/audios/' . $audio_slug . '.mp3';
             }
         }
+        return json_encode($content);
+    }
 
-        foreach ($audios as $audio) {
-            $audio_slug = Str::slug($audio[0]);
-            $audio_path = public_path('dist/content/audios') . $audio_slug . '.mp3';
-            if (!file_exists($audio_path)) {
-                $audio_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q='. urlencode($audio[0]) .'&tl=en&client=tw-ob';
-                
-                $fp = fopen($audio_path, 'w');
-                $handle = curl_init();
-                curl_setopt($handle, CURLOPT_URL, $audio_url);
-                curl_setopt($handle, CURLOPT_FILE, $fp);
-                curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Referer: http://translate.google.com/',
-                    'User-Agent: stagefright/1.2 (Linux;Android 5.0)'
-                ));
+    public static function saveAudioFromGoogleTranslate($text, $audio_path)
+    {
+        $audio_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' . urlencode($text) . '&tl=en&client=tw-ob';
 
-                curl_exec($handle);
-                curl_close($handle);
-            }
+        $fp = fopen($audio_path, 'w+');
+        try {
+
+            $handle = curl_init();
+            curl_setopt($handle, CURLOPT_URL, $audio_url);
+            curl_setopt($handle, CURLOPT_FILE, $fp);
+            curl_setopt($handle, CURLOPT_HTTPHEADER, array(
+                'Referer: http://translate.google.com/',
+                'User-Agent: stagefright/1.2 (Linux;Android 5.0)',
+            ));
+
+            curl_exec($handle);
+            curl_close($handle);
+            fclose($fp);
+            return 'saved.';
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
 
-        return $content;
     }
 }

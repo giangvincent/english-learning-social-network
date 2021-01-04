@@ -15,33 +15,33 @@ class Controller extends BaseController
 
     public function CreateUploadFol()
     {
-        if (!file_exists(public_path($root_folder . 'upload'))) {
-            mkdir(public_path($root_folder . 'upload'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'upload'))) {
+            mkdir(public_path($this->root_folder . 'upload'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'upload/post'))) {
-            mkdir(public_path($root_folder . 'upload/post'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'upload/post'))) {
+            mkdir(public_path($this->root_folder . 'upload/post'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'upload/temp'))) {
-            mkdir(public_path($root_folder . 'upload/temp'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'upload/temp'))) {
+            mkdir(public_path($this->root_folder . 'upload/temp'), 0777);
         }
     }
 
     public function CreateContentFol()
     {
-        if (!file_exists(public_path($root_folder . 'content'))) {
-            mkdir(public_path($root_folder . 'content'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'content'))) {
+            mkdir(public_path($this->root_folder . 'content'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'content/posts'))) {
-            mkdir(public_path($root_folder . 'content/posts'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'content/posts'))) {
+            mkdir(public_path($this->root_folder . 'content/posts'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'content/categories'))) {
-            mkdir(public_path($root_folder . 'content/categories'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'content/categories'))) {
+            mkdir(public_path($this->root_folder . 'content/categories'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'content/tags'))) {
-            mkdir(public_path($root_folder . 'content/tags'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'content/tags'))) {
+            mkdir(public_path($this->root_folder . 'content/tags'), 0777);
         }
-        if (!file_exists(public_path($root_folder . 'content/audios'))) {
-            mkdir(public_path($root_folder . 'content/tags'), 0777);
+        if (!file_exists(public_path($this->root_folder . 'content/audios'))) {
+            mkdir(public_path($this->root_folder . 'content/audios'), 0777);
         }
     }
 
