@@ -1,18 +1,18 @@
 <template>
   <div
-    v-show="showModal"
+    v-show="showAudio"
     class="modal-bg transition-all duration-500 fixed left-0 overflow-auto z-50 top-0 bottom-0 right-0 flex"
   >
     <div
       class="absolute w-full h-full bg-opacity-50 bg-black"
-      @click="showModal = false"
+      @click="$emit('close')"
     ></div>
     <div
       class="modal-content bg-white relative m-auto max-w-lg shadow-lg rounded-lg"
     >
       <div
         class="closeBtn absolute right-0 top-0 font-bold text-4xl w-10 h-10 flex justify-center items-center bg-gray-900 text-white rounded-full -m-4"
-        @click="showModal = false"
+        @click="$emit('close')"
       >
         &times;
       </div>
@@ -44,17 +44,22 @@
 <script>
 export default {
   name: "audio-input",
+  props: {
+    showAudio: Boolean
+  },
   data() {
     return {
-      showModal: true,
-      textInput: "",
+      textInput: ""
     };
   },
   methods: {
     addAudio() {
       if (this.textInput !== "") {
+        this.$emit("addAudio", this.textInput);
+        this.textInput = "";
+        this.$emit("close");
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -175,6 +175,7 @@ export default {
         contentHtml: "",
         contentOrigin: { ops: [] },
         images: [],
+        audios: [],
         answers: [],
         correctAnswers: []
       });
@@ -209,6 +210,9 @@ export default {
     },
     updateImages(images, paraIndex) {
       this.quizs[paraIndex].images = images;
+    },
+    updateAudios(audios, paraIndex) {
+      this.quizs[paraIndex].audios = audios;
     },
     updateAnswer(value, index, paraIndex) {
       this.quizs[paraIndex].answers[index] = value;

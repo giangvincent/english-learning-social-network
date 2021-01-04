@@ -7,7 +7,7 @@
       <button
         type="button"
         class="font-semibold text-white rounded-lg px-3 py-2 btn-hover bg-color-purple mr-1"
-        @click="selectAudio()"
+        @click="showAudio = true"
       >
         <svg
           class="text-white w-5 inline"
@@ -56,6 +56,55 @@
       accept="images/*"
       @change="onImagesSelect"
     />
+    <div
+      class="w-full flex flex-wrap my-4"
+      ref="imageContainer"
+      v-if="audios.length > 0"
+    >
+      <div
+        class="relative mb-2 flex items-center justify-center"
+        v-for="(audio, index) in audios"
+        :key="'previewImage-' + index"
+      >
+        <svg
+          class="w-8"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <div class="px-1 text-black font-bold text-normal">
+          {{ audio }}
+        </div>
+        <div class="absolute">
+          <button
+            class="w-8 rounded-full p-2 text-white bg-black bg-opacity-50 hover:bg-opacity-100"
+            @click="removeAudio(index)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <!-- button delete preview image -->
+        </div>
+      </div>
+    </div>
+    <!-- list audios -->
     <div
       class="w-full flex flex-wrap my-4"
       ref="imageContainer"
@@ -110,6 +159,7 @@
       </div>
     </div>
     <!-- preview images -->
+
     <component
       v-bind:is="asyncComponent"
       :imageEdit="imageChange"
@@ -119,7 +169,11 @@
     >
       <!-- component changes when vm.currentView changes! -->
     </component>
-    <audio-input></audio-input>
+    <audio-input
+      :showAudio="showAudio"
+      @close="showAudio = false"
+      @addAudio="addAudio"
+    ></audio-input>
   </div>
 </template>
 
@@ -150,13 +204,21 @@ export default {
       asyncComponent: "ImageEditor",
       previewImages: [],
       indexImageChange: null,
-      imageChange: null
+      imageChange: null,
+      showAudio: false,
+      audios: []
     };
   },
   watch: {
     previewImages: {
       handler(val) {
         this.$emit("updateImages", this.previewImages, this.paraIndex);
+      },
+      deep: true
+    },
+    audios: {
+      handler(val) {
+        this.$emit("updateAudios", this.audios, this.paraIndex);
       },
       deep: true
     }
@@ -201,7 +263,12 @@ export default {
       this.indexImageChange = null;
       this.imageChange = null;
     },
-    selectAudio() {}
+    addAudio(text) {
+      this.audios[0] = text;
+    },
+    removeAudio(index) {
+      this.audios.splice(index, 1);
+    }
   }
 };
 function isScriptAlreadyIncluded(src) {

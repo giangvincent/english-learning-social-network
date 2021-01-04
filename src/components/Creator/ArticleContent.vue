@@ -66,7 +66,9 @@ export default {
   data() {
     return {
       maxParas: 4,
-      paragraphs: [{ contentHtml: "", contentOrigin: { ops: [] }, images: [] }]
+      paragraphs: [
+        { contentHtml: "", contentOrigin: { ops: [] }, images: [], audios: [] }
+      ]
     };
   },
   watch: {
@@ -109,6 +111,9 @@ export default {
     updateImages(images, paraIndex) {
       // console.log(images, paraIndex);
       this.paragraphs[paraIndex].images = images;
+    },
+    updateAudios(audios, paraIndex) {
+      this.paragraphs[paraIndex].audios = audios;
     }
   }
 };
