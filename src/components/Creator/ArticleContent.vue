@@ -35,10 +35,11 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateImages"
+        @updateAudios="updateAudios"
         :paraIndex="index"
-      ></image-preview>
+      ></media-input>
     </fieldset>
     <div class="flex justify-center">
       <button
@@ -53,20 +54,22 @@
 
 <script>
 import ContentEditor from "@/components/Form/ContentEditor.vue";
-import ImagePreview from "@/components/Form/ImagePreview.vue";
+import MediaInput from "@/components/Form/MediaInput.vue";
 export default {
   name: "article-content",
   components: {
     ContentEditor,
-    ImagePreview,
+    MediaInput
   },
   props: {
-    data: Array,
+    data: Array
   },
   data() {
     return {
       maxParas: 4,
-      paragraphs: [{ contentHtml: "", contentOrigin: { ops: [] }, images: [] }],
+      paragraphs: [
+        { contentHtml: "", contentOrigin: { ops: [] }, images: [], audios: [] }
+      ]
     };
   },
   watch: {
@@ -74,15 +77,15 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.paragraphs);
       },
-      deep: true,
+      deep: true
     },
     data: {
-      handler: function (val) {
+      handler: function(val) {
         // console.log(val);
         this.paragraphs = this.data;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     console.log(this.data);
@@ -99,6 +102,7 @@ export default {
         contentHtml: "",
         contentOrigin: { ops: [] },
         images: [],
+        audios: []
       });
     },
     updateContent(content, paraIndex) {
@@ -110,6 +114,9 @@ export default {
       // console.log(images, paraIndex);
       this.paragraphs[paraIndex].images = images;
     },
-  },
+    updateAudios(audios, paraIndex) {
+      this.paragraphs[paraIndex].audios = audios;
+    }
+  }
 };
 </script>

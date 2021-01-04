@@ -5,7 +5,7 @@
     <div class="my-6 md:px-6 lg:px-8 pb-20 mx-auto px-3">
       <div class="mx-auto max-w-lg">
         <div class="py-1">
-          <span class="px-1  text-gray-600">Danh mục</span>
+          <span class="px-1 text-gray-600">Danh mục</span>
           <form-select
             :selectData="categories"
             @changeSelectData="changeCategory"
@@ -47,7 +47,7 @@
         </div>
         <!-- Choose post type -->
         <div class="py-1">
-          <span class="px-1  text-gray-600">Chủ đề</span>
+          <span class="px-1 text-gray-600">Chủ đề</span>
           <input
             placeholder="Chủ đề được giới hạn trong 250 ký tự"
             type="text"
@@ -211,6 +211,12 @@ export default {
         user: JSON.stringify(this.user),
         tags: JSON.stringify(this.tags)
       };
+      if (!postData.postContent || postData.subject == "") {
+        this.processPost = false;
+        this.processUpImages = false;
+        this.$toast.error("Nội dung trống trơn.");
+        return false;
+      }
       var self = this;
       var uploadImages = [];
       postData.postContent.forEach((content, contentIndex) => {

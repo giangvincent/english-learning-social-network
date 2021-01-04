@@ -11,7 +11,7 @@
     </div>
     <div
       v-if="page === 'login'"
-      class="container mx-auto pb-6 relative flex flex-wrap md:w-6/12"
+      class="container mx-auto px-6 pb-6 relative flex flex-wrap md:w-6/12"
     >
       <div class="px-2 w-full text-sm text-center font-semibold">
         Bạn đã có tài khoản. Hãy vui lòng điền đầy đủ thông tin bên dưới.
@@ -118,7 +118,7 @@
 
     <div
       v-if="page === 'register'"
-      class="container mx-auto pb-6 relative flex flex-wrap md:w-6/12"
+      class="container mx-auto px-6 pb-6 relative flex flex-wrap md:w-6/12"
     >
       <div class="px-2 w-full">
         <div class="text-center font-semibold">
@@ -284,7 +284,7 @@ export default {
     LoadingIcon,
     simpleTopNav,
     FbLogin,
-    GgLogin
+    GgLogin,
   },
   data() {
     return {
@@ -297,27 +297,27 @@ export default {
         email: "",
         password: "",
         password_confirm: "",
-        accept_term: false
+        accept_term: false,
       },
       email: "",
       password: "",
       page: "login",
-      keepLogin: true
+      keepLogin: true,
     };
   },
   watch: {
-    email: function(newVal, oldVal) {
+    email: function (newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
         console.log(checkEmail);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   created() {
     this.page = "login";
@@ -372,7 +372,7 @@ export default {
         this.processApi = true;
         let self = this;
         this.LOGIN({ email: this.email, password: this.password })
-          .then(res => {
+          .then((res) => {
             self.processApi = false;
             if (self.keepLogin && self.isLocalStorage()) {
               localStorage.setItem("user", JSON.stringify(res.user));
@@ -380,14 +380,14 @@ export default {
             }
             self.$router.go(-1);
           })
-          .catch(err => {
+          .catch((err) => {
             self.processApi = false;
           });
       }
     },
     sendRegister() {
       const isEmpty = !Object.values(this.registerData).some(
-        data => data !== null && data !== ""
+        (data) => data !== null && data !== ""
       );
       if (
         !isEmpty &&
@@ -397,7 +397,7 @@ export default {
         this.processApi = true;
         let self = this;
         this.REGISTER(this.registerData)
-          .then(res => {
+          .then((res) => {
             self.processApi = false;
             if (self.isLocalStorage()) {
               localStorage.setItem("user", JSON.stringify(res.success.user));
@@ -408,11 +408,11 @@ export default {
             }
             self.$router.go(-1);
           })
-          .catch(err => {
+          .catch((err) => {
             self.processApi = false;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

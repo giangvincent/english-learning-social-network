@@ -2,6 +2,7 @@
   <div class="py-1 relative">
     <span class="px-1 text-gray-600">Gắn Tag</span>
     <input
+      autocapitalize="none"
       placeholder="Tên của Tag"
       type="text"
       class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
@@ -84,7 +85,8 @@ export default {
   },
   watch: {
     curTag: function(newVal, oldVal) {
-      if (newVal !== oldVal) {
+      this.curTag = newVal.toLowerCase();
+      if (newVal.toLowerCase() !== oldVal) {
         this.initSugguest = true;
         let regexStr = new RegExp("^.*" + newVal + ".*", "g");
         this.sugguestTags = [];

@@ -25,7 +25,7 @@
         </svg>
       </div>
       <div class="py-1">
-        <span class="px-1 text-gray-600">Nội dung gợi ý</span>
+        <span class="px-1 text-gray-600">Nội dung mặt trước</span>
         <content-editor
           :contentHtml="card.contentHtml"
           :contentOrigin="card.contentOrigin"
@@ -36,13 +36,14 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateImages"
+        @updateAudios="updateAudios"
         :paraIndex="index"
-      ></image-preview>
+      ></media-input>
 
       <div class="py-1">
-        <span class="px-1 text-gray-600">Kết quả</span>
+        <span class="px-1 text-gray-600">Nội dung mặt sau</span>
         <content-editor
           :paraIndex="'-flip-content-' + index"
           :contentHtml="card.flipContentHtml"
@@ -53,10 +54,11 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateFlipImages"
+        @updateAudios="updateFlipAudios"
         :paraIndex="index"
-      ></image-preview>
+      ></media-input>
     </fieldset>
     <div class="flex justify-center">
       <button
@@ -71,12 +73,12 @@
 
 <script>
 import ContentEditor from "@/components/Form/ContentEditor.vue";
-import ImagePreview from "@/components/Form/ImagePreview.vue";
+import MediaInput from "@/components/Form/MediaInput.vue";
 export default {
   name: "flash-card",
   components: {
     ContentEditor,
-    ImagePreview
+    MediaInput
   },
   props: {
     data: Array
@@ -89,9 +91,11 @@ export default {
           contentHtml: "",
           contentOrigin: { ops: [] },
           images: [],
+          audios: [],
           flipContentHtml: "",
           flipContentOrigin: { ops: [] },
-          flipImages: []
+          flipImages: [],
+          flipAudios: []
         }
       ]
     };
@@ -112,7 +116,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.data);
+    // console.log(this.data);
     if (this.data) {
       this.flashCards = this.data;
     }
@@ -126,9 +130,11 @@ export default {
         contentHtml: "",
         contentOrigin: { ops: [] },
         images: [],
+        audios: [],
         flipContentHtml: "",
         flipContentOrigin: { ops: [] },
-        flipImages: []
+        flipImages: [],
+        flipAudios: []
       });
     },
     updateContent(content, paraIndex) {
@@ -145,6 +151,14 @@ export default {
     },
     updateFlipImages(images, paraIndex) {
       this.flashCards[paraIndex].flipImages = images;
+    },
+    updateAudios(audios, paraIndex) {
+      console.log("updateAudios", audios);
+      this.flashCards[paraIndex].audios = audios;
+    },
+    updateFlipAudios(audios, paraIndex) {
+      console.log("updateFlipAudios", audios);
+      this.flashCards[paraIndex].flipAudios = audios;
     }
   }
 };

@@ -35,10 +35,11 @@
       </div>
       <!-- text content editor -->
 
-      <image-preview
+      <media-input
         @updateImages="updateImages"
+        @updateAudios="updateAudios"
         :paraIndex="paraIndex"
-      ></image-preview>
+      ></media-input>
       <div class="relative my-2 p-3">
         <div class="font-bold">Các câu trả lời</div>
         <div
@@ -59,7 +60,7 @@
             class="mx-1 border border-2 border-green-600 rounded w-10"
             @click="makeCorrectAnswer(index, paraIndex)"
             :class="{
-              'bg-green-600': quiz.correctAnswers.includes(index),
+              'bg-green-600': quiz.correctAnswers.includes(index)
             }"
             title="Đánh dấu câu trả lời đúng"
           >
@@ -67,7 +68,7 @@
               class="w-full h-full inline"
               :class="{
                 'text-green-600': !quiz.correctAnswers.includes(index),
-                'text-white': quiz.correctAnswers.includes(index),
+                'text-white': quiz.correctAnswers.includes(index)
               }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -126,15 +127,15 @@
 
 <script>
 import ContentEditor from "@/components/Form/ContentEditor.vue";
-import ImagePreview from "@/components/Form/ImagePreview.vue";
+import MediaInput from "@/components/Form/MediaInput.vue";
 export default {
   name: "quizs",
   components: {
     ContentEditor,
-    ImagePreview,
+    MediaInput
   },
   props: {
-    data: Array,
+    data: Array
   },
   data() {
     return {
@@ -144,10 +145,11 @@ export default {
           contentHtml: "",
           contentOrigin: { ops: [] },
           images: [],
+          audios: [],
           answers: [],
-          correctAnswers: [],
-        },
-      ],
+          correctAnswers: []
+        }
+      ]
     };
   },
   watch: {
@@ -155,14 +157,14 @@ export default {
       handler(val) {
         this.$emit("changeContent", this.quizs);
       },
-      deep: true,
+      deep: true
     },
     data: {
-      handler: function (val) {
+      handler: function(val) {
         this.quizs = this.data;
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {
     if (this.data) {
@@ -175,8 +177,9 @@ export default {
         contentHtml: "",
         contentOrigin: { ops: [] },
         images: [],
+        audios: [],
         answers: [],
-        correctAnswers: [],
+        correctAnswers: []
       });
     },
     removeCard(paraIndex) {
@@ -210,9 +213,12 @@ export default {
     updateImages(images, paraIndex) {
       this.quizs[paraIndex].images = images;
     },
+    updateAudios(audios, paraIndex) {
+      this.quizs[paraIndex].audios = audios;
+    },
     updateAnswer(value, index, paraIndex) {
       this.quizs[paraIndex].answers[index] = value;
-    },
-  },
+    }
+  }
 };
 </script>
