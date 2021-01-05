@@ -119,11 +119,11 @@ class CategoryController extends AdminController
 
     public function checkFolderContent()
     {
-        if (!file_exists(public_path() . '/content/')) {
-            mkdir(public_path() . '/content/', 0777);
+        if (!file_exists(public_path('dist/content'))) {
+            mkdir(public_path('dist/content'), 0777);
         }
-        if (!file_exists(public_path() . '/content/categories/')) {
-            mkdir(public_path() . '/content/categories/', 0777);
+        if (!file_exists(public_path('dist/content') . '/categories/')) {
+            mkdir(public_path('dist/content') . '/categories/', 0777);
         }
     }
 
@@ -131,7 +131,7 @@ class CategoryController extends AdminController
     {
         $data = $category->toArray();
         // $data['posts'] = $category->posts()->where('status', 1)->select('id', 'title', 'slug', 'summary', 'feature_image', 'updated_at')->orderBy('id', 'desc')->limit(12)->get()->toArray();
-        file_put_contents(public_path() . '/content/categories/' . $category->slug . '.json', json_encode($data));
+        file_put_contents(public_path('dist/content') . '/categories/' . $category->slug . '.json', json_encode($data));
     }
 
     public function exportCategories()
@@ -143,6 +143,6 @@ class CategoryController extends AdminController
             $catData['posts'] = $cat->posts()->count();
             array_push($allCatsData, $catData);
         }
-        file_put_contents(public_path() . '/content/categories.json', json_encode($allCatsData));
+        file_put_contents(public_path('dist/content') . '/categories.json', json_encode($allCatsData));
     }
 }

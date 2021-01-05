@@ -156,6 +156,20 @@ class PostApi extends Controller
                 }
                 $content[$i]['audios'][0] = '/content/audios/' . $audio_slug . '.mp3';
             }
+
+            if (
+                isset($content[$i]['flipAudios']) &&
+                count($content[$i]['flipAudios']) > 0
+            ) {
+                $audios = $content[$i]['flipAudios'];
+                $audio_slug = Str::slug($audios[0]);
+                $audio_path = public_path('dist/content/audios') . '/' . $audio_slug . '.mp3';
+
+                if (!file_exists($audio_path)) {
+                    self::saveAudioFromGoogleTranslate($audios[0], $audio_path);
+                }
+                $content[$i]['flipAudios'][0] = '/content/audios/' . $audio_slug . '.mp3';
+            }
         }
         return json_encode($content);
     }
