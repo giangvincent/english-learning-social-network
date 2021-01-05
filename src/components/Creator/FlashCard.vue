@@ -39,6 +39,7 @@
       <media-input
         @updateImages="updateImages"
         @updateAudios="updateAudios"
+        :media="{ images: card.images, audios: card.audios }"
         :paraIndex="index"
       ></media-input>
 
@@ -57,6 +58,7 @@
       <media-input
         @updateImages="updateFlipImages"
         @updateAudios="updateFlipAudios"
+        :media="{ images: card.flipImages, audios: card.flipAudios }"
         :paraIndex="index"
       ></media-input>
     </fieldset>

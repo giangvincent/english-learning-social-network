@@ -38,6 +38,7 @@
       <media-input
         @updateImages="updateImages"
         @updateAudios="updateAudios"
+        :media="{ images: quiz.images, audios: quiz.audios }"
         :paraIndex="paraIndex"
       ></media-input>
       <div class="relative my-2 p-3">

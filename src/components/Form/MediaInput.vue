@@ -193,7 +193,8 @@ var blobToBase64 = function(blob, callback) {
 export default {
   name: "image-preview",
   props: {
-    paraIndex: Number
+    paraIndex: Number,
+    media: Object
   },
   components: {
     ImageEditor: () => import("./ImageEditor.vue"),
@@ -210,6 +211,13 @@ export default {
     };
   },
   watch: {
+    media: {
+      handler(val) {
+        this.previewImages = val.images;
+        this.audios = val.audios;
+      },
+      deep: true
+    },
     previewImages: {
       handler(val) {
         this.$emit("updateImages", this.previewImages, this.paraIndex);
