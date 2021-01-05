@@ -226,7 +226,7 @@ export default {
     },
     audios: {
       handler(val) {
-        console.log(val);
+        // console.log(val);
         this.$emit("updateAudios", this.audios, this.paraIndex);
       },
       deep: true

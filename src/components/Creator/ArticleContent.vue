@@ -38,7 +38,7 @@
       <media-input
         @updateImages="updateImages"
         @updateAudios="updateAudios"
-        :media="{ images: paragraph.images, audios: paragraph.audios }"
+        :media="{ images: paragraph.images, audios: paragraph.audios || [] }"
         :paraIndex="index"
       ></media-input>
     </fieldset>
