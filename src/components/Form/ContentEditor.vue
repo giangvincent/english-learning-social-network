@@ -68,6 +68,7 @@ export default {
 
         ["clean"] // remove formatting button
       ];
+      let self = this;
       this.editor =
         this.editor ||
         new Quill("#editor-" + this.paraIndex, {
@@ -88,7 +89,7 @@ export default {
       const importContent = this.editor.clipboard.convert(this.contentHtml);
       // console.log(this.contentOrigin);
       this.editor.setContents(importContent);
-      var self = this;
+
       // let limit = 1000;
       this.editor.on("text-change", function(delta, oldDelta, source) {
         /* if (source == "api") {
