@@ -158,11 +158,9 @@ export default {
       this.flashCards[paraIndex].flipImages = images;
     },
     updateAudios(audios, paraIndex) {
-      console.log("updateAudios", audios);
       this.flashCards[paraIndex].audios = audios;
     },
     updateFlipAudios(audios, paraIndex) {
-      console.log("updateFlipAudios", audios);
       this.flashCards[paraIndex].flipAudios = audios;
     }
   }

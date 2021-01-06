@@ -106,12 +106,12 @@
         </div>
         <button
           v-if="
-            typeof postData.audios !== 'undefined' &&
-              typeof postData.audios[0] !== 'undefined' &&
-              postData.audios[0] !== ''
+            typeof postData.flipAudios !== 'undefined' &&
+              typeof postData.flipAudios[0] !== 'undefined' &&
+              postData.flipAudios[0] !== ''
           "
           class="p-1 ml-3 mb-2 flex items-center rounded-lg border-2 hover:border-gray-600 py-2 border-gray-300 bg-white"
-          @click="playAudio(postData.audios[0])"
+          @click="playAudio(postData.flipAudios[0])"
         >
           <svg
             class="w-8"
