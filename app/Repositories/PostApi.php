@@ -28,6 +28,7 @@ class PostApi extends Controller
 
     public function handleUpdatePost($request, $post)
     {
+        $this->CreateContentFol();
         $content = $this->createAudios($request);
         $updatePost = $this->changePostDB($request, $post, $content);
         if (!$updatePost) {

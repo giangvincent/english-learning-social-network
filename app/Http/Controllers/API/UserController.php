@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdatePostWhenDbChange;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\userInteract;
@@ -126,6 +127,8 @@ class UserController extends Controller
         $userInfo->bio = $request->bio;
         $userInfo->save();
 
+        UpdatePostWhenDbChange::dispatch();
+
         return response()->json(['success' => 1], $this->successStatus);
     }
 
@@ -156,6 +159,8 @@ class UserController extends Controller
         $user = Auth::user();
         $user->avatar = '/upload/' . $fileName;
         $user->save();
+
+        UpdatePostWhenDbChange::dispatch();
 
         return response()->json(['success' => 1], $this->successStatus);
     }

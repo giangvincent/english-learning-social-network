@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Jobs\UpdatePostWhenDbChange;
 use App\Models\Category;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -113,6 +114,7 @@ class CategoryController extends AdminController
             $this->checkFolderContent();
             $this->exportToJson($category);
             $this->exportCategories();
+            UpdatePostWhenDbChange::dispatch();
         });
         return $form;
     }
