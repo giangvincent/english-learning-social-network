@@ -296,7 +296,7 @@ export default {
     },
     playAudio(file_path) {
       var sound = new Howl({
-        src: this.rootUrl + file_path,
+        src: file_path,
         format: ["mp3"],
         html5: true
       });
