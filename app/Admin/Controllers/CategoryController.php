@@ -114,7 +114,8 @@ class CategoryController extends AdminController
             $this->checkFolderContent();
             $this->exportToJson($category);
             $this->exportCategories();
-            UpdatePostWhenDbChange::dispatch();
+
+            UpdatePostWhenDbChange::dispatch('category', $form->model()->id);
         });
         return $form;
     }

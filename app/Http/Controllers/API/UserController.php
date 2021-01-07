@@ -127,7 +127,7 @@ class UserController extends Controller
         $userInfo->bio = $request->bio;
         $userInfo->save();
 
-        UpdatePostWhenDbChange::dispatch();
+        UpdatePostWhenDbChange::dispatch('author', $user->id);
 
         return response()->json(['success' => 1], $this->successStatus);
     }
@@ -160,7 +160,7 @@ class UserController extends Controller
         $user->avatar = '/upload/' . $fileName;
         $user->save();
 
-        UpdatePostWhenDbChange::dispatch();
+        UpdatePostWhenDbChange::dispatch('author', $user->id);
 
         return response()->json(['success' => 1], $this->successStatus);
     }
