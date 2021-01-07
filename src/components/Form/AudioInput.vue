@@ -32,6 +32,7 @@
               maxlength="100"
               v-model="textInput"
               v-on:keyup.enter="addAudio"
+              autofocus
             />
           </div>
         </fieldset>
@@ -55,6 +56,8 @@ export default {
   methods: {
     addAudio() {
       if (this.textInput !== "") {
+        this.textInput = this.textInput.replace(/\s+/g, " ");
+        this.textInput = this.textInput.toLowerCase().trim();
         this.$emit("addAudio", this.textInput);
         this.textInput = "";
         this.$emit("close");
