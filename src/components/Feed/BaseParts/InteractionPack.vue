@@ -98,14 +98,14 @@
               />
             </svg>
           </li>
-          <li class="m-1">
+          <!-- <li class="m-1">
             <input
               class="h-10"
               ref="linkShare"
               type="text"
               :value="linkShare"
             />
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
