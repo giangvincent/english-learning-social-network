@@ -177,7 +177,7 @@ class PostApi extends Controller
 
     public static function saveAudioFromGoogleTranslate($text, $audio_path)
     {
-        $audio_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' . urlencode($text) . '&tl=en&client=tw-ob';
+        $audio_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' . urlencode($text) . '&tl=en&client=tw-ob&&ttsspeed=0.24';
 
         $fp = fopen($audio_path, 'w+');
         try {
