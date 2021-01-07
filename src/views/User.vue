@@ -11,7 +11,7 @@
             class="h-64 w-full overflow-hidden bg-center bg-cover relative bg-color-black"
             :style="{
               'background-image': curUser.cover_image
-                ? 'url(' + rootUrl + curUser.cover_image + ')'
+                ? 'url(' + curUser.cover_image + ')'
                 : 'url(/assets/images/default.jpg)'
             }"
           >
@@ -41,7 +41,7 @@
               <img
                 :src="
                   curUser.avatar
-                    ? rootUrl + curUser.avatar
+                    ? curUser.avatar
                     : '/assets/images/default_avatar.jpg'
                 "
                 class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"

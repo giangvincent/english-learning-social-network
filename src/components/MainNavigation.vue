@@ -41,9 +41,7 @@
           <div class="rounded-full flex overflow-hidden">
             <img
               :src="
-                user.avatar
-                  ? rootUrl + user.avatar
-                  : '/assets/images/default_avatar.jpg'
+                user.avatar ? user.avatar : '/assets/images/default_avatar.jpg'
               "
               alt="profilepic"
               width="28px"

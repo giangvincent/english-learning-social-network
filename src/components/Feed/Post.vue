@@ -18,7 +18,7 @@
           v-for="(image, imgIndex) in content.images"
           :key="`content.images.${imgIndex}`"
         >
-          <img v-if="image !== ''" class="w-full" :src="rootUrl + image" />
+          <img v-if="image !== ''" class="w-full" :src="image" />
         </div>
         <!-- End media -->
         <section>

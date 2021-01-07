@@ -54,7 +54,7 @@
           v-for="(image, imgIndex) in postData.content[currentQuizIndex].images"
           :key="`content.images.${imgIndex}`"
           class="w-full"
-          :src="rootUrl + image"
+          :src="image"
         />
       </div>
       <!-- End media -->

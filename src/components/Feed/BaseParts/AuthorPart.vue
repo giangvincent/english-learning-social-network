@@ -8,7 +8,7 @@
         <img
           :src="
             postData.author.avatar
-              ? rootUrl + postData.author.avatar
+              ? postData.author.avatar
               : '/assets/images/default_avatar.jpg'
           "
           alt="profilepic"
