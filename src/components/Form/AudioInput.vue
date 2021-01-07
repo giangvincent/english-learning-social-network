@@ -25,6 +25,7 @@
           </legend>
           <div class="py-1">
             <input
+              ref="audioInput"
               autocapitalize="none"
               placeholder="Chữ cần phát âm ...(Tối đa 100 ký tự)"
               type="text"
@@ -32,7 +33,6 @@
               maxlength="100"
               v-model="textInput"
               v-on:keyup.enter="addAudio"
-              autofocus
             />
           </div>
         </fieldset>
@@ -53,7 +53,18 @@ export default {
       textInput: ""
     };
   },
+  watch: {
+    showAudio: function(newVal, oldVal) {
+      if (newVal) {
+        this.$nextTick(() => this.setFocus());
+      }
+    }
+  },
   methods: {
+    setFocus: function() {
+      // Note, you need to add a ref="search" attribute to your input.
+      this.$refs.audioInput.focus();
+    },
     addAudio() {
       if (this.textInput !== "") {
         this.textInput = this.textInput.replace(/\s+/g, " ");
