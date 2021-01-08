@@ -15,9 +15,9 @@ class PostApi extends Controller
     {
         $this->CreateUploadFol();
         $this->CreateContentFol();
-        $content = $this->createAudios($request);
+        $this->createAudios($request);
 
-        $newPost = $this->newPostDB($request, $content);
+        $newPost = $this->newPostDB($request);
         if (!$newPost) {
             return response()->json(['status' => false], 200);
         }
@@ -29,8 +29,8 @@ class PostApi extends Controller
     public function handleUpdatePost($request, $post)
     {
         $this->CreateContentFol();
-        $content = $this->createAudios($request);
-        $updatePost = $this->changePostDB($request, $post, $content);
+        $this->createAudios($request);
+        $updatePost = $this->changePostDB($request, $post);
         if (!$updatePost) {
             return response()->json(['status' => false], 200);
         }
@@ -106,14 +106,14 @@ class PostApi extends Controller
         }
     }
 
-    private static function newPostDB($request, $content)
+    private static function newPostDB($request)
     {
         try {
             $pid = (string) Str::uuid();
             $newPost = new Post();
             $newPost->pid = $pid;
             $newPost->subject = strip_tags($request->subject);
-            $newPost->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content);
+            $newPost->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
             $newPost->type = $request->post_type;
             $newPost->category = $request->cat_id;
             $newPost->author = Auth::user()->id;
@@ -125,11 +125,11 @@ class PostApi extends Controller
         }
     }
 
-    private static function changePostDB($request, $post, $content)
+    private static function changePostDB($request, $post)
     {
         try {
             $post->subject = strip_tags($request->subject);
-            $post->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content);
+            $post->content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $request->content);
             $post->type = $request->post_type;
             $post->category = $request->cat_id;
             $post->save();
@@ -155,7 +155,7 @@ class PostApi extends Controller
                 if (!file_exists($audio_path)) {
                     self::saveAudioFromGoogleTranslate($audios[0], $audio_path);
                 }
-                $content[$i]['audios'][0] = '/content/audios/' . $audio_slug . '.mp3';
+                // $content[$i]['audios'][0] = '/content/audios/' . $audio_slug . '.mp3';
             }
 
             if (
@@ -169,7 +169,7 @@ class PostApi extends Controller
                 if (!file_exists($audio_path)) {
                     self::saveAudioFromGoogleTranslate($audios[0], $audio_path);
                 }
-                $content[$i]['flipAudios'][0] = '/content/audios/' . $audio_slug . '.mp3';
+                // $content[$i]['flipAudios'][0] = '/content/audios/' . $audio_slug . '.mp3';
             }
         }
         return json_encode($content);
