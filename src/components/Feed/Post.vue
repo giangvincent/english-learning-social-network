@@ -217,9 +217,15 @@ export default {
         })
         .catch(error => console.log(error));
     },
-    playAudio(file_path) {
+    playAudio(text) {
       var sound = new Howl({
-        src: file_path,
+        src:
+          "/content/audios/" +
+          text
+            .toLowerCase()
+            .replace(/[^\w ]+/g, "")
+            .replace(/ +/g, "-") +
+          ".mp3",
         format: ["mp3"],
         html5: true
       });
