@@ -8,6 +8,7 @@
           <span class="px-1 text-gray-600">Danh mục</span>
           <form-select
             :selectData="categories"
+            :index="category"
             @changeSelectData="changeCategory"
           ></form-select>
         </div>
@@ -171,7 +172,13 @@ export default {
         .then(res => {
           // console.log(res);
           self.postType = res[0].type ? res[0].type : "normalPost";
-          self.category = res[0].category.id;
+          self.category = self.categories.findIndex(
+            category => category.id === res[0].category.id
+          );
+          console.log(self.category);
+          if (self.category == -1) {
+            self.category = 0;
+          }
           self.subject = res[0].subject;
           self.postContent = res[0].content;
           let tags = [];

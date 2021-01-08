@@ -4,7 +4,11 @@
     <div
       class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
     >
-      <label for="menu-toggle" class="cursor-pointer py-2" @click="$router.go(-1)">
+      <label
+        for="menu-toggle"
+        class="sm:w-1/2 cursor-pointer py-2"
+        @click="$router.go(-1)"
+      >
         <svg
           class="color-black fill-current w-5"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +25,7 @@
         </svg>
       </label>
 
-      <div class="order-1 md:order-2 md:w-1/3 flex justify-center py-2">
+      <div class="order-1 md:order-2 sm:w-1/2 flex justify-center py-2">
         <logo></logo>
       </div>
     </div>
@@ -33,7 +37,7 @@ import logo from "../Logo.vue";
 export default {
   name: "simpleTopNav",
   components: {
-    logo,
-  },
+    logo
+  }
 };
 </script>

@@ -10,7 +10,7 @@
         <input
           placeholder="Click để chọn"
           class="p-1 px-2 appearance-none w-full text-gray-800"
-          :value="selectData[picked] ? selectData[picked].name : ''"
+          :value="selectData[index] ? selectData[index].name : ''"
         />
         <div
           class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200"
@@ -61,7 +61,7 @@
         <div
           class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
           v-for="(data, index) in selectData"
-          @click="picked = index"
+          @click="$emit('changeSelectData', index)"
           :key="`select-${index}`"
         >
           <div
@@ -88,20 +88,14 @@
 export default {
   name: "form-select",
   props: {
-    selectData: Array
+    selectData: Array,
+    index: Number
   },
   data() {
     return {
       initPick: false,
       picked: 0
     };
-  },
-  watch: {
-    picked: function(newVal, old) {
-      if (newVal !== old) {
-        this.$emit("changeSelectData", newVal);
-      }
-    }
   }
 };
 </script>
