@@ -6,7 +6,7 @@
     >
       <label
         for="menu-toggle"
-        class="cursor-pointer w-1/3 md:hidden block py-2"
+        class="cursor-pointer sm:w-1/3 md:hidden block py-2"
         @click="toggle_left_panel"
       >
         <svg

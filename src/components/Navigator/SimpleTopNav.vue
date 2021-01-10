@@ -2,7 +2,7 @@
   <!--Nav-->
   <nav id="header" class="bg-white w-full shadow">
     <div
-      class="w-full container mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
+      class="w-full container max-w-lg mx-auto flex flex-wrap items-center mt-0 px-4 justify-between sm:justify-center"
     >
       <label
         for="menu-toggle"
@@ -25,7 +25,7 @@
         </svg>
       </label>
 
-      <div class="order-1 md:order-2 sm:w-1/2 flex justify-center py-2">
+      <div class="order-1 md:order-2 sm:w-1/2 flex justify-end py-2">
         <logo></logo>
       </div>
     </div>
@@ -37,7 +37,7 @@ import logo from "../Logo.vue";
 export default {
   name: "simpleTopNav",
   components: {
-    logo
-  }
+    logo,
+  },
 };
 </script>
