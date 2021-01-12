@@ -1,17 +1,22 @@
 <template>
   <div
-    class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white overflow-hidden"
+    class="mx-0 border-t-2 shadow-xl rounded-lg mb-10 tracking-wide w-full bg-white overflow-hidden"
     v-if="enable"
   >
     <div class="w-full p-3 font-bold">
       <h1>{{ postData.subject }}</h1>
     </div>
     <CatsAndTags :postData="postData"></CatsAndTags>
-    <div
+    <fieldset
       ref="quizContent"
-      class="flex flex-col m-2 shadow rounded"
+      class="flex flex-col m-2 border-2 border-gray-500 shadow rounded"
       :class="{ 'slide-in-right': nextQuiz }"
     >
+      <legend
+        class="mx-2 text-xs font-bold rounded-lg bg-gray-500 text-white p-1"
+      >
+        Câu hỏi:
+      </legend>
       <section>
         <div class="ql-snow" style="height: auto; border: none">
           <div
@@ -60,7 +65,7 @@
       <!-- End media -->
 
       <div class="py-3 text-sm">
-        <span class="px-2">Các đáp án là :</span>
+        <span class="px-2 underline">Các đáp án là :</span>
         <div
           class="flex justify-start cursor-pointer text-md rounded-lg border-2 hover:border-gray-600 py-2 m-2"
           :class="{
@@ -101,7 +106,7 @@
           <div class="px-2">{{ answer }}</div>
         </div>
       </div>
-    </div>
+    </fieldset>
 
     <div class="mb-4 flex cursor-pointer justify-center items-center flex-wrap">
       <div
@@ -110,19 +115,19 @@
         Quiz {{ currentQuizIndex + 1 }}/{{ postData.content.length }}
       </div>
       <button
-        class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center py-1"
+        class="md:text-lg text-white rounded-lg btn-hover gradient-black shadow-none w-1/4 flex justify-center items-center py-1"
         @click="toNextQuiz()"
         v-show="reviewCorrectAns"
         v-if="!resetEnable"
       >
-        Next
+        CÂU TIẾP
       </button>
       <button
-        class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center py-1"
+        class="md:text-lg text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center py-1"
         @click="resetLearning()"
         v-if="resetEnable"
       >
-        Học lại
+        HỌC LẠI
       </button>
     </div>
 

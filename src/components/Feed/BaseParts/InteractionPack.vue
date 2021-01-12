@@ -3,12 +3,12 @@
     class="py-2 px-2 border-t-2 border-gray-400 flex content-center flex-wrap"
   >
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+      class="w-1/3 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
       @click="saveClick(!saved)"
     >
       <bagged-icon :saved="saved"></bagged-icon>
       <span :class="{ 'text-green-500': !saved, 'text-red-500': saved }">{{
-        saved ? "Bỏ học" : "Học"
+        saved ? "Bỏ lưu" : "Lưu để học"
       }}</span>
       <label
         class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
@@ -17,40 +17,9 @@
       >
     </div>
     <!-- saved icon -->
-    <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
-      @click="goodClick(!goodVoted)"
-    >
-      <good-voted :goodVoted="goodVoted"></good-voted>
-      <span :class="{ 'color-blue': goodVoted }">{{
-        goodVoted ? "Good" : "Good?"
-      }}</span>
-      <label
-        class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-        v-if="indicatorNum.nums_good > 10"
-        >{{ indicatorNum.nums_good }}</label
-      >
-    </div>
-    <!-- good icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
-      @click="badClick(!badVoted)"
-    >
-      <bad-voted :badVoted="badVoted"></bad-voted>
-      <span :class="{ 'color-blue': badVoted }">{{
-        badVoted ? "Bad" : "Bad?"
-      }}</span>
-      <label
-        class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
-        v-if="indicatorNum.nums_bad > 10"
-        >{{ indicatorNum.nums_bad }}</label
-      >
-    </div>
-    <!-- bad icon -->
-
-    <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
+      class="w-1/3 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold color-blue relative"
     >
       <svg
         class="w-8 mx-auto"
@@ -67,7 +36,7 @@
           d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
         />
       </svg>
-      <span @click="shareClicked = !shareClicked">Share</span>
+      <span @click="shareClicked = !shareClicked">Chia sẻ</span>
       <div
         class="bg-white absolute top-0 -mt-16 p-2 shadow-2xl rounded-lg"
         v-show="shareClicked"
@@ -112,7 +81,7 @@
     <!-- Share icon -->
 
     <div
-      class="w-1/5 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
+      class="w-1/3 py-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold text-black-600 relative"
       @click="showModal = true"
     >
       <svg
@@ -152,6 +121,37 @@
           &times;
         </div>
         <div class="py-3 px-3 flex flex-wrap">
+          <div
+            class=" mx-2 p-2 rounded-lg hover:bg-gray-300 focus:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+            @click="goodClick(!goodVoted)"
+          >
+            <good-voted :goodVoted="goodVoted"></good-voted>
+            <span :class="{ 'color-blue': goodVoted }">{{
+              goodVoted ? "Good" : "Good?"
+            }}</span>
+            <label
+              class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
+              v-if="indicatorNum.nums_good > 10"
+              >{{ indicatorNum.nums_good }}</label
+            >
+          </div>
+          <!-- good icon -->
+
+          <div
+            class="mx-2 p-2 rounded-lg focus:bg-gray-300 hover:bg-gray-300 flex flex-col items-center justify-center flex-wrap font-bold relative"
+            @click="badClick(!badVoted)"
+          >
+            <bad-voted :badVoted="badVoted"></bad-voted>
+            <span :class="{ 'color-blue': badVoted }">{{
+              badVoted ? "Bad" : "Bad?"
+            }}</span>
+            <label
+              class="m-1 absolute bg-color-blue font-semibold right-0 rounded-full text-center text-white text-xs top-0 numberIndicator"
+              v-if="indicatorNum.nums_bad > 10"
+              >{{ indicatorNum.nums_bad }}</label
+            >
+          </div>
+          <!-- bad icon -->
           <router-link
             class="mx-2 p-2 flex flex-col items-center rounded-lg hover:bg-gray-300 focus:bg-gray-300"
             :to="`/p/${detailPostType}/${post_id}`"
