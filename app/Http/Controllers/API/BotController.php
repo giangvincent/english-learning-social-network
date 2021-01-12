@@ -52,8 +52,8 @@ class BotController extends Controller
         $sender = Arr::get($entry, '0.messaging.0.sender.id');
         Log::info('start handle entry : ' . json_encode($entry));
         $message = mb_strtolower(Arr::get($entry, '0.messaging.0.message.text'), 'UTF-8');
-        if ($message === 'register' || $message === 'đăng ký') {
-            $this->dispatchResponse($sender, 'Cảm ơn bạn đã đăng ký. Tin nhắn để nhắc nhở bạn học hàng ngày sẽ được gửi đi đều đặn. Nhớ truy cập <a href="https://thatsgood.info">https://thatsgood.info</a> nhé!');
+        if ($message == 'register' || $message == 'đăng ký') {
+            $this->dispatchResponse($sender, 'Cảm ơn bạn đã đăng ký. Tin nhắn để nhắc nhở bạn học hàng ngày sẽ được gửi đi đều đặn. Nhớ truy cập https://thatsgood.info nhé!');
         } else {
             $this->dispatchResponse($sender, 'Sai cú pháp! Xin vui lòng gõ "đăng ký" hoặc "register". Xin cảm ơn.');
         }
