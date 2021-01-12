@@ -18,7 +18,7 @@ class ExportJson extends Controller
         $users = User::all();
         foreach ($users as $user) {
             $notifyDB = $user->notify()->where([
-                ['time_notification', '<=', Carbon::today()],
+                ['time_notification', Carbon::today()],
                 ['seen', 0],
             ])->get();
             $notifyData = [];
