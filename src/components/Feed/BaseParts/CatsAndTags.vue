@@ -23,7 +23,7 @@
       :to="`/tag/${tag.slug}`"
       v-for="(tag, tagIndex) in postData.tags"
       :key="`tag-${tagIndex}`"
-      class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1"
+      class="inline-block rounded-full text-white bg-color-purple px-2 py-1 text-xs font-bold mr-1 mb-1"
       >#{{ tag.name }}</router-link
     >
   </div>
