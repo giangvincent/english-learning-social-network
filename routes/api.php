@@ -54,6 +54,8 @@ Route::get('feed-home', 'FeedController@home');
 Route::get('feed-category/{slug}', 'FeedController@feedCategory');
 Route::get('feed-tag/{slug}', 'FeedController@feedTag');
 
+Route::get('static/{slug}', 'StaticContentController@getContent');
+
 Route::get('share/{postId}', function ($postId) {
     $postJson = new JsonController();
     $data = $postJson->getPost($postId);
