@@ -13,7 +13,14 @@ if (count($data) > 0) {
         $description .= strip_tags($content['contentHtml']). ' ';
     }
     $res['description'] = mb_substr($description, 0, 255, "UTF-8");
-    $res['url'] = $res['url']. '/p/post/' . $data['url'];
+    $type = 'post';
+    if ($data['type'] == 'flashCard') {
+        $type = 'flash-card';
+    }
+    if ($data['type'] == 'quiz') {
+        $type = 'quiz';
+    }
+    $res['url'] = $res['url']. '/p/'. $type .'/' . $data['url'];
 }
 ?>
 <html lang="vi">
@@ -46,7 +53,7 @@ if (count($data) > 0) {
 
 <body>
     <script>
-        window.location.replace("https://thatsgood.info");
+        window.location.replace("{{ $res['url'] }}");
     </script>
 </body>
 
