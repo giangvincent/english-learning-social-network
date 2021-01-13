@@ -5,7 +5,9 @@
     class="bottom-0 p-2 mb-5 text-xs z-10 bg-white fixed w-64 md:w-1/5 lg:w-1/6"
   >
     <ul class="flex flex-wrap my-1 items-center underline">
-      <li class="mr-2"><router-link to="/about/us">About</router-link></li>
+      <li class="mr-2">
+        <router-link to="/about/us">Về thatsgood</router-link>
+      </li>
       <li class="mr-2"><router-link to="/about/faqs">FAQs</router-link></li>
       <li class="mr-2">
         <router-link to="/about/contact">Liên hệ</router-link>
