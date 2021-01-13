@@ -41,9 +41,7 @@ export default {
     pid: String
   },
   computed: {
-    ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+    ...mapState({})
   }
 };
 </script>

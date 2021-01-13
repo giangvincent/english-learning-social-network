@@ -166,7 +166,6 @@ export default {
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl,
       user: state => state.user.user
     })
   },

@@ -65,8 +65,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user.user,
-      baggedPosts: state => state.user.baggedPosts,
-      rootUrl: state => state.rootUrl
+      baggedPosts: state => state.user.baggedPosts
     })
   },
   mounted() {

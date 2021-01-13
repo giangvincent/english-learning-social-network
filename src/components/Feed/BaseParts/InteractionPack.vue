@@ -293,7 +293,7 @@ export default {
     }
   },
   mounted() {
-    this.linkShare = this.apiUrl + "/share/" + this.post_id;
+    this.linkShare = "https://share.thatsgood.info/" + this.post_id;
   },
   methods: {
     ...mapActions(["ReqInteract", "REQ_DEL_POST"]),

@@ -144,7 +144,6 @@ export default {
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl,
       categories: state => state.categories,
       user: state => state.user.user,
       user_token: state => state.user.token,

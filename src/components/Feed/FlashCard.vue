@@ -271,9 +271,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+    ...mapState({})
   },
   watch: {
     postData: {
