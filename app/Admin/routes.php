@@ -19,5 +19,6 @@ Route::group([
     $router->resource('tags', TagController::class);
     $router->resource('users', UserController::class);
     $router->resource('contacts', ContactController::class);
+    $router->resource('static-contents', StaticContentController::class);
 
 });

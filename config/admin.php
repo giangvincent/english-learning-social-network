@@ -435,7 +435,6 @@ return [
                     ],
                 ],
                 'theme' => 'snow',
-                'height' => '200px',
             ],
         ],
     ],
