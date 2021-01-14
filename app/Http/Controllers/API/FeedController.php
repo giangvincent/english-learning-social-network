@@ -17,6 +17,13 @@ class FeedController extends Controller
         return response()->json($posts, $this->successStatus);
     }
 
+    public function search($query)
+    {
+        $query = urldecode($query);
+        $posts = Post::where('subject', 'LIKE', "%$query%")->select(['id', 'pid', 'type'])->orderBy('id', 'desc')->simplePaginate(10);
+        return response()->json($posts, $this->successStatus);
+    }
+
     public function feedCategory($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
