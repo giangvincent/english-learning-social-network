@@ -27,6 +27,17 @@ export default {
         .catch(err => reject(err));
     });
   },
+  LOAD_SEARCH: function({ state, commit }, payload) {
+    var query = encodeURIComponent(payload);
+    return new Promise((response, reject) => {
+      fetch(state.apiUrl + "/search/" + query + "?page=" + state.currentPage)
+        .then(res => res.json())
+        .then(res => {
+          response(res);
+        })
+        .catch(err => reject(err));
+    });
+  },
   LOAD_FEED_CAT: function({ state, commit }, cat) {
     return new Promise((response, reject) => {
       fetch(
