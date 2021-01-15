@@ -106,6 +106,11 @@ class StaticContentController extends AdminController
             $form->slug = Str::slug($form->title, "-");
         });
 
+        $form->saved(function (Form $form) {
+            $data = ['title' => $form->title, 'content' => $form->content];
+            file_put_contents(public_path('dist/content') . '/' . $form->type . '.json', json_encode($data));
+        });
+
         return $form;
     }
 }

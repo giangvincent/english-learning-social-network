@@ -19,7 +19,7 @@ class CreateStaticContentsTable extends Migration
             $table->string('slug');
             $table->text('content');
             $table->string('type', 50)->default('common');
-            $table->text('value')->default('{}');
+            $table->text('value');
             $table->string('status')->default('publish');
             $table->timestamps();
         });
