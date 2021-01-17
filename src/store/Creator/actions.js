@@ -58,7 +58,7 @@ export default {
         .then(function (data) {
           console.log(data);
           if (typeof data.status !== "undefined") {
-            let successData = data.status;
+            let successData = data;
             res(successData);
           } else {
             rej(data.error);
