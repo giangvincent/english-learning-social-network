@@ -50,8 +50,8 @@ class BotController extends Controller
         $entry = $request->get('entry');
 
         $sender = Arr::get($entry, '0.messaging.0.sender.id');
-        Log::info('start handle entry : ' . json_encode($entry));
         $message = mb_strtolower(Arr::get($entry, '0.messaging.0.message.text'), 'UTF-8');
+        Log::info('start handle entry : ' . json_encode($entry));
         if ($message == 'register' || $message == 'đăng ký') {
             $this->dispatchResponse($sender, 'Cảm ơn bạn đã đăng ký. Tin nhắn để nhắc nhở bạn học hàng ngày sẽ được gửi đi đều đặn. Nhớ truy cập https://thatsgood.info nhé!');
         } else {
@@ -70,7 +70,7 @@ class BotController extends Controller
      */
     protected function dispatchResponse($id, $response)
     {
-        $access_token = 'EAAL60j78yO8BACTyjvccWmsLsrpLbkfbQUyp1BknwohzYhZAywQZAQtZBLGBZAgZCSSer5hvAXgG4IrcCTvaN3DBi7zN0yGJjmGRqkFJTcFmxLhkmYpR4mDn96jzoNDu8EsAonTe0c3Doj64wQWVZCg4Q3KeZBDGsyNjh0Wsbgxwir7bi0DKHAwXWdDR7MxOLAZD';
+        $access_token = 'EAAL60j78yO8BAL6mgH6TfI6SJLs6mZBsOAKqQgy77YhM4L7yvymgKeZBxuVvikvGbCopom7jnns30e5HHdgCF2Fsm1lgu31MdQU6stLGQ1cSe5nr048nwohTw4P2TQJxPJVoSrQ2FpgSo7FdwS3GAkKUuuFNZCmw9ilsnwQyljc1hH7dIhAIyd6KKqWWkoZD';
         $url = "https://graph.facebook.com/v9.0/me/messages?access_token={$access_token}";
 
         $data = json_encode([

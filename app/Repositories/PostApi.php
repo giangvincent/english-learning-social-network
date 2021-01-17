@@ -23,7 +23,8 @@ class PostApi extends Controller
         }
         $this->attachTags($request->tags, $newPost);
         ExportJson::exportPost($newPost);
-        return response()->json(['status' => true], 200);
+        $postUrl = $this->createPostUrl($newPost);
+        return response()->json(['status' => true, 'url' => $postUrl], 200);
     }
 
     public function handleUpdatePost($request, $post)
@@ -34,11 +35,24 @@ class PostApi extends Controller
         if (!$updatePost) {
             return response()->json(['status' => false], 200);
         }
-        $post->tags()->detach();
-        $this->attachTags($request->tags, $post);
+        $updatePost->tags()->detach();
+        $this->attachTags($request->tags, $updatePost);
 
-        ExportJson::exportPost($post);
-        return response()->json(['status' => true], 200);
+        ExportJson::exportPost($updatePost);
+        $postUrl = $this->createPostUrl($updatePost);
+        return response()->json(['status' => true, 'url' => $postUrl], 200);
+    }
+
+    public function createPostUrl($post)
+    {
+        $type = 'post';
+        if ($post->type == 'flashCard') {
+            $type = 'flash-card';
+        }
+        if ($post->type == 'quiz') {
+            $type = 'quiz';
+        }
+        return '/p/'. $type .'/' . $post->pid;
     }
 
     public function handleDeletePost($post)
@@ -133,7 +147,7 @@ class PostApi extends Controller
             $post->type = $request->post_type;
             $post->category = $request->cat_id;
             $post->save();
-            return true;
+            return $post;
         } catch (Exception $e) {
             report($e);
             return false;
@@ -181,7 +195,6 @@ class PostApi extends Controller
 
         $fp = fopen($audio_path, 'w+');
         try {
-
             $handle = curl_init();
             curl_setopt($handle, CURLOPT_URL, $audio_url);
             curl_setopt($handle, CURLOPT_FILE, $fp);
@@ -197,6 +210,5 @@ class PostApi extends Controller
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-
     }
 }
