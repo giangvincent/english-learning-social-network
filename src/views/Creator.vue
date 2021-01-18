@@ -21,7 +21,7 @@
                 @click="changePostType('normalPost')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'normalPost',
+                  'border-b-2 border-gray-900': postType == 'normalPost'
                 }"
               >
                 Bài viết
@@ -30,7 +30,7 @@
                 @click="changePostType('flashCard')"
                 class="w-1/3 py-3 cursor-pointer"
                 :class="{
-                  'border-b-2 border-gray-900': postType == 'flashCard',
+                  'border-b-2 border-gray-900': postType == 'flashCard'
                 }"
               >
                 Flash Cards
@@ -128,7 +128,7 @@ export default {
     normalPost,
     flashCard,
     quiz,
-    LoadingIcon,
+    LoadingIcon
   },
   data() {
     return {
@@ -139,24 +139,24 @@ export default {
       tags: [],
       processPost: false,
       processUpImages: false,
-      errors: [],
+      errors: []
     };
   },
   computed: {
     ...mapState({
-      categories: (state) => state.categories,
-      user: (state) => state.user.user,
-      user_token: (state) => state.user.token,
-      currentAction: (state) => state.creator.currentAction,
-      editPostId: (state) => state.creator.editPostId,
-    }),
+      categories: state => state.categories,
+      user: state => state.user.user,
+      user_token: state => state.user.token,
+      currentAction: state => state.creator.currentAction,
+      editPostId: state => state.creator.editPostId
+    })
   },
   watch: {
-    postContent: function (newVal, oldVal) {
+    postContent: function(newVal, oldVal) {
       if (newVal !== oldVal) {
         // console.log(newVal);
       }
-    },
+    }
   },
   mounted() {
     console.log(this.currentAction, this.editPostId);
@@ -167,12 +167,12 @@ export default {
     if (this.currentAction === "edit" && this.editPostId) {
       let self = this;
       fetch("/content/posts/" + this.editPostId + ".json")
-        .then((res) => res.json())
-        .then((res) => {
+        .then(res => res.json())
+        .then(res => {
           // console.log(res);
           self.postType = res[0].type ? res[0].type : "normalPost";
           self.category = self.categories.findIndex(
-            (category) => category.id === res[0].category.id
+            category => category.id === res[0].category.id
           );
           console.log(self.category);
           if (self.category == -1) {
@@ -181,12 +181,12 @@ export default {
           self.subject = res[0].subject;
           self.postContent = res[0].content;
           let tags = [];
-          res[0].tags.forEach((tag) => {
+          res[0].tags.forEach(tag => {
             tags.push(tag.name);
           });
           self.tags = tags;
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     }
   },
   methods: {
@@ -215,7 +215,7 @@ export default {
         subject: this.subject,
         postContent: this.postContent,
         user: JSON.stringify(this.user),
-        tags: JSON.stringify(this.tags),
+        tags: JSON.stringify(this.tags)
       };
       if (!postData.postContent || postData.subject == "") {
         this.processPost = false;
@@ -230,11 +230,11 @@ export default {
           uploadImages.push(
             self
               .Upload_image(image)
-              .then((imageUrl) => {
+              .then(imageUrl => {
                 // console.log(imageUrl);
                 postData.postContent[contentIndex].images[imgIndex] = imageUrl;
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
                 postData.postContent[contentIndex].images.splice(imgIndex, 1);
               })
@@ -246,16 +246,16 @@ export default {
         postData.postContent = JSON.stringify(postData.postContent);
         self
           .SUBMIT_POST(postData)
-          .then((res) => {
+          .then(res => {
             // console.log(res);
             if (res.status) {
               self.$toast.success("Bài viết đã được đăng thành công.");
-              self.$router.push(res.url);
+              self.$router.push(res.url || "/");
             } else {
               self.handleErr(res);
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             self.handleErr(error);
           })
@@ -272,11 +272,11 @@ export default {
         (this.postContent = null),
         (this.tags = []),
         (this.errors = []);
-    },
+    }
   },
   beforeDestroy() {
     this.resetData();
-  },
+  }
 };
 </script>
 
