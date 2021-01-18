@@ -42,7 +42,13 @@ export default {
     return {};
   },
   mounted() {
-    this.SeenNotification(this.$route.params.slug);
+    console.log(this.$route.query);
+    if (
+      typeof this.$route.query.from !== "undefined" &&
+      this.$route.query.from === "notification"
+    ) {
+      this.SeenNotification(this.$route.params.slug);
+    }
   },
   methods: {
     ...mapActions(["SeenNotification"])
