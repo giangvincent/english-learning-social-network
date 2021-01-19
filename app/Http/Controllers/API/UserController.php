@@ -211,9 +211,22 @@ class UserController extends Controller
         return response()->json(['success' => 1], $this->successStatus);
     }
 
-    public function updateNotificationConn()
+    public function updateNotificationConn(Request $request)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'notification_conn' => 'required',
+            'socials_conn' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        $user = Auth::user();
+        $userInfo = $user->info()->first();
+        $userInfo->notification_conn = $request->notification_conn;
+        $userInfo->socials_conn = $request->socials_conn;
+        $userInfo->save();
+        return response()->json(['success' => 1], $this->successStatus);
     }
 
     public function interactPost(Request $request)
