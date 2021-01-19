@@ -1,4 +1,4 @@
-const evaluateTime = function (beginTime) {
+const evaluateTime = function(beginTime) {
   let timeString = new Date(beginTime).getTime() / 1000;
   let timeNow = new Date().getTime() / 1000;
   let distanceTime = parseInt(timeNow) - timeString;
@@ -25,7 +25,7 @@ const evaluateTime = function (beginTime) {
   }
 };
 
-const isLocalStorage = function () {
+const isLocalStorage = function() {
   var mod = "modernizr";
   try {
     localStorage.setItem(mod, mod);
@@ -36,15 +36,29 @@ const isLocalStorage = function () {
   }
 };
 
-const isExist = function (url) {
+const isExist = function(url) {
   var http = new XMLHttpRequest();
-  http.open('HEAD', url, false);
+  http.open("HEAD", url, false);
   http.send();
   return http.status != 404;
-}
+};
+
+const urlBase64ToUint8Array = function(base64String) {
+  var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  var base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+
+  var rawData = window.atob(base64);
+  var outputArray = new Uint8Array(rawData.length);
+
+  for (var i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+};
 
 export default {
   evaluateTime,
   isLocalStorage,
-  isExist
+  isExist,
+  urlBase64ToUint8Array
 };

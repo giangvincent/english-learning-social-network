@@ -19,6 +19,7 @@ export default {
     simpleTopNav,
     Faqs: () => import("@/components/Others/faqs.vue"),
     Contact: () => import("@/components/Others/Contact.vue"),
+    BuyCoffee: () => import("@/components/Others/BuyCoffeePage.vue"),
     StaticContent: () => import("@/components/Others/StaticContent.vue")
   },
   data() {
@@ -31,6 +32,8 @@ export default {
       this.asyncComponent = "Contact";
     } else if (this.$route.params.page === "faqs") {
       this.asyncComponent = "faqs";
+    } else if (this.$route.params.page === "buy-coffee") {
+      this.asyncComponent = "BuyCoffee";
     } else {
       this.asyncComponent = "StaticContent";
     }

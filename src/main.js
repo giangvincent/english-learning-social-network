@@ -12,6 +12,8 @@ import VueMasonry from "vue-masonry-css";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+import webPush from "./webPush.js";
+
 Vue.config.productionTip = false;
 Vue.use(VueMasonry);
 Vue.use(VueToast, {
@@ -28,6 +30,19 @@ if (helperFunc.isLocalStorage()) {
       store.commit("SET_USER", user);
       store.commit("SET_TOKEN", user_token);
       store.dispatch("LoadNotification");
+      if (
+        user.notification_conn.browser &&
+        user.notification_conn.browser.state
+      ) {
+        setTimeout(() => {
+          var r = window.confirm(
+            "Trình duyệt này chưa cho phép thông báo. Bạn có muốn kich hoạt không?"
+          );
+          if (r) {
+            webPush.initSW();
+          }
+        }, 1000);
+      }
     }
     let welcomeEnable = localStorage.getItem("welcomeEnable");
     if (!welcomeEnable) {

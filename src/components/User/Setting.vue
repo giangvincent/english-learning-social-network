@@ -70,14 +70,7 @@
         <legend class="mx-2 font-bold rounded-lg bg-green-800 text-white p-2">
           Đổi cài đặt thông báo
         </legend>
-        <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Tài khoản Facebook</span>
-          <input
-            placeholder
-            type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
-          />
-        </div>
+
         <div class="py-1">
           <span class="px-1 text-sm text-gray-600"
             >Thông báo thông qua trình duyệt</span
@@ -90,6 +83,12 @@
               name="toggle"
               id="toggle"
               class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+              :checked="
+                user.notification_conn.browser
+                  ? user.notification_conn.browser.state
+                  : false
+              "
+              @click="toggleBrowserNotify()"
             />
             <label
               for="toggle"
@@ -154,7 +153,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
 export default {
   name: "user-setting",
@@ -166,7 +165,8 @@ export default {
       processUpload: false,
       cur_password: "",
       password: "",
-      c_password: ""
+      c_password: "",
+      browserNotify: false
     };
   },
   computed: {
@@ -177,6 +177,40 @@ export default {
   mounted() {},
   methods: {
     ...mapActions(["UpdateInfo", "ChangePassword", "UpdateNotificationConn"]),
+    ...mapMutations(["SET_USER"]),
+    toggleBrowserNotify() {
+      console.log(this.user.notification_conn);
+      if (
+        this.user.notification_conn &&
+        typeof this.user.notification_conn === "object"
+      ) {
+        if (this.user.notification_conn.browser) {
+          this.user.notification_conn.browser.state = !this.user
+            .notification_conn.browser.state;
+        } else {
+          this.user.notification_conn.browser = {};
+          this.user.notification_conn.browser.state = true;
+          this.user.notification_conn.browser.keysArr = [];
+        }
+        let self = this;
+        this.UpdateNotificationConn(this.user).then(res => {
+          if (res.success) {
+            self.SET_USER(self.user);
+            if (self.isLocalStorage()) {
+              localStorage.setItem("user", JSON.stringify(self.user));
+            }
+            self.$toast.success("Cập nhật thành công!");
+          } else {
+            self.$toast.error(
+              "Cập nhật thất bại. " + JSON.stringify(res.error)
+            );
+          }
+        });
+      } else {
+        this.user.notification_conn = {};
+        this.toggleBrowserNotify();
+      }
+    },
     callUpdateInfo() {
       if (!this.processUpload) {
         this.processUpload = true;
