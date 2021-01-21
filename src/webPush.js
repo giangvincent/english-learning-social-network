@@ -26,6 +26,20 @@ function initSW() {
   if (!"serviceWorker" in navigator) {
     console.log("service worker isn't supported");
     //service worker isn't supported
+    alert("service worker isn't supported");
+    return;
+  }
+
+  var NotificationIsSupported = !!(
+    (
+      window.Notification /* W3C Specification */ ||
+      win.webkitNotifications /* old WebKit Browsers */ ||
+      navigator.mozNotification
+    ) /* Firefox for Android and Firefox OS */
+  );
+  if (!NotificationIsSupported) {
+    console.log("Notification isn't supported");
+    alert("Notification isn't supported");
     return;
   }
 
@@ -53,14 +67,6 @@ function initPush() {
   if (!navigator.serviceWorker.ready) {
     return;
   }
-
-  var NotificationIsSupported = !!(
-    (
-      window.Notification /* W3C Specification */ ||
-      win.webkitNotifications /* old WebKit Browsers */ ||
-      navigator.mozNotification
-    ) /* Firefox for Android and Firefox OS */
-  );
 
   new Promise(function(resolve, reject) {
     const permissionResult = Notification.requestPermission(function(result) {
