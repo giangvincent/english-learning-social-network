@@ -29,6 +29,7 @@ Route::get('uploaded-posts/{id}', 'UserController@uploadedPosts');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('update-info', 'UserController@updateInfo');
     Route::post('update-notification-conn', 'UserController@updateNotificationConn');
+    Route::post('save-webpush', 'WebpushController@update');
     Route::post('change-password', 'UserController@changePassword');
     Route::post('change-avatar', 'UserController@changeAvatar');
     Route::post('change-cover', 'UserController@changeCover');
