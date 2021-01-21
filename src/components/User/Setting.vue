@@ -84,7 +84,9 @@
               id="toggle"
               class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
               :checked="
-                user.notification_conn.browser
+                user.notification_conn &&
+                user.notification_conn.browser &&
+                browserNotify
                   ? user.notification_conn.browser.state
                   : false
               "
@@ -155,6 +157,8 @@
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
+import webPush from "../../webPush.js";
+
 export default {
   name: "user-setting",
   components: {
@@ -166,7 +170,7 @@ export default {
       cur_password: "",
       password: "",
       c_password: "",
-      browserNotify: false
+      browserNotify: true
     };
   },
   computed: {
@@ -184,20 +188,44 @@ export default {
         this.user.notification_conn &&
         typeof this.user.notification_conn === "object"
       ) {
+        let browser_unique =
+          localStorage.getItem("thatsgood_info_browser_unique") || false;
         if (this.user.notification_conn.browser) {
           this.user.notification_conn.browser.state = !this.user
             .notification_conn.browser.state;
+          if (this.user.notification_conn.browser.state === false) {
+            localStorage.removeItem("thatsgood_info_browser_unique");
+            let index = this.user.notification_conn.browser.keysArr.indexOf(
+              browser_unique
+            );
+            if (index !== -1) {
+              this.user.notification_conn.browser.keysArr.splice(index, 1);
+            }
+          }
         } else {
           this.user.notification_conn.browser = {};
           this.user.notification_conn.browser.state = true;
           this.user.notification_conn.browser.keysArr = [];
         }
+
+        if (
+          !webPush.checkBrowserRegistered(
+            this.user.notification_conn,
+            browser_unique
+          )
+        ) {
+          webPush.initSW();
+        }
+
         let self = this;
         this.UpdateNotificationConn(this.user).then(res => {
           if (res.success) {
             self.SET_USER(self.user);
             if (self.isLocalStorage()) {
-              localStorage.setItem("user", JSON.stringify(self.user));
+              localStorage.setItem(
+                "thatsgood_info_user",
+                JSON.stringify(self.user)
+              );
             }
             self.$toast.success("Cập nhật thành công!");
           } else {

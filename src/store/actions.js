@@ -1,3 +1,6 @@
+import helperFunc from "../helperFunc";
+import Vue from "vue";
+
 export default {
   LOAD_TAGS: function({ state, commit }) {
     fetch("/content/tags.json")
@@ -59,5 +62,40 @@ export default {
         })
         .catch(err => reject(err));
     });
+  },
+  SAVE_WEBPUSH: function({ state, commit, dispatch }, pushSubscription) {
+    pushSubscription = JSON.parse(pushSubscription);
+    var data = new FormData();
+    data.append("endpoint", pushSubscription.endpoint);
+    data.append("keys_auth", pushSubscription.keys.auth);
+    data.append("keys_p256dh", pushSubscription.keys.p256dh);
+    fetch(state.apiUrl + "/save-webpush", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + state.user.token
+      },
+      body: data
+    })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(result) {
+        if (result.success && !result.error) {
+          let browserUnique = helperFunc.randStr();
+          let user = state.user.user;
+          user.notification_conn.browser.keysArr.push(browserUnique);
+          commit("SET_USER", user);
+          dispatch("UpdateNotificationConn", user);
+          localStorage.setItem("thatsgood_info_browser_unique", browserUnique);
+          localStorage.setItem("thatsgood_info_user", JSON.stringify(user));
+          Vue.$toast.success("Kích hoạt thông báo cho trình duyệt thành công.");
+        } else {
+          console.log(result.error);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };

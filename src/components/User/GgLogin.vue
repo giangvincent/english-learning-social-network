@@ -189,9 +189,12 @@ export default {
             if (typeof data.success !== "undefined") {
               let successData = data.success;
               if (self.isLocalStorage()) {
-                localStorage.setItem("user", JSON.stringify(successData.user));
                 localStorage.setItem(
-                  "user_token",
+                  "thatsgood_info_user",
+                  JSON.stringify(successData.user)
+                );
+                localStorage.setItem(
+                  "thatsgood_info_user_token",
                   JSON.stringify(successData.token)
                 );
               }

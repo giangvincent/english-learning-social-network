@@ -1,4 +1,26 @@
 import helperFunc from "./helperFunc";
+import store from "./store/";
+
+function checkBrowserRegistered(userNotification, browser_unique) {
+  if (
+    userNotification.browser &&
+    userNotification.browser.state &&
+    userNotification.browser.keysArr &&
+    (!browser_unique ||
+      userNotification.browser.keysArr.length <= 0 ||
+      !userNotification.browser.keysArr.includes(browser_unique))
+  ) {
+    return false;
+  }
+  if (
+    userNotification.browser &&
+    userNotification.browser.state &&
+    !userNotification.browser.keysArr
+  ) {
+    return false;
+  }
+  return true;
+}
 
 function initSW() {
   if (!"serviceWorker" in navigator) {
@@ -31,6 +53,14 @@ function initPush() {
   if (!navigator.serviceWorker.ready) {
     return;
   }
+
+  var NotificationIsSupported = !!(
+    (
+      window.Notification /* W3C Specification */ ||
+      win.webkitNotifications /* old WebKit Browsers */ ||
+      navigator.mozNotification
+    ) /* Firefox for Android and Firefox OS */
+  );
 
   new Promise(function(resolve, reject) {
     const permissionResult = Notification.requestPermission(function(result) {
@@ -70,23 +100,6 @@ function subscribeUser() {
 }
 
 function storePushSubscription(pushSubscription) {
-  fetch("/push", {
-    method: "POST",
-    body: JSON.stringify(pushSubscription),
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "X-CSRF-Token": token
-    }
-  })
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  store.dispatch("SAVE_WEBPUSH", JSON.stringify(pushSubscription));
 }
-export default { initSW };
+export default { checkBrowserRegistered, initSW };

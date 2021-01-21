@@ -296,7 +296,8 @@ export default {
   UpdateNotificationConn: function({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("notification_conn", JSON.stringify(payload.notification_conn));
-    data.append("socials_conn", JSON.stringify(payload.socials_conn));
+    // data.append("socials_conn", JSON.stringify(payload.socials_conn));
+    data.append("socials_conn", JSON.stringify({}));
 
     return new Promise((res, rej) => {
       fetch(rootState.apiUrl + "/update-notification-conn", {
