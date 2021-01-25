@@ -1,8 +1,12 @@
 export default {
   LoadNotification: function({ rootState, state, commit }) {
     if (rootState.user && rootState.user.token) {
-      fetch("/content/notification/" + rootState.user.user.id + ".json", {
-        method: "GET"
+      fetch(rootState.apiUrl + "/get-notification", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + rootState.user.token
+        }
       })
         .then(res => res.json())
         .then(res => {
