@@ -474,4 +474,20 @@ class UserController extends Controller
 
         return response()->json(['success' => 1], $this->successStatus);
     }
+
+    public function getNotification()
+    {
+        $user = Auth::user();
+        $notifyDB = $user->notify()->where([
+            ['seen', 0],
+        ])->get();
+        $notifyData = [];
+        foreach ($notifyDB as $notify) {
+            $data = [];
+            $data = $notify->post()->select('pid', 'subject', 'type')->first();
+            $data['date'] = $notify->time_notification;
+            array_push($notifyData, $data);
+        }
+        return response()->json($notifyData);
+    }
 }

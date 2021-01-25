@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('update-learning-progress', 'UserController@SaveLearnt');
 
     Route::get('seen-notification/{slug}', 'UserController@seenNotification');
+    Route::get('get-notification', 'UserController@getNotification');
 
     // test api
     Route::get('get-calculate', 'UserController@calculateLearningDay');
