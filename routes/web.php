@@ -43,19 +43,4 @@ Route::group([
     Route::get('notification/{link}', [JsonController::class, 'getUserNotification']);
 });
 
-use App\Notifications\MailPush;
-use Illuminate\Support\Facades\Route;
 
-Route::get('send-mail', function () {
-    $user = User::first();
-    $details = [
-        'greeting' => 'Hi Artisan',
-        'body' => 'This is my first notification from ItSolutionStuff.com',
-        'thanks' => 'Thank you for using ItSolutionStuff.com tuto!',
-        'actionText' => 'View My Site',
-        'actionURL' => url('/'),
-        'order_id' => 101,
-    ];
-
-    Notification::send($user, new MailPush($details));
-});

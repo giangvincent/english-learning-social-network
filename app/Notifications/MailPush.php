@@ -49,10 +49,12 @@ class MailPush extends Notification
         return (new MailMessage)
             ->subject('Các bài học đang chờ ở ThatsGOOD')
             ->from('giang.dlinh@gmail.com', 'ThatsGOOD Admin')
-            ->greeting($this->details['greeting'])
-            ->line($this->details['body'])
-            ->action($this->details['actionText'], $this->details['actionURL'])
-            ->line($this->details['thanks']);
+            ->line($this->details['body']);
+
+        /* ->greeting($this->details['greeting'])
+    ->line($this->details['body'])
+    ->action($this->details['actionText'], $this->details['actionURL'])
+    ->line($this->details['thanks']); */
     }
 
     /**
