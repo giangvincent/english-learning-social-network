@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class PushNotification extends Controller
 {
-    public function sendMail()
+    public static function sendMail()
     {
 
         $details = [

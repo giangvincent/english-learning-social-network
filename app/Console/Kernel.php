@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Repositories\ExportJson;
+use App\Repositories\PushNotification;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,6 +30,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             ExportJson::SaveNotification();
         })->hourly();
+        $schedule->call(function () {
+
+            PushNotification::sendMail();
+        })->dailyAt('9:00');
     }
 
     /**
