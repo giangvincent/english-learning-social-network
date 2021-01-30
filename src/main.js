@@ -57,6 +57,9 @@ Vue.use(VueToast, {
   // One of the options
   position: "top-right"
 });
+if (process.env.NODE_ENV === "development") {
+  store.commit("URL_DEV");
+}
 
 if (helperFunc.isLocalStorage()) {
   try {
@@ -98,10 +101,6 @@ if (helperFunc.isLocalStorage()) {
   } catch (err) {
     console.log(err);
   }
-}
-
-if (process.env.NODE_ENV === "development") {
-  store.commit("URL_DEV");
 }
 
 Vue.mixin({
