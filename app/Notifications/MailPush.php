@@ -46,10 +46,14 @@ class MailPush extends Notification
      */
     public function toMail($notifiable)
     {
+
         return (new MailMessage)
             ->subject('Các bài học đang chờ ở ThatsGOOD')
             ->from('giang.dlinh@gmail.com', 'ThatsGOOD Admin')
-            ->line($this->details['body']);
+            ->greeting($this->details['greeting'])
+            ->line('Dưới đây là dánh sách các bài mà bạn đã lưu, đã đến lúc quay lại để học tiếp nào.')
+            ->line($this->details['body'])
+        ;
 
         /* ->greeting($this->details['greeting'])
     ->line($this->details['body'])

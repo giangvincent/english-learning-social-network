@@ -23,14 +23,7 @@ class QueueNotification implements ShouldQueue
     public function __construct($user, $details)
     {
         $this->user = $user;
-        $this->details = $details || [
-            'greeting' => 'Hi Artisan',
-            'body' => 'This is my first notification from ItSolutionStuff.com',
-            'thanks' => 'Thank you for using ItSolutionStuff.com tuto!',
-            'actionText' => 'View My Site',
-            'actionURL' => url('/'),
-            'order_id' => 101,
-        ];
+        $this->details = $details;
     }
 
     /**

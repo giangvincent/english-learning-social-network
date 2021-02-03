@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\QueueNotification;
+use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -14,7 +15,7 @@ class PushNotification extends Controller
 
         $details = [
             'greeting' => 'Bài bạn đã lưu để vô học',
-            'body' => 'Dưới đây là dánh sách các bài mà bạn đã lưu, đã đến lúc quay lại để học tiếp nào.',
+            'body' => '',
             /* 'actionText' => 'View My Site',
         'actionURL' => url('/'),
         'order_id' => 101, */
@@ -36,10 +37,30 @@ class PushNotification extends Controller
 
                 $list .= '<li><a href="' . self::createUrl($data->type, $data->pid) . '" target="_blank">' . $data->subject . '</a></li>';
             }
-            $details['body'] = $list . "</ul>";
+            $details['body'] .= $list . "</ul>";
 
             QueueNotification::dispatch($user, $details);
         }
+    }
+
+    public static function testMail()
+    {
+
+        $details = [
+            'greeting' => 'Bài bạn đã lưu để vô học',
+            'body' => '',
+            /* 'actionText' => 'View My Site',
+        'actionURL' => url('/'),
+        'order_id' => 101, */
+        ];
+
+        $user = User::first();
+        $post = Post::first();
+        $list = '<ul>';
+        $list .= '<li><a href="' . self::createUrl($post->type, $post->pid) . '" target="_blank">' . $post->subject . '</a></li>';
+        $details['body'] = $list . "</ul>";
+
+        QueueNotification::dispatch($user, $details);
     }
 
     public static function createUrl($ptype, $pid)
