@@ -12,7 +12,7 @@
       <li class="mr-2">
         <router-link to="/about/buy-coffee" class="flex"
           ><svg
-            class="w-4 text-yellow-500"
+            class="h-4 w-4 text-yellow-500"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
