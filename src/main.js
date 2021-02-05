@@ -11,7 +11,6 @@ import helperFunc from "./helperFunc";
 import VueMasonry from "vue-masonry-css";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
-
 import webPush from "./webPush.js";
 
 Vue.config.productionTip = false;
@@ -20,6 +19,9 @@ Vue.use(VueToast, {
   // One of the options
   position: "top-right"
 });
+if (process.env.NODE_ENV === "development") {
+  store.commit("URL_DEV");
+}
 
 if (helperFunc.isLocalStorage()) {
   try {
@@ -61,10 +63,6 @@ if (helperFunc.isLocalStorage()) {
   } catch (err) {
     console.log(err);
   }
-}
-
-if (process.env.NODE_ENV === "development") {
-  store.commit("URL_DEV");
 }
 
 Vue.mixin({

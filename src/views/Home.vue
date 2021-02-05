@@ -5,7 +5,7 @@
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
       <main-feed :itemArray="currentFeed"></main-feed>
-      <infinite-loading @infinite="infiniteHandler">
+      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
         <div slot="spinner">Loading...</div>
         <div slot="no-more">No more message</div>
         <div slot="no-results">No results message</div>
@@ -26,15 +26,15 @@ export default {
   name: "home",
   components: {
     MainFeed,
-    InfiniteLoading
+    InfiniteLoading,
   },
   data() {
     return {
-      items: []
+      items: [],
     };
   },
   computed: {
-    ...mapState(["currentFeed", "currentPage", "welcomeEnable"])
+    ...mapState(["currentFeed", "currentPage", "welcomeEnable"]),
   },
   mounted() {
     this.CHANGE_TAB("home");
@@ -48,24 +48,24 @@ export default {
       "CHANGE_TAB",
       "SET_PAGE",
       "SET_CURRENTFEED",
-      "SET_WELCOME"
+      "SET_WELCOME",
     ]),
     infiniteHandler($state) {
       var self = this;
       this.LOAD_HOME()
-        .then(content => {
+        .then((content) => {
           var feedData = self.currentFeed;
-          feedData.push(...content.data);
+          feedData.push(...content);
           self.SET_CURRENTFEED(feedData);
           self.SET_PAGE(self.currentPage + 1);
-          if (content.data.length >= 10) {
+          if (content.length >= 10) {
             $state.loaded();
           } else {
             $state.complete();
           }
         })
-        .catch(e => console.log(e));
-    }
-  }
+        .catch((e) => console.log(e));
+    },
+  },
 };
 </script>
