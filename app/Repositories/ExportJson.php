@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
@@ -96,5 +97,37 @@ class ExportJson extends Controller
             array_push($allTagsData, $tagData);
         }
         file_put_contents(public_path() . '/dist/content/tags.json', json_encode($allTagsData));
+    }
+
+    public static function feedToJson($type = 'home')
+    {
+        if ($type === 'category') {
+            $categories = Category::with('posts')->get();
+            foreach ($categories as $category) {
+                $postDb = $category->posts()->where('status', 'publish')->select(['id', 'pid', 'type'])->orderBy('id', 'desc');
+                
+                self::savePostsToJson($postDb, 'category-'. $category->slug);
+            }
+        } elseif ($type === 'tag') {
+            $tags = Tag::with('posts')->get();
+            foreach ($tags as $tag) {
+                $postDb = $tag->posts()->where('status', 'publish')->orderBy('id', 'desc')->simplePaginate(10)->toArray();
+                self::savePostsToJson($postDb, 'tag-'. $tag->slug);
+            }
+        } else {
+            $postDb = Post::where('status', 'publish')->select(['id', 'pid', 'type'])->orderBy('id', 'desc');
+            self::savePostsToJson($postDb, 'home');
+        }
+        return 'done';
+    }
+
+    public static function savePostsToJson($postDb, $feedName)
+    {
+        $page = 1;
+        file_put_contents(public_path() . '/dist/content/feed/'.$feedName.'-'.$page.'.json', json_encode([]));
+        $postDb->chunk(10, function ($posts) use (&$page, $feedName) {
+            file_put_contents(public_path() . '/dist/content/feed/'.$feedName.'-'.$page.'.json', json_encode($posts->toArray()));
+            $page++;
+        });
     }
 }
