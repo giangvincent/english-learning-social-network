@@ -5,10 +5,14 @@
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
       <main-feed :itemArray="currentFeed"></main-feed>
-      <infinite-loading @infinite="infiniteHandler">
-        <div slot="spinner">Loading...</div>
-        <div slot="no-more">No more message</div>
-        <div slot="no-results">No results message</div>
+      <infinite-loading
+        ref="infiniteLoading"
+        @infinite="infiniteHandler"
+        spinner="spiral"
+      >
+        <div slot="spinner">Đang tải...</div>
+        <div slot="no-more">Đã tải hết bài viết.</div>
+        <div slot="no-results">Không có bài nào.</div>
       </infinite-loading>
     </div>
     <to-creator></to-creator>
@@ -25,23 +29,27 @@ export default {
   name: "cat-feed",
   components: {
     MainFeed,
-    InfiniteLoading
+    InfiniteLoading,
   },
   data() {
     return {
-      items: []
+      items: [],
     };
   },
   watch: {
-    "$route.params.name": function(val, oldVal) {
+    "$route.params.name": function (val, oldVal) {
       console.log(val, oldVal);
       this.SET_CURRENTFEED([]);
       this.SET_PAGE(1);
-      this.infiniteHandler();
-    }
+      this.$refs.infiniteLoading.status = 1;
+      this.$refs.infiniteLoading.$emit(
+        "infinite",
+        this.$refs.infiniteLoading.stateChanger
+      );
+    },
   },
   computed: {
-    ...mapState(["currentFeed", "currentPage"])
+    ...mapState(["currentFeed", "currentPage"]),
   },
   mounted() {
     this.SET_CURRENTFEED([]);
@@ -53,19 +61,19 @@ export default {
     infiniteHandler($state) {
       var self = this;
       this.LOAD_FEED_CAT(this.$route.params.name)
-        .then(content => {
+        .then((content) => {
           var feedData = self.currentFeed;
-          feedData.push(...content.data);
+          feedData.push(...content);
           self.SET_CURRENTFEED(feedData);
           self.SET_PAGE(self.currentPage + 1);
-          if (content.data.length >= 10) {
+          if (content.length >= 10) {
             $state.loaded();
           } else {
             $state.complete();
           }
         })
-        .catch(e => console.log(e));
-    }
-  }
+        .catch((e) => console.log(e));
+    },
+  },
 };
 </script>

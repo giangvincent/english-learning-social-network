@@ -11,45 +11,7 @@ import helperFunc from "./helperFunc";
 import VueMasonry from "vue-masonry-css";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
-
 import webPush from "./webPush.js";
-import firebase from "firebase/app";
-import "@firebase/messaging";
-var firebaseConfig = {
-  apiKey: "AIzaSyAfJNI6MBwvOGKkUylFrcQbZu467f6lgKs",
-  authDomain: "thatgood.firebaseapp.com",
-  projectId: "thatgood",
-  storageBucket: "thatgood.appspot.com",
-  messagingSenderId: "677986354646",
-  appId: "1:677986354646:web:543a144ac2c0407644d077",
-  measurementId: "G-WE9SEJKBB1"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const messaging = firebase.messaging();
-console.log(messaging);
-messaging
-  .getToken({
-    vapidKey:
-      "BIwxpOTrY3jyIW1thOw0UGRtQf17g4QtDZg-0aYF8XICQFk7MgwRK4adZfYLFIjEbmhITYOq56U1AP4ns1Xke6I"
-  })
-  .then(currentToken => {
-    if (currentToken) {
-      console.log(currentToken);
-    } else {
-      // Show permission request UI
-      console.log(
-        "No registration token available. Request permission to generate one."
-      );
-      // ...
-    }
-  })
-  .catch(err => {
-    console.log("An error occurred while retrieving token. ", err);
-    // ...
-  });
 
 Vue.config.productionTip = false;
 Vue.use(VueMasonry);

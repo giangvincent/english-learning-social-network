@@ -2,7 +2,7 @@ import helperFunc from "../helperFunc";
 import Vue from "vue";
 
 export default {
-  LOAD_TAGS: function({ state, commit }) {
+  LOAD_TAGS: function ({ state, commit }) {
     fetch("/content/tags.json")
       .then(res => res.json())
       .then(res => {
@@ -11,7 +11,7 @@ export default {
       })
       .catch(err => console.log(err));
   },
-  LOAD_CATEGORIES: function({ state, commit }) {
+  LOAD_CATEGORIES: function ({ state, commit }) {
     fetch("/content/categories.json")
       .then(res => res.json())
       .then(res => {
@@ -20,9 +20,10 @@ export default {
       })
       .catch(err => console.log(err));
   },
-  LOAD_HOME: function({ state, commit }) {
+  LOAD_HOME: function ({ state, commit }) {
     return new Promise((response, reject) => {
-      fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
+      // fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
+      fetch("/content/feed/home-" + state.currentPage + ".json")
         .then(res => res.json())
         .then(res => {
           response(res);
@@ -30,7 +31,7 @@ export default {
         .catch(err => reject(err));
     });
   },
-  LOAD_SEARCH: function({ state, commit }, payload) {
+  LOAD_SEARCH: function ({ state, commit }, payload) {
     var query = encodeURIComponent(payload);
     return new Promise((response, reject) => {
       fetch(state.apiUrl + "/search/" + query + "?page=" + state.currentPage)
@@ -41,11 +42,12 @@ export default {
         .catch(err => reject(err));
     });
   },
-  LOAD_FEED_CAT: function({ state, commit }, cat) {
+  LOAD_FEED_CAT: function ({ state, commit }, cat) {
     return new Promise((response, reject) => {
-      fetch(
+      /* fetch(
         state.apiUrl + "/feed-category/" + cat + "?page=" + state.currentPage
-      )
+      ) */
+      fetch("/content/feed/category-" + cat + "-" + state.currentPage + ".json")
         .then(res => res.json())
         .then(res => {
           response(res);
@@ -53,7 +55,7 @@ export default {
         .catch(err => reject(err));
     });
   },
-  LOAD_FEED_TAG: function({ state, commit }, tag) {
+  LOAD_FEED_TAG: function ({ state, commit }, tag) {
     return new Promise((response, reject) => {
       fetch(state.apiUrl + "/feed-tag/" + tag + "?page=" + state.currentPage)
         .then(res => res.json())
@@ -63,7 +65,7 @@ export default {
         .catch(err => reject(err));
     });
   },
-  SAVE_WEBPUSH: function({ state, commit, dispatch }, pushSubscription) {
+  SAVE_WEBPUSH: function ({ state, commit, dispatch }, pushSubscription) {
     pushSubscription = JSON.parse(pushSubscription);
     var data = new FormData();
     data.append("endpoint", pushSubscription.endpoint);
@@ -77,10 +79,10 @@ export default {
       },
       body: data
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
-      .then(function(result) {
+      .then(function (result) {
         if (result.success && !result.error) {
           let browserUnique = helperFunc.randStr();
           let user = state.user.user;

@@ -5,7 +5,7 @@
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
       <main-feed :itemArray="currentFeed"></main-feed>
-      <infinite-loading @infinite="infiniteHandler">
+      <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
         <div slot="spinner">Loading...</div>
         <div slot="no-more">No more message</div>
         <div slot="no-results">No results message</div>
@@ -25,22 +25,26 @@ export default {
   name: "tag-feed",
   components: {
     MainFeed,
-    InfiniteLoading
+    InfiniteLoading,
   },
   data() {
     return {
-      items: []
+      items: [],
     };
   },
   computed: {
-    ...mapState(["currentFeed", "currentPage"])
+    ...mapState(["currentFeed", "currentPage"]),
   },
   watch: {
-    "$route.params.name": function(val, oldVal) {
+    "$route.params.name": function (val, oldVal) {
       this.SET_CURRENTFEED([]);
       this.SET_PAGE(1);
-      this.infiniteHandler();
-    }
+      this.$refs.infiniteLoading.status = 1;
+      this.$refs.infiniteLoading.$emit(
+        "infinite",
+        this.$refs.infiniteLoading.stateChanger
+      );
+    },
   },
   mounted() {
     this.SET_CURRENTFEED([]);
@@ -52,7 +56,7 @@ export default {
     infiniteHandler($state) {
       var self = this;
       this.LOAD_FEED_TAG(this.$route.params.name)
-        .then(content => {
+        .then((content) => {
           var feedData = self.currentFeed;
           feedData.push(...content.data);
           self.SET_CURRENTFEED(feedData);
@@ -63,8 +67,8 @@ export default {
             $state.complete();
           }
         })
-        .catch(e => console.log(e));
-    }
-  }
+        .catch((e) => console.log(e));
+    },
+  },
 };
 </script>
