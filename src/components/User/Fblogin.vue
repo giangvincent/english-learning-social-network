@@ -88,11 +88,11 @@ export default {
                   let successData = data.success;
                   if (self.isLocalStorage()) {
                     localStorage.setItem(
-                      "user",
+                      "thatsgood_info_user",
                       JSON.stringify(successData.user)
                     );
                     localStorage.setItem(
-                      "user_token",
+                      "thatsgood_info_user_token",
                       JSON.stringify(successData.token)
                     );
                   }

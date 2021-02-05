@@ -36,6 +36,11 @@ const router = new Router({
       component: () => import("./views/Tag.vue")
     },
     {
+      path: "/s/:query",
+      name: "search-feed",
+      component: () => import("./views/Search.vue")
+    },
+    {
       path: "/creator",
       name: "creator-tool",
       component: () => import("./views/Creator.vue")

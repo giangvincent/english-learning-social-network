@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full relative bg-white overflow-hidden"
+    class="mx-0 border-t-2 shadow-xl rounded-lg mb-10 tracking-wide w-full relative bg-white overflow-hidden"
     v-if="enable"
   >
     <div class="w-full p-3 font-bold">
@@ -9,14 +9,19 @@
     <CatsAndTags :postData="postData"></CatsAndTags>
     <!-- End relation label -->
     <!-- card indicator -->
-    <div
+    <fieldset
       ref="frontCard"
-      class="flex flex-col m-2 shadow rounded"
+      class="flex flex-col m-2 border-2 border-gray-500 shadow rounded"
       :class="{
         'slide-in-right block': !currentBackCard,
         hidden: currentBackCard
       }"
     >
+      <legend
+        class="mx-2 text-xs font-bold rounded-lg bg-gray-500 text-white p-1"
+      >
+        Gợi ý
+      </legend>
       <div
         class="mx-auto bg-color-black"
         v-for="(image, imgIndex) in postData.content[currentCardIndex].images"
@@ -61,33 +66,37 @@
         </button>
       </section>
       <!-- End content text -->
-      <div class="px-3 pb-4 flex w-full">
-        <input
-          placeholder="Nội dung mặt sau"
-          type="text"
-          class="text-md block px-3 py-2 rounded-lg border-2 border-gray-300 placeholder-gray-600 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none w-3/4"
-          v-model="currentAnswer"
-          @keydown.enter="reviewBackCard"
-        />
-        <button
-          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center"
-          @click="reviewBackCard()"
-        >
-          Review
-        </button>
-      </div>
-      <!-- Review back card -->
-    </div>
+    </fieldset>
     <!-- front card -->
-
-    <div
+    <div class="px-3 pb-4 w-full" v-if="!currentBackCard">
+      <input
+        placeholder="Nội dung mặt sau là gì ?"
+        type="text"
+        class="text-md block px-3 py-2 rounded-lg border-b-2 border-gray-500 placeholder-gray-900 focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none w-full"
+        v-model="currentAnswer"
+        @keydown.enter="reviewBackCard"
+      />
+      <button
+        class="md:text-lg text-white rounded-lg btn-hover gradient-black flex justify-center items-center w-auto py-1 shadow-none mx-auto px-2 mt-1"
+        @click="reviewBackCard()"
+      >
+        LẬT MẶT SAU
+      </button>
+    </div>
+    <!-- Review back card -->
+    <fieldset
       ref="backCard"
-      class="flex flex-col m-2 shadow rounded"
+      class="flex flex-col m-2 border-2 border-gray-500 shadow rounded"
       :class="{
         'flip-in-ver-right block': currentBackCard,
         hidden: !currentBackCard
       }"
     >
+      <legend
+        class="mx-2 text-xs font-bold rounded-lg bg-gray-500 text-white p-1"
+      >
+        Mặt sau
+      </legend>
       <div
         class="mx-auto bg-color-black"
         v-for="(image, imgIndex) in postData.content[currentCardIndex]
@@ -134,30 +143,36 @@
         </button>
       </section>
       <!-- End content text -->
-      <div class="px-3 pb-4 flex flex-row" v-if="!resetEnable">
-        <div
-          class="flex flex-wrap content-center justify-center text-md md:text-lg font-semibold py-2 border-gray-600 focus:outline-none rounded-lg border-2 w-3/4 min-h-1"
-        >
-          {{ currentAnswer }}
-        </div>
-        <button
-          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center"
-          @click="toNextCard()"
-        >
-          Next
-        </button>
-      </div>
-      <div class="px-3 pb-4 flex flex-row" v-if="resetEnable">
-        <button
-          class="md:text-lg font-semibold text-white rounded-lg btn-hover gradient-black w-1/4 flex justify-center items-center min-h-1 mx-auto"
-          @click="resetLearning()"
-        >
-          Học lại
-        </button>
-      </div>
       <!-- Review back card -->
-    </div>
+    </fieldset>
     <!-- Back card -->
+
+    <div class="px-3 pb-4" v-if="!resetEnable && currentBackCard">
+      <fieldset
+        class="flex flex-wrap content-center justify-center text-md md:text-lg font-semibold py-2 border-gray-600 focus:outline-none rounded-lg border-2 w-full min-h-2"
+      >
+        <legend
+          class="mx-2 text-xs font-bold rounded-lg bg-gray-500 text-white p-1"
+        >
+          Bạn đã viết:
+        </legend>
+        {{ currentAnswer }}
+      </fieldset>
+      <button
+        class="md:text-lg text-white rounded-lg btn-hover gradient-black shadow-none flex justify-center items-center mt-1 py-1 px-2 mx-auto"
+        @click="toNextCard()"
+      >
+        Card TIẾP
+      </button>
+    </div>
+    <div class="px-3 pb-4" v-if="resetEnable">
+      <button
+        class="md:text-lg text-white rounded-lg btn-hover gradient-black flex justify-center items-center px-2 min-h-1 mx-auto"
+        @click="resetLearning()"
+      >
+        HỌC LẠI
+      </button>
+    </div>
 
     <div class="mb-4 flex cursor-pointer justify-center items-center flex-wrap">
       <div
@@ -256,9 +271,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      rootUrl: state => state.rootUrl
-    })
+    ...mapState({})
   },
   watch: {
     postData: {
@@ -323,7 +336,13 @@ export default {
     },
     playAudio(text) {
       var sound = new Howl({
-        src: '/content/audios/'+ text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-') +'.mp3',
+        src:
+          "/content/audios/" +
+          text
+            .toLowerCase()
+            .replace(/[^\w ]+/g, "")
+            .replace(/ +/g, "-") +
+          ".mp3",
         format: ["mp3"],
         html5: true
       });

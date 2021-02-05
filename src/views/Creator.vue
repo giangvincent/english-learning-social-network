@@ -144,7 +144,6 @@ export default {
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl,
       categories: state => state.categories,
       user: state => state.user.user,
       user_token: state => state.user.token,
@@ -249,9 +248,9 @@ export default {
           .SUBMIT_POST(postData)
           .then(res => {
             // console.log(res);
-            if (res) {
+            if (res.status) {
               self.$toast.success("Bài viết đã được đăng thành công.");
-              self.$router.push("/");
+              self.$router.push(res.url || "/");
             } else {
               self.handleErr(res);
             }

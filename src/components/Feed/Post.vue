@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
+    class="mx-0 border-t-2 shadow-xl rounded-lg mb-10 tracking-wide w-full bg-white"
     v-if="enable"
   >
     <div class="w-full p-3 font-bold">
@@ -166,7 +166,6 @@ export default {
   },
   computed: {
     ...mapState({
-      rootUrl: state => state.rootUrl,
       user: state => state.user.user
     })
   },

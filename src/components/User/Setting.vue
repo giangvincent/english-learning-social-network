@@ -70,13 +70,33 @@
         <legend class="mx-2 font-bold rounded-lg bg-green-800 text-white p-2">
           Đổi cài đặt thông báo
         </legend>
+
         <div class="py-1">
-          <span class="px-1 text-sm text-gray-600">Tài khoản Facebook</span>
-          <input
-            placeholder
-            type="text"
-            class="text-md px-3 py-2 rounded-lg w-full placeholder-gray-600 shadow"
-          />
+          <span class="px-1 text-sm text-gray-600"
+            >Thông báo thông qua trình duyệt</span
+          >
+          <div
+            class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
+          >
+            <input
+              type="checkbox"
+              name="toggle"
+              id="toggle"
+              class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+              :checked="
+                user.notification_conn &&
+                user.notification_conn.browser &&
+                browserNotify
+                  ? user.notification_conn.browser.state
+                  : false
+              "
+              @click="toggleBrowserNotify()"
+            />
+            <label
+              for="toggle"
+              class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+            ></label>
+          </div>
         </div>
         <button
           class="mt-3 text-lg font-semibold mx-auto text-white rounded-lg px-6 py-3 btn-hover gradient-black"
@@ -135,8 +155,10 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import LoadingIcon from "@/components/Icons/LoadingAnimate.vue";
+import webPush from "../../webPush.js";
+
 export default {
   name: "user-setting",
   components: {
@@ -147,7 +169,8 @@ export default {
       processUpload: false,
       cur_password: "",
       password: "",
-      c_password: ""
+      c_password: "",
+      browserNotify: true
     };
   },
   computed: {
@@ -158,6 +181,64 @@ export default {
   mounted() {},
   methods: {
     ...mapActions(["UpdateInfo", "ChangePassword", "UpdateNotificationConn"]),
+    ...mapMutations(["SET_USER"]),
+    toggleBrowserNotify() {
+      console.log(this.user.notification_conn);
+      if (
+        this.user.notification_conn &&
+        typeof this.user.notification_conn === "object"
+      ) {
+        let browser_unique =
+          localStorage.getItem("thatsgood_info_browser_unique") || false;
+        if (this.user.notification_conn.browser) {
+          this.user.notification_conn.browser.state = !this.user
+            .notification_conn.browser.state;
+          if (this.user.notification_conn.browser.state === false) {
+            localStorage.removeItem("thatsgood_info_browser_unique");
+            let index = this.user.notification_conn.browser.keysArr.indexOf(
+              browser_unique
+            );
+            if (index !== -1) {
+              this.user.notification_conn.browser.keysArr.splice(index, 1);
+            }
+          }
+        } else {
+          this.user.notification_conn.browser = {};
+          this.user.notification_conn.browser.state = true;
+          this.user.notification_conn.browser.keysArr = [];
+        }
+
+        if (
+          !webPush.checkBrowserRegistered(
+            this.user.notification_conn,
+            browser_unique
+          )
+        ) {
+          webPush.initSW();
+        }
+
+        let self = this;
+        this.UpdateNotificationConn(this.user).then(res => {
+          if (res.success) {
+            self.SET_USER(self.user);
+            if (self.isLocalStorage()) {
+              localStorage.setItem(
+                "thatsgood_info_user",
+                JSON.stringify(self.user)
+              );
+            }
+            self.$toast.success("Cập nhật thành công!");
+          } else {
+            self.$toast.error(
+              "Cập nhật thất bại. " + JSON.stringify(res.error)
+            );
+          }
+        });
+      } else {
+        this.user.notification_conn = {};
+        this.toggleBrowserNotify();
+      }
+    },
     callUpdateInfo() {
       if (!this.processUpload) {
         this.processUpload = true;
@@ -198,3 +279,14 @@ export default {
   }
 };
 </script>
+<style lang="sass">
+/* CHECKBOX TOGGLE SWITCH */
+/* @apply rules for documentation, these do not work as inline style */
+.toggle-checkbox:checked
+  apply: right-0 border-green-400
+  right: 0
+  border-color: #68d391
+.toggle-checkbox:checked + .toggle-label
+  apply: bg-green-400
+  background-color: #68d391
+</style>

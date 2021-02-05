@@ -1,6 +1,6 @@
 {
-  "name": "thatsgood-frontend",
-  "short_name": "thatsgood-frontend",
+  "name": "ThatsGOOD",
+  "short_name": "ThatsGOOD",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

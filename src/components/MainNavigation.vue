@@ -85,7 +85,7 @@ export default {
   name: "main-navigatior",
   components: {
     Logo,
-    DesktopNav,
+    DesktopNav
   },
   data() {
     return {
@@ -95,29 +95,28 @@ export default {
       userLogout: "/auth/logout",
       showNavbar: true,
       showUserMenu: false,
-      lastScrollPosition: 0,
+      lastScrollPosition: 0
     };
   },
   watch: {
     user: {
-      handler: function (val) {
+      handler: function(val) {
         if (this.user.id) {
           this.userUploaded = "/u/" + this.user.id;
           this.userBagged = "/u/" + this.user.id + "?cur=saved";
           this.userSetting = "/u/" + this.user.id + "?cur=setting";
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   computed: {
     ...mapState({
-      currentTab: (state) => state.currentTab,
-      user: (state) => state.user.user,
-      categories: (state) => state.categories,
-      notification: (state) => state.user.notification,
-      rootUrl: (state) => state.rootUrl,
-    }),
+      currentTab: state => state.currentTab,
+      user: state => state.user.user,
+      categories: state => state.categories,
+      notification: state => state.user.notification
+    })
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);
@@ -158,10 +157,10 @@ export default {
       }
       this.showNavbar = currentScrollPosition < this.lastScrollPosition;
       this.lastScrollPosition = currentScrollPosition;
-    },
+    }
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.onScroll);
-  },
+  }
 };
 </script>

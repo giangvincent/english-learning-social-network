@@ -33,7 +33,10 @@
               <input
                 class="py-2 pr-4 pl-8  w-full bg-gray-300 focus:bg-white focus:border-transparent form-input rounded shadow focus:shadow-none text-gray-900 w-56"
                 type="text"
-                placeholder="Search..."
+                placeholder="Tìm kiếm..."
+                ref="search"
+                v-model="searchText"
+                v-on:keyup.enter="search"
               />
             </label>
           </div>
@@ -73,7 +76,8 @@ export default {
   data() {
     return {
       footerHeight: 0,
-      customStyle: "height: calc(100vh - 5rem)"
+      customStyle: "height: calc(100vh - 5rem)",
+      searchText: ""
     };
   },
   components: {
@@ -89,7 +93,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["toggle_left_panel"])
+    ...mapMutations(["toggle_left_panel"]),
+    search() {
+      this.$router.push("/s/" + encodeURIComponent(this.searchText));
+    }
   },
   mounted() {
     // console.log(this.footerHeight);
