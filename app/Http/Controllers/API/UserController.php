@@ -20,6 +20,16 @@ class UserController extends Controller
 {
     public $successStatus = 200;
 
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:191',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+    }
+
     /**
      * login api
      *

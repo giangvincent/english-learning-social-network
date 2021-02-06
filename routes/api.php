@@ -22,6 +22,7 @@ Route::post('webhook', 'BotController@handle_query');
 Route::post('social-login/{provider}', 'SocialAuthController@login');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
+Route::post('reset-password', 'UserController@resetPassword');
 Route::post('new-contact', 'ContactController@handleCreateContact');
 
 Route::get('user-detail/{id}', 'UserController@details');
