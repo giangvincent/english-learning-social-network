@@ -1,7 +1,10 @@
 <template>
   <div>
     <simpleTopNav></simpleTopNav>
-    <div class="container mx-auto p-6 mt-6 relative flex flex-wrap md:w-6/12">
+    <div
+      v-if="page === 'login' || page === 'register'"
+      class="container mx-auto p-6 mt-6 relative flex flex-wrap md:w-6/12"
+    >
       <div class="w-full sm:w-1/2 sm:pr-2 mb-3 sm:mb-0">
         <fb-login></fb-login>
       </div>
@@ -95,7 +98,7 @@
         <div class="flex flex-col flex-wrap content-center text-center">
           <label class="block text-gray-500 font-bold my-4">
             <a
-              href="#"
+              @click="changeAuthRoute('reset-password')"
               class="cursor-pointer tracking-tighter border-b-2 border-gray-400 hover:border-gray-600"
             >
               <span>Quên mật khẩu?</span>
@@ -263,6 +266,58 @@
       </div>
     </div>
     <!-- End register tab -->
+
+    <div
+      v-if="page === 'reset-password'"
+      class="container mx-auto p-6 relative flex flex-wrap md:w-6/12"
+    >
+      <div class="px-2 w-full text-sm text-center font-semibold">
+        Để đặt lại mật khẩu vui lòng điền địa chỉ email mà bạn đã đăng ký.
+      </div>
+
+      <div class="mt-6 w-full mx-auto">
+        <div class="py-2">
+          <span class="px-1 text-sm text-gray-600">Địa chỉ Email</span>
+          <input
+            placeholder
+            type="email"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            autocomplete="email"
+            v-model="email"
+          />
+        </div>
+        <button
+          class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="sendCheckEmail()"
+        >
+          <span v-if="!processApi"> Gửi yêu cầu </span>
+          <div v-if="processApi">
+            <loading-icon></loading-icon>
+          </div>
+        </button>
+        <div class="flex flex-col flex-wrap content-center text-center">
+          <label class="block text-gray-500 font-bold my-4">
+            <a
+              @click="changeAuthRoute('login')"
+              class="cursor-pointer tracking-tighter border-b-2 border-gray-400 hover:border-gray-600"
+            >
+              <span>Quay lại đăng nhập</span>
+            </a>
+          </label>
+          <div class="text-sm font-semibold block py-3">
+            <a @click="changeAuthRoute('register')" class="font-normal">
+              Bạn chưa có tài khoản?
+              <br />
+              <span
+                class="font-semibold border-b-2 border-gray-400 hover:border-teal-500"
+                >Đăng ký ở đây nè</span
+              >
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End login tab -->
   </div>
 </template>
 
@@ -284,7 +339,7 @@ export default {
     LoadingIcon,
     simpleTopNav,
     FbLogin,
-    GgLogin
+    GgLogin,
   },
   data() {
     return {
@@ -297,27 +352,27 @@ export default {
         email: "",
         password: "",
         password_confirm: "",
-        accept_term: false
+        accept_term: false,
       },
       email: "",
       password: "",
       page: "login",
-      keepLogin: true
+      keepLogin: true,
     };
   },
   watch: {
-    email: function(newVal, oldVal) {
+    email: function (newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
-        console.log(checkEmail);
+        // console.log(checkEmail);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   created() {
     this.page = "login";
@@ -326,6 +381,13 @@ export default {
       this.$route.params.page === "register"
     ) {
       this.page = "register";
+    }
+
+    if (
+      typeof this.$route.params.page !== "undefined" &&
+      this.$route.params.page === "reset-password"
+    ) {
+      this.page = "reset-password";
     }
 
     if (
@@ -356,11 +418,25 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["LOGIN", "REGISTER"]),
+    ...mapActions(["LOGIN", "REGISTER", "CHECK_EMAIL"]),
     ...mapMutations(["SET_USER", "SET_TOKEN"]),
     changeAuthRoute(Auth) {
       this.page = Auth;
       this.$router.push("/auth/" + Auth);
+    },
+    sendCheckEmail() {
+      if (this.email !== "" && validateEmail(this.email)) {
+        this.processApi = true;
+        let self = this;
+        this.CHECK_EMAIL(this.email)
+          .then((res) => {
+            self.processApi = false;
+          })
+          .catch((err) => {
+            self.$toast.alert("Đã xảy ra lỗi. Hãy kiểm tra lại Email.");
+            self.processApi = false;
+          });
+      }
     },
     sendLogin() {
       if (
@@ -372,17 +448,20 @@ export default {
         this.processApi = true;
         let self = this;
         this.LOGIN({ email: this.email, password: this.password })
-          .then(res => {
+          .then((res) => {
             self.saveUser(res);
           })
-          .catch(err => {
+          .catch((err) => {
+            self.$toast.alert(
+              "Đã xảy ra lỗi. Hãy kiểm tra lại Email và mật khẩu."
+            );
             self.processApi = false;
           });
       }
     },
     sendRegister() {
       const isEmpty = !Object.values(this.registerData).some(
-        data => data !== null && data !== ""
+        (data) => data !== null && data !== ""
       );
       if (
         !isEmpty &&
@@ -392,10 +471,11 @@ export default {
         this.processApi = true;
         let self = this;
         this.REGISTER(this.registerData)
-          .then(res => {
+          .then((res) => {
             self.saveUser(res);
           })
-          .catch(err => {
+          .catch((err) => {
+            self.$toast.alert("Đã xảy ra lỗi. Hãy kiểm tra lại các thông tin.");
             self.processApi = false;
           });
       }
@@ -410,7 +490,7 @@ export default {
         );
       }
       this.$router.go(-1);
-    }
-  }
+    },
+  },
 };
 </script>

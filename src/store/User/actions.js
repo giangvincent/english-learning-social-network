@@ -1,5 +1,5 @@
 export default {
-  LoadNotification: function({ rootState, state, commit }) {
+  LoadNotification: function ({ rootState, state, commit }) {
     if (rootState.user && rootState.user.token) {
       fetch(rootState.apiUrl + "/get-notification", {
         method: "GET",
@@ -27,7 +27,29 @@ export default {
         });
     }
   },
-  LOGIN: function({ rootState, state, commit }, payload) {
+  CHECK_EMAIL: function ({ rootState }, payload) {
+    let data = new FormData();
+    data.append("email", payload);
+
+    return new Promise((res, rej) => {
+      fetch(rootState.apiUrl + "/reset-password", {
+        method: "POST",
+        body: data
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        if (typeof data.success !== "undefined") {
+          let successData = data.success;
+          res(successData);
+        } else {
+          rej(data.error);
+        }
+      }).catch(err => {
+        rej(err)
+      })
+    })
+  },
+  LOGIN: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);
     data.append("password", payload.password);
@@ -36,10 +58,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           // console.log(data);
           if (typeof data.success !== "undefined") {
             let successData = data.success;
@@ -55,7 +77,7 @@ export default {
         });
     });
   },
-  REGISTER: function({ rootState, state, commit }, payload) {
+  REGISTER: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("nick_name", payload.nick_name);
     data.append("full_name", payload.full_name);
@@ -69,10 +91,10 @@ export default {
         method: "POST",
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           console.log(data);
           let successData = data;
           commit("SET_TOKEN", successData.token);
@@ -84,14 +106,14 @@ export default {
         });
     });
   },
-  GetUploadedPosts: function({ rootState, state, commit }, payload) {
+  GetUploadedPosts: function ({ rootState, state, commit }, payload) {
     return new Promise((response, reject) => {
       fetch(
         rootState.apiUrl +
-          "/uploaded-posts/" +
-          payload +
-          "?page=" +
-          rootState.currentPage,
+        "/uploaded-posts/" +
+        payload +
+        "?page=" +
+        rootState.currentPage,
         {
           method: "GET",
           headers: {
@@ -99,10 +121,10 @@ export default {
           }
         }
       )
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(res) {
+        .then(function (res) {
           response(res);
         })
         .catch(err => {
@@ -111,7 +133,7 @@ export default {
     });
   },
 
-  GetBaggedPosts: function({ rootState, state, commit }, payload) {
+  GetBaggedPosts: function ({ rootState, state, commit }, payload) {
     return new Promise((response, reject) => {
       fetch(rootState.apiUrl + "/bagged-posts?page=" + rootState.currentPage, {
         method: "GET",
@@ -120,10 +142,10 @@ export default {
           Authorization: "Bearer " + rootState.user.token
         }
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(res) {
+        .then(function (res) {
           response(res);
         })
         .catch(err => {
@@ -131,7 +153,7 @@ export default {
         });
     });
   },
-  ReqInteract: function({ rootState, state, commit }, payload) {
+  ReqInteract: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("post_id", payload.post_id);
     data.append("interact", payload.interact);
@@ -143,10 +165,10 @@ export default {
       },
       body: data
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
-      .then(function(res) {
+      .then(function (res) {
         // console.log(res)
         // TODO: Add interact data to current post
       })
@@ -154,7 +176,7 @@ export default {
         console.log(err);
       });
   },
-  LoadUserInfo: function({ rootState, state, commit }, payload) {
+  LoadUserInfo: function ({ rootState, state, commit }, payload) {
     return new Promise((res, rej) => {
       fetch(rootState.apiUrl + "/user-detail/" + payload, {
         method: "GET",
@@ -162,10 +184,10 @@ export default {
           Accept: "application/json"
         }
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           if (typeof data.success !== "undefined") {
             let successData = data.success;
             res(successData);
@@ -178,7 +200,7 @@ export default {
         });
     });
   },
-  ChangeAvatar: function({ rootState, state, commit }, payload) {
+  ChangeAvatar: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("avatar", payload);
     return new Promise((res, rej) => {
@@ -190,24 +212,24 @@ export default {
         },
         body: data
       })
-        .then(function(response) {
+        .then(function (response) {
           return response.json();
         })
         .then(
-          function(result) {
+          function (result) {
             if (result.success) {
               res(1);
             } else {
               rej(result.message);
             }
           },
-          function(e) {
+          function (e) {
             rej(e.messages);
           }
         );
     });
   },
-  ChangeCover: function({ rootState, state, commit }, payload) {
+  ChangeCover: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("cover_image", payload);
     return new Promise((res, rej) => {
@@ -219,24 +241,24 @@ export default {
         },
         body: data
       })
-        .then(function(response) {
+        .then(function (response) {
           return response.json();
         })
         .then(
-          function(result) {
+          function (result) {
             if (result.success) {
               res(1);
             } else {
               rej(result.message);
             }
           },
-          function(e) {
+          function (e) {
             rej(e.messages);
           }
         );
     });
   },
-  UpdateInfo: function({ rootState, state, commit }, payload) {
+  UpdateInfo: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("full_name", payload.full_name);
     data.append("nick_name", payload.nick_name);
@@ -252,10 +274,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(data) {
+        .then(function (data) {
           if (data.success) {
             res(data);
           } else {
@@ -267,7 +289,7 @@ export default {
         });
     });
   },
-  ChangePassword: function({ rootState, state, commit }, payload) {
+  ChangePassword: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("cur_password", payload.cur_password);
     data.append("password", payload.password);
@@ -282,10 +304,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(result) {
+        .then(function (result) {
           if (result.success) {
             res(result);
           } else {
@@ -297,7 +319,7 @@ export default {
         });
     });
   },
-  UpdateNotificationConn: function({ rootState, state, commit }, payload) {
+  UpdateNotificationConn: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("notification_conn", JSON.stringify(payload.notification_conn));
     // data.append("socials_conn", JSON.stringify(payload.socials_conn));
@@ -312,10 +334,10 @@ export default {
         },
         body: data
       })
-        .then(function(res) {
+        .then(function (res) {
           return res.json();
         })
-        .then(function(result) {
+        .then(function (result) {
           if (result) {
             res(result);
           } else {
@@ -327,7 +349,7 @@ export default {
         });
     });
   },
-  FinishPostLearnt: function({ rootState, state, commit }, payload) {
+  FinishPostLearnt: function ({ rootState, state, commit }, payload) {
     if (rootState.user && rootState.user.token) {
       var data = new FormData();
       data.append("post_id", payload);
@@ -341,10 +363,10 @@ export default {
           },
           body: data
         })
-          .then(function(res) {
+          .then(function (res) {
             return res.json();
           })
-          .then(function(result) {
+          .then(function (result) {
             if (result) {
               res(result);
             } else {
@@ -357,7 +379,7 @@ export default {
       });
     }
   },
-  SeenNotification: function({ rootState, state, commit }, payload) {
+  SeenNotification: function ({ rootState, state, commit }, payload) {
     if (rootState.user && rootState.user.token) {
       fetch(rootState.apiUrl + "/seen-notification/" + payload, {
         method: "get",
