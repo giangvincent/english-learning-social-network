@@ -49,6 +49,30 @@ export default {
       })
     })
   },
+  UPDATE_RESET_PASS: function ({ rootState }, payload) {
+    let data = new FormData();
+    data.append("email", payload.email);
+    data.append("token", payload.token)
+    data.append('password', payload.password)
+    data.append('password_confirmation', payload.password_confirmation)
+
+    return new Promise((res, rej) => {
+      fetch(rootState.apiUrl + "/update-reset-password", {
+        method: "POST",
+        body: data
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        if (data.status) {
+          res(data.message);
+        } else {
+          rej(data);
+        }
+      }).catch(err => {
+        rej(err)
+      })
+    })
+  },
   LOGIN: function ({ rootState, state, commit }, payload) {
     var data = new FormData();
     data.append("email", payload.email);
