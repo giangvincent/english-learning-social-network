@@ -157,6 +157,9 @@ class PostApi extends Controller
     public function createAudios($req)
     {
         $content = json_decode($req->content, true);
+        if (!is_array($content)) {
+            return '';
+        }
         for ($i = 0; $i < count($content); $i++) {
             if (
                 isset($content[$i]['audios']) &&

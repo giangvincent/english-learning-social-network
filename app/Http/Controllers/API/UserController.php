@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\UpdatePostWhenDbChange;
+use App\Jobs\QueueNotification;
+use App\Mail\resetPassLink;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\userInteract;
@@ -14,6 +16,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class UserController extends Controller
@@ -22,12 +31,62 @@ class UserController extends Controller
 
     public function resetPassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:191',
+        $input = $request->only('email');
+        $validator = Validator::make($input, [
+            'email' => "required|email"
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json($validator->errors(), 401);
         }
+        $response = Password::sendResetLink($input);
+        if ($response == Password::RESET_LINK_SENT) {
+            $user = User::where('email', $request->email)->firstOrFail();
+            Mail::to($user)->send(new resetPassLink(
+                DB::table('password_resets')->where('email', $request->email)->first()
+            ));
+            $message = 'Mail sent';
+        } else {
+            $message = trans($response);
+        }
+    
+        return response()->json(['status' => true, 'message' => $message], 200);
+    }
+
+    public function updateResetPassword(Request $request)
+    {
+        $input = $request->only('email', 'token', 'password', 'password_confirmation');
+        $validator = Validator::make($input, [
+            'token' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string|confirmed',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 401);
+        }
+
+        $passwordReset = DB::table('password_resets')->where([
+            ['token', $request->token],
+            ['email', $request->email]
+        ]);
+        if (!$passwordReset->first()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This password reset token is invalid.'
+            ], 401);
+        }
+        $user = User::where('email', $passwordReset->first()->email)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => "We can't find a user with that e-mail address."
+            ], 401);
+        }
+        $user->password = bcrypt($request->password);
+        $user->save();
+        $passwordReset->delete();
+
+        
+        return response()->json(['status' => true, 'message' => 'Password reset successfully'], 200);
     }
 
     /**

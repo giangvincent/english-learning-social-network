@@ -20,9 +20,13 @@ return $request->user();
 Route::get('webhook', 'BotController@verify_token');
 Route::post('webhook', 'BotController@handle_query');
 Route::post('social-login/{provider}', 'SocialAuthController@login');
+Route::get('login', function () {
+    return redirect('/');
+})->name('login');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::post('reset-password', 'UserController@resetPassword');
+Route::post('update-reset-password', 'UserController@updateResetPassword');
 Route::post('new-contact', 'ContactController@handleCreateContact');
 
 Route::get('user-detail/{id}', 'UserController@details');
