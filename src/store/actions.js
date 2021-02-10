@@ -3,7 +3,7 @@ import Vue from "vue";
 
 export default {
   LOAD_TAGS: function ({ state, commit }) {
-    fetch("/content/tags.json")
+    fetch("/content/tags.json", { cache: "reload" })
       .then(res => res.json())
       .then(res => {
         // console.log(res);
@@ -12,7 +12,7 @@ export default {
       .catch(err => console.log(err));
   },
   LOAD_CATEGORIES: function ({ state, commit }) {
-    fetch("/content/categories.json")
+    fetch("/content/categories.json", { cache: "reload" })
       .then(res => res.json())
       .then(res => {
         // console.log(res);
@@ -23,7 +23,7 @@ export default {
   LOAD_HOME: function ({ state, commit }) {
     return new Promise((response, reject) => {
       // fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
-      fetch("/content/feed/home-" + state.currentPage + ".json")
+      fetch("/content/feed/home-" + state.currentPage + ".json", { cache: "reload" })
         .then(res => res.json())
         .then(res => {
           response(res);
@@ -47,7 +47,7 @@ export default {
       /* fetch(
         state.apiUrl + "/feed-category/" + cat + "?page=" + state.currentPage
       ) */
-      fetch("/content/feed/category-" + cat + "-" + state.currentPage + ".json")
+      fetch("/content/feed/category-" + cat + "-" + state.currentPage + ".json", { cache: "reload" })
         .then(res => res.json())
         .then(res => {
           response(res);

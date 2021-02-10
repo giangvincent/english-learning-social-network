@@ -1,7 +1,10 @@
 <template>
   <div>
     <simpleTopNav></simpleTopNav>
-    <div class="container mx-auto p-6 mt-6 relative flex flex-wrap md:w-6/12">
+    <div
+      v-if="page === 'login' || page === 'register'"
+      class="container mx-auto p-6 mt-6 relative flex flex-wrap md:w-6/12"
+    >
       <div class="w-full sm:w-1/2 sm:pr-2 mb-3 sm:mb-0">
         <fb-login></fb-login>
       </div>
@@ -95,7 +98,7 @@
         <div class="flex flex-col flex-wrap content-center text-center">
           <label class="block text-gray-500 font-bold my-4">
             <a
-              href="#"
+              @click="changeAuthRoute('reset-password')"
               class="cursor-pointer tracking-tighter border-b-2 border-gray-400 hover:border-gray-600"
             >
               <span>Quên mật khẩu?</span>
@@ -263,6 +266,160 @@
       </div>
     </div>
     <!-- End register tab -->
+
+    <div
+      v-if="page === 'reset-password'"
+      class="container mx-auto p-6 relative flex flex-wrap md:w-6/12"
+    >
+      <div class="px-2 w-full text-sm text-center font-semibold">
+        Để đặt lại mật khẩu vui lòng điền địa chỉ email mà bạn đã đăng ký.
+      </div>
+
+      <div class="mt-6 w-full mx-auto">
+        <div class="py-2">
+          <span class="px-1 text-sm text-gray-600">Địa chỉ Email</span>
+          <input
+            placeholder
+            type="email"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            autocomplete="email"
+            v-model="email"
+          />
+        </div>
+        <button
+          class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="sendCheckEmail()"
+        >
+          <span v-if="!processApi"> Gửi yêu cầu </span>
+          <div v-if="processApi">
+            <loading-icon></loading-icon>
+          </div>
+        </button>
+        <div class="flex flex-col flex-wrap content-center text-center">
+          <label class="block text-gray-500 font-bold my-4">
+            <a
+              @click="changeAuthRoute('login')"
+              class="cursor-pointer tracking-tighter border-b-2 border-gray-400 hover:border-gray-600"
+            >
+              <span>Quay lại đăng nhập</span>
+            </a>
+          </label>
+          <div class="text-sm font-semibold block py-3">
+            <a @click="changeAuthRoute('register')" class="font-normal">
+              Bạn chưa có tài khoản?
+              <br />
+              <span
+                class="font-semibold border-b-2 border-gray-400 hover:border-teal-500"
+                >Đăng ký ở đây nè</span
+              >
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End send check mail tab -->
+    <div
+      v-if="page === 'update-password'"
+      class="container mx-auto p-6 relative flex flex-wrap md:w-6/12"
+    >
+      <div class="px-2 w-full text-sm text-center font-semibold">
+        Để hoàn tất đặt lại mật khẩu vui lòng điền đầy đủ thông tin bên dưới.
+      </div>
+
+      <div class="mt-6 w-full mx-auto">
+        <div class="py-2">
+          <span class="px-1 text-sm text-gray-600">Địa chỉ Email</span>
+          <input
+            placeholder
+            type="email"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            autocomplete="email"
+            v-model="resetData.email"
+          />
+        </div>
+        <div class="py-2">
+          <span class="px-1 text-sm text-gray-600">Mật khẩu</span>
+          <div class="relative">
+            <input
+              placeholder
+              :type="!showPass ? 'password' : 'text'"
+              v-model="resetData.password"
+              class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+            />
+            <div
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              <svg
+                class="h-6 text-gray-700"
+                fill="none"
+                @click="showPass = !showPass"
+                :class="{ hidden: !showPass, block: showPass }"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
+                />
+              </svg>
+
+              <svg
+                class="h-6 text-gray-700"
+                fill="none"
+                @click="showPass = !showPass"
+                :class="{ block: !showPass, hidden: showPass }"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="py-2">
+          <span class="px-1 text-sm text-gray-600">Xác nhận mật khẩu</span>
+          <input
+            placeholder
+            type="password"
+            v-model="resetData.password_confirmation"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+          />
+        </div>
+        <button
+          class="mt-3 text-lg font-semibold w-full text-white rounded-lg px-6 py-3 btn-hover gradient-black"
+          @click="updateResetPass()"
+        >
+          <span v-if="!processApi"> Đặt lại mật khẩu </span>
+          <div v-if="processApi">
+            <loading-icon></loading-icon>
+          </div>
+        </button>
+        <div class="flex flex-col flex-wrap content-center text-center">
+          <label class="block text-gray-500 font-bold my-4">
+            <a
+              @click="changeAuthRoute('login')"
+              class="cursor-pointer tracking-tighter border-b-2 border-gray-400 hover:border-gray-600"
+            >
+              <span>Quay lại đăng nhập</span>
+            </a>
+          </label>
+          <div class="text-sm font-semibold block py-3">
+            <a @click="changeAuthRoute('register')" class="font-normal">
+              Bạn chưa có tài khoản?
+              <br />
+              <span
+                class="font-semibold border-b-2 border-gray-400 hover:border-teal-500"
+                >Đăng ký ở đây nè</span
+              >
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End update reset password tab -->
   </div>
 </template>
 
@@ -284,7 +441,7 @@ export default {
     LoadingIcon,
     simpleTopNav,
     FbLogin,
-    GgLogin
+    GgLogin,
   },
   data() {
     return {
@@ -297,27 +454,33 @@ export default {
         email: "",
         password: "",
         password_confirm: "",
-        accept_term: false
+        accept_term: false,
+      },
+      resetData: {
+        token: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
       },
       email: "",
       password: "",
       page: "login",
-      keepLogin: true
+      keepLogin: true,
     };
   },
   watch: {
-    email: function(newVal, oldVal) {
+    email: function (newVal, oldVal) {
       if (newVal && newVal !== oldVal) {
         let checkEmail = validateEmail(newVal);
-        console.log(checkEmail);
+        // console.log(checkEmail);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      user: state => state.user.user,
-      user_token: state => state.user.token
-    })
+      user: (state) => state.user.user,
+      user_token: (state) => state.user.token,
+    }),
   },
   created() {
     this.page = "login";
@@ -326,6 +489,23 @@ export default {
       this.$route.params.page === "register"
     ) {
       this.page = "register";
+    }
+
+    if (
+      typeof this.$route.params.page !== "undefined" &&
+      this.$route.params.page === "reset-password"
+    ) {
+      this.page = "reset-password";
+    }
+    if (
+      typeof this.$route.params.page !== "undefined" &&
+      this.$route.params.page === "update-password" &&
+      typeof this.$route.query.token !== "undefined" &&
+      typeof this.$route.query.email !== "undefined"
+    ) {
+      this.page = "update-password";
+      this.resetData.token = decodeURIComponent(this.$route.query.token);
+      this.resetData.email = this.$route.query.email;
     }
 
     if (
@@ -356,12 +536,48 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["LOGIN", "REGISTER"]),
+    ...mapActions(["LOGIN", "REGISTER", "CHECK_EMAIL", "UPDATE_RESET_PASS"]),
     ...mapMutations(["SET_USER", "SET_TOKEN"]),
     changeAuthRoute(Auth) {
       this.page = Auth;
       this.$router.push("/auth/" + Auth);
     },
+    updateResetPass() {
+      const isEmpty = !Object.values(this.resetData).some(
+        (data) => data !== null && data !== ""
+      );
+      if (!isEmpty && !this.processApi && validateEmail(this.resetData.email)) {
+        this.processApi = true;
+        let self = this;
+        this.UPDATE_RESET_PASS(this.resetData)
+          .then((res) => {
+            self.$toast.success(
+              "Khởi tạo lại thành công. Xin mời đăng nhập lại."
+            );
+            self.$router.push("/auth/login");
+            self.processApi = false;
+          })
+          .catch((err) => {
+            self.$toast.error("Đã xảy ra lỗi. Hãy kiểm tra lại các thông tin.");
+            self.processApi = false;
+          });
+      }
+    },
+    sendCheckEmail() {
+      if (this.email !== "" && validateEmail(this.email)) {
+        this.processApi = true;
+        let self = this;
+        this.CHECK_EMAIL(this.email)
+          .then((res) => {
+            self.processApi = false;
+          })
+          .catch((err) => {
+            self.$toast.error("Đã xảy ra lỗi. Hãy kiểm tra lại Email.");
+            self.processApi = false;
+          });
+      }
+    },
+
     sendLogin() {
       if (
         this.email !== "" &&
@@ -372,17 +588,20 @@ export default {
         this.processApi = true;
         let self = this;
         this.LOGIN({ email: this.email, password: this.password })
-          .then(res => {
+          .then((res) => {
             self.saveUser(res);
           })
-          .catch(err => {
+          .catch((err) => {
+            self.$toast.error(
+              "Đã xảy ra lỗi. Hãy kiểm tra lại Email và mật khẩu."
+            );
             self.processApi = false;
           });
       }
     },
     sendRegister() {
       const isEmpty = !Object.values(this.registerData).some(
-        data => data !== null && data !== ""
+        (data) => data !== null && data !== ""
       );
       if (
         !isEmpty &&
@@ -392,10 +611,11 @@ export default {
         this.processApi = true;
         let self = this;
         this.REGISTER(this.registerData)
-          .then(res => {
+          .then((res) => {
             self.saveUser(res);
           })
-          .catch(err => {
+          .catch((err) => {
+            self.$toast.error("Đã xảy ra lỗi. Hãy kiểm tra lại các thông tin.");
             self.processApi = false;
           });
       }
@@ -410,7 +630,7 @@ export default {
         );
       }
       this.$router.go(-1);
-    }
-  }
+    },
+  },
 };
 </script>
