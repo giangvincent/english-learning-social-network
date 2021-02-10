@@ -12,7 +12,6 @@ class PushNotification extends Controller
 {
     public static function sendMail()
     {
-
         $details = [
             'greeting' => 'Bài bạn đã lưu để vô học',
             'body' => '',
@@ -45,7 +44,6 @@ class PushNotification extends Controller
 
     public static function testMail()
     {
-
         $details = [
             'greeting' => 'Bài bạn đã lưu để vô học',
             'body' => '',
@@ -72,6 +70,6 @@ class PushNotification extends Controller
         if ($ptype == 'quiz') {
             $type = 'quiz';
         }
-        return 'https://thatsgood.info/p/' . $type . '/' . $pid;
+        return 'https://thatsgood.info/p/' . $type . '/' . $pid . '?from=notification';
     }
 }
