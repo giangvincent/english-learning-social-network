@@ -1,9 +1,11 @@
 import helperFunc from "../helperFunc";
 import Vue from "vue";
 
+var t = new Date().getTime();
+
 export default {
   LOAD_TAGS: function ({ state, commit }) {
-    fetch("/content/tags.json", { cache: "reload" })
+    fetch("/content/tags.json?t=" + t)
       .then(res => res.json())
       .then(res => {
         // console.log(res);
@@ -12,7 +14,7 @@ export default {
       .catch(err => console.log(err));
   },
   LOAD_CATEGORIES: function ({ state, commit }) {
-    fetch("/content/categories.json", { cache: "reload" })
+    fetch("/content/categories.json?t=" + t)
       .then(res => res.json())
       .then(res => {
         // console.log(res);
@@ -23,7 +25,7 @@ export default {
   LOAD_HOME: function ({ state, commit }) {
     return new Promise((response, reject) => {
       // fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
-      fetch("/content/feed/home-" + state.currentPage + ".json", { cache: "reload" })
+      fetch("/content/feed/home-" + state.currentPage + ".json?t=" + t)
         .then(res => res.json())
         .then(res => {
           response(res);
@@ -47,7 +49,7 @@ export default {
       /* fetch(
         state.apiUrl + "/feed-category/" + cat + "?page=" + state.currentPage
       ) */
-      fetch("/content/feed/category-" + cat + "-" + state.currentPage + ".json", { cache: "reload" })
+      fetch("/content/feed/category-" + cat + "-" + state.currentPage + ".json?t=" + t)
         .then(res => res.json())
         .then(res => {
           response(res);
