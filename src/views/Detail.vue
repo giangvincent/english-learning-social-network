@@ -15,7 +15,7 @@
           :pid="$route.params.slug"
           v-if="$route.params.type == 'quiz'"
         ></quiz>
-        <comment></comment>
+        <FbComments :url="$route.params"></FbComments>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@ import simpleTopNav from "@/components/Navigator/SimpleTopNav.vue";
 import Post from "@/components/Feed/Post.vue";
 import FlashCard from "@/components/Feed/FlashCard.vue";
 import Quiz from "@/components/Feed/Quiz.vue";
-import Comment from "@/components/Feed/BaseParts/CommentSection.vue";
+import FbComments from "@/components/Feed/BaseParts/FbComments.vue";
 import { mapActions } from "vuex";
 
 export default {
@@ -36,7 +36,7 @@ export default {
     Post,
     FlashCard,
     Quiz,
-    Comment
+    FbComments
   },
   data() {
     return {};
