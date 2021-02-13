@@ -34,7 +34,6 @@ class UpdatePostWhenDbChange implements ShouldQueue
      */
     public function handle()
     {
-
         if ($this->col && $this->id) {
             Post::where($this->col, $this->id)->chunk(20, function ($posts) {
                 foreach ($posts as $post) {
@@ -42,7 +41,8 @@ class UpdatePostWhenDbChange implements ShouldQueue
                 }
             });
             Log::info('Handled update post : ' . $this->col . ' ' . $this->id);
+            ExportJson::feedToJson('home');
+            ExportJson::feedToJson('category');
         }
-
     }
 }

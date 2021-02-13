@@ -98,6 +98,8 @@ class TagController extends AdminController
             $this->checkFolderContent();
             $this->exportToJson($tag);
             ExportJson::exportTags();
+            ExportJson::feedToJson('home');
+            ExportJson::feedToJson('category');
         });
 
         return $form;
@@ -119,5 +121,4 @@ class TagController extends AdminController
         // $data['posts'] = $category->posts()->where('status', 1)->select('id', 'title', 'slug', 'summary', 'feature_image', 'updated_at')->orderBy('id', 'desc')->limit(12)->get()->toArray();
         file_put_contents(public_path() . '/content/tags/' . $tag->slug . '.json', json_encode($data));
     }
-
 }

@@ -23,6 +23,8 @@ class PostApi extends Controller
         }
         $this->attachTags($request->tags, $newPost);
         ExportJson::exportPost($newPost);
+        ExportJson::feedToJson('home');
+        ExportJson::feedToJson('category');
         $postUrl = $this->createPostUrl($newPost);
         return response()->json(['status' => true, 'url' => $postUrl], 200);
     }
@@ -39,6 +41,8 @@ class PostApi extends Controller
         $this->attachTags($request->tags, $updatePost);
 
         ExportJson::exportPost($updatePost);
+        ExportJson::feedToJson('home');
+        ExportJson::feedToJson('category');
         $postUrl = $this->createPostUrl($updatePost);
         return response()->json(['status' => true, 'url' => $postUrl], 200);
     }

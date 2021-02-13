@@ -51,7 +51,6 @@ class PostController extends AdminController
                 }
 
                 if (isset($content['answers'])) {
-
                     foreach ($content['answers'] as $answer) {
                         $contentDisplay .= '<p> -' . strip_tags($answer) . '</p>';
                     }
@@ -182,6 +181,8 @@ class PostController extends AdminController
             $post = Post::find($form->model()->id);
             $this->checkFolderContent();
             ExportJson::exportPost($post);
+            ExportJson::feedToJson('home');
+            ExportJson::feedToJson('category');
         });
         return $form;
     }

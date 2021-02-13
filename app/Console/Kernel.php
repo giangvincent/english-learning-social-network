@@ -34,10 +34,10 @@ class Kernel extends ConsoleKernel
             PushNotification::sendMail();
         })->dailyAt('9:00');
 
-        $schedule->call(function () {
+        /* $schedule->call(function () {
             ExportJson::feedToJson('home');
             ExportJson::feedToJson('category');
-        })->everyMinute();
+        })->everyMinute(); */
     }
 
     /**
