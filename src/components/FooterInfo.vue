@@ -9,7 +9,7 @@
         <router-link to="/about/us">Về thatsgood</router-link>
       </li>
       <li class="mr-2"><router-link to="/about/faqs">FAQs</router-link></li>
-      <li class="mr-2">
+      <!-- <li class="mr-2">
         <router-link to="/about/buy-coffee" class="flex"
           ><svg
             class="h-4 w-4 text-yellow-500"
@@ -22,7 +22,7 @@
             /></svg
           >Buy Coffee</router-link
         >
-      </li>
+      </li> -->
       <li class="mr-2">
         <router-link to="/about/contact">Liên hệ</router-link>
       </li>
@@ -41,6 +41,6 @@ export default {
   name: "footer-info",
   mounted() {
     this.$emit("getHeight", this.$refs.footerInfo.clientHeight);
-  }
+  },
 };
 </script>
