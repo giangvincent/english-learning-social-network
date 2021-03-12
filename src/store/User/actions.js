@@ -108,7 +108,7 @@ export default {
     data.append("birthday", payload.birthday);
     data.append("email", payload.email);
     data.append("password", payload.password);
-    data.append("c_password", payload.c_password);
+    data.append("c_password", payload.password_confirm);
 
     return new Promise((res, rej) => {
       fetch(rootState.apiUrl + "/register", {
