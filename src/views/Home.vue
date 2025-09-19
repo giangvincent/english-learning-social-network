@@ -4,12 +4,12 @@
     <side-panel-left></side-panel-left>
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
-      <main-feed :itemArray="currentFeed"></main-feed>
-      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
-        <div slot="spinner">Loading...</div>
-        <div slot="no-more">No more message</div>
-        <div slot="no-results">No results message</div>
-      </infinite-loading>
+      <main-feed :itemArray="currentFeed" />
+      <InfiniteLoading @infinite="infiniteHandler">
+        <template #spinner>Loading...</template>
+        <template #no-more>No more message</template>
+        <template #no-results>No results message</template>
+      </InfiniteLoading>
     </div>
 
     <to-creator></to-creator>
@@ -17,13 +17,12 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import { mapState, mapMutations, mapActions } from "vuex";
-import InfiniteLoading from "vue-infinite-loading";
-import MainFeed from "@/components/Feed/Main.vue";
+import { mapState, mapMutations, mapActions } from 'vuex';
+import InfiniteLoading from '@/components/common/InfiniteLoading.vue';
+import MainFeed from '@/components/Feed/Main.vue';
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     MainFeed,
     InfiniteLoading,
@@ -34,37 +33,44 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentFeed", "currentPage", "welcomeEnable"]),
+    ...mapState(['currentFeed', 'currentPage', 'welcomeEnable']),
   },
   mounted() {
-    this.CHANGE_TAB("home");
+    this.CHANGE_TAB('home');
     this.SET_CURRENTFEED([]);
     this.SET_PAGE(1);
-    // this.LOAD_HOME();
   },
   methods: {
-    ...mapActions(["LOAD_HOME"]),
+    ...mapActions(['LOAD_HOME']),
     ...mapMutations([
-      "CHANGE_TAB",
-      "SET_PAGE",
-      "SET_CURRENTFEED",
-      "SET_WELCOME",
+      'CHANGE_TAB',
+      'SET_PAGE',
+      'SET_CURRENTFEED',
+      'SET_WELCOME',
     ]),
     infiniteHandler($state) {
-      var self = this;
       this.LOAD_HOME()
         .then((content) => {
-          var feedData = self.currentFeed;
-          feedData.push(...content);
-          self.SET_CURRENTFEED(feedData);
-          self.SET_PAGE(self.currentPage + 1);
-          if (content.length >= 10) {
-            $state.loaded();
-          } else {
-            $state.complete();
+          const items = Array.isArray(content) ? content : [];
+          if (items.length > 0) {
+            const feedData = [...this.currentFeed, ...items];
+            this.SET_CURRENTFEED(feedData);
+            this.SET_PAGE(this.currentPage + 1);
           }
+          if (items.length >= 10) {
+            $state.loaded();
+            return;
+          }
+          if (items.length > 0) {
+            $state.loaded();
+          }
+          const showNoResults = this.currentFeed.length === 0;
+          $state.complete(showNoResults);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          $state.complete(this.currentFeed.length === 0);
+        });
     },
   },
 };

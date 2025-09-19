@@ -146,17 +146,13 @@
     >
       <div
         class="absolute w-full h-full bg-opacity-50 bg-black"
-        @click="showModal = false"
+        @click="closeModal"
       ></div>
       <div
         class="modal-content bg-white relative m-auto w-4/5 max-w-lg shadow-lg rounded-lg"
       >
         <div class="py-3 px-3 flex flex-wrap">
-          <vue-cropper
-            ref="cropper"
-            :aspect-ratio="aspectRatio"
-            :src="cropperImg"
-          />
+          <img ref="cropperImage" :src="cropperImg" class="w-full" alt="Selected image" />
         </div>
         <div class="mb-3 flex flex-wrap justify-center text-white">
           <button
@@ -167,7 +163,7 @@
           </button>
           <button
             class="font-semibold rounded-lg btn-hover bg-gray-900 px-3 py-1"
-            @click="showModal = false"
+            @click="closeModal"
           >
             Hủy
           </button>
@@ -184,7 +180,7 @@ import SavedPost from "@/components/User/SavedPost.vue";
 import UserCreated from "@/components/User/UserCreated.vue";
 import Setting from "@/components/User/Setting.vue";
 
-import VueCropper from "vue-cropperjs";
+import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 
 export default {
@@ -193,7 +189,6 @@ export default {
     SavedPost,
     UserCreated,
     Setting,
-    VueCropper
   },
   data() {
     return {
@@ -202,7 +197,8 @@ export default {
       cropperImg: "/assets/images/default.jpg",
       croperType: "avatar",
       aspectRatio: 1 / 1,
-      curUser: {}
+      curUser: {},
+      cropper: null,
     };
   },
   computed: {
@@ -212,64 +208,104 @@ export default {
   },
   mounted() {
     this.curUser.id = this.$route.params.id;
-    this.SET_PAGE("user");
-    let self = this;
+    this.SET_PAGE('user');
     this.LoadUserInfo(this.curUser.id)
-      .then(userInfo => {
+      .then((userInfo) => {
         this.curUser = userInfo;
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   },
   methods: {
-    ...mapMutations(["SET_PAGE"]),
-    ...mapActions(["LoadUserInfo", "ChangeAvatar", "ChangeCover"]),
+    ...mapMutations(['SET_PAGE']),
+    ...mapActions(['LoadUserInfo', 'ChangeAvatar', 'ChangeCover']),
     selectImage(type) {
-      if (type === "avatar") {
-        this.croperType = "avatar";
+      if (type === 'avatar') {
+        this.croperType = 'avatar';
         this.aspectRatio = 1 / 1;
       }
-      if (type === "cover") {
-        this.croperType = "cover";
+      if (type === 'cover') {
+        this.croperType = 'cover';
         this.aspectRatio = 16 / 9;
       }
-      this.$refs.cropper.setAspectRatio(this.aspectRatio);
+      if (this.cropper) {
+        this.cropper.setAspectRatio(this.aspectRatio);
+      }
       this.$refs.imageInput.click();
     },
-    onImageSelect(e) {
-      const file = e.target.files[0];
-      if (file.type.indexOf("image/") === -1) {
-        alert("Please select an image file");
+    onImageSelect(event) {
+      const [file] = event.target.files;
+      if (!file || file.type.indexOf('image/') !== 0) {
+        alert('Please select an image file');
         return;
       }
-      if (typeof FileReader === "function") {
+      if (typeof FileReader === 'function') {
         const reader = new FileReader();
-        let self = this;
-        reader.onload = event => {
-          self.cropperImg = event.target.result;
-          // rebuild cropperjs with the updated source
-          self.$refs.cropper.replace(event.target.result);
-          self.showModal = true;
+        reader.onload = (e) => {
+          this.cropperImg = e.target.result;
+          this.showModal = true;
+          this.$nextTick(() => {
+            const imgEl = this.$refs.cropperImage;
+            if (!imgEl) {
+              return;
+            }
+            const init = () => {
+              this.initCropper();
+            };
+            if (imgEl.complete) {
+              init();
+            } else {
+              imgEl.onload = init;
+            }
+          });
         };
         reader.readAsDataURL(file);
+        if (this.$refs.imageInput) {
+          this.$refs.imageInput.value = '';
+        }
       } else {
-        alert("Sorry, FileReader API not supported");
+        alert('Sorry, FileReader API not supported');
       }
     },
-
+    initCropper() {
+      this.cleanupCropper();
+      const imageEl = this.$refs.cropperImage;
+      if (!imageEl) {
+        return;
+      }
+      this.cropper = new Cropper(imageEl, {
+        aspectRatio: this.aspectRatio,
+        viewMode: 1,
+        autoCropArea: 1,
+      });
+    },
+    cleanupCropper() {
+      if (this.cropper) {
+        this.cropper.destroy();
+        this.cropper = null;
+      }
+    },
     cropImage() {
-      // get image data for post processing, e.g. upload or setting image src
-      let image = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      if (this.croperType === "avatar") {
-        this.ChangeAvatar(image)
-          .then(res => console.log(res))
-          .catch(err => console.log(err));
+      if (!this.cropper) {
+        return;
       }
-      if (this.croperType === "cover") {
-        this.ChangeCover(image)
-          .then(res => console.log(res))
-          .catch(err => console.log(err));
+      const canvas = this.cropper.getCroppedCanvas();
+      if (!canvas) {
+        return;
       }
-    }
-  }
+      const image = canvas.toDataURL();
+      const action = this.croperType === 'cover' ? this.ChangeCover : this.ChangeAvatar;
+      action(image)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+      this.closeModal();
+    },
+    closeModal() {
+      this.showModal = false;
+      this.cleanupCropper();
+    },
+  },
+  beforeUnmount() {
+    this.cleanupCropper();
+  },
 };
 </script>

@@ -1,5 +1,5 @@
 import helperFunc from "./helperFunc";
-import store from "./store/";
+import store from "./store";
 
 function checkBrowserRegistered(userNotification, browser_unique) {
   if (

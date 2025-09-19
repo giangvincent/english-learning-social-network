@@ -1,89 +1,92 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store/";
-import "./registerServiceWorker";
+import { createApp, defineAsyncComponent } from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import './registerServiceWorker';
 
-import "@/assets/css/tailwind.css";
-import "@/assets/css/main.css";
-import helperFunc from "./helperFunc";
+import '@/assets/css/tailwind.css';
+import '@/assets/css/main.css';
+import helperFunc from './helperFunc';
 
-import VueMasonry from "vue-masonry-css";
-import VueToast from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
-import webPush from "./webPush.js";
+import VueMasonry from 'vue-masonry-css';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+import webPush from './webPush.js';
+import { installToast } from './plugins/toast';
 
-Vue.config.productionTip = false;
-Vue.use(VueMasonry);
-Vue.use(VueToast, {
-  // One of the options
-  position: "top-right"
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
+app.use(VueMasonry);
+app.use(VueToast, {
+  position: 'top-right',
 });
-if (process.env.NODE_ENV === "development") {
-  store.commit("URL_DEV");
+
+const toast = installToast(app);
+
+if (process.env.NODE_ENV === 'development') {
+  store.commit('URL_DEV');
 }
 
 if (helperFunc.isLocalStorage()) {
   try {
-    let user_token = JSON.parse(
-      localStorage.getItem("thatsgood_info_user_token")
+    const user_token = JSON.parse(
+      localStorage.getItem('thatsgood_info_user_token')
     );
-    let user = JSON.parse(localStorage.getItem("thatsgood_info_user"));
+    const user = JSON.parse(localStorage.getItem('thatsgood_info_user'));
 
-    let browser_unique =
-      localStorage.getItem("thatsgood_info_browser_unique") || false;
+    const browser_unique =
+      localStorage.getItem('thatsgood_info_browser_unique') || false;
     if (user_token && user) {
-      // console.log(user_token, user);
       user.notification_conn =
-        typeof user.notification_conn === "object"
+        typeof user.notification_conn === 'object'
           ? user.notification_conn
           : JSON.parse(user.notification_conn);
-      store.commit("SET_USER", user);
-      store.commit("SET_TOKEN", user_token);
-      store.dispatch("LoadNotification");
-      if (
-        !webPush.checkBrowserRegistered(user.notification_conn, browser_unique)
-      ) {
+      store.commit('SET_USER', user);
+      store.commit('SET_TOKEN', user_token);
+      store.dispatch('LoadNotification');
+      if (!webPush.checkBrowserRegistered(user.notification_conn, browser_unique)) {
         setTimeout(() => {
-          var r = window.confirm(
-            "Trình duyệt này chưa cho phép thông báo. Bạn có muốn kich hoạt không?"
+          const allowNotification = window.confirm(
+            'Trình duyệt này chưa cho phép thông báo. Bạn có muốn kich hoạt không?'
           );
-          if (r) {
+          if (allowNotification) {
             webPush.initSW();
           }
         }, 1000);
       }
     }
-    let welcomeEnable = localStorage.getItem("thatsgood_info_welcomeEnable");
+    const welcomeEnable = localStorage.getItem('thatsgood_info_welcomeEnable');
     if (!welcomeEnable) {
-      Vue.$toast.info("Chào mừng bạn đã đến Thatsgood.");
-      localStorage.setItem("thatsgood_info_welcomeEnable", true);
-      store.commit("SET_WELCOME", true);
+      toast.info('Chào mừng bạn đã đến Thatsgood.');
+      localStorage.setItem('thatsgood_info_welcomeEnable', true);
+      store.commit('SET_WELCOME', true);
     }
   } catch (err) {
     console.log(err);
   }
 }
 
-Vue.mixin({
-  methods: helperFunc
+app.mixin({
+  methods: helperFunc,
 });
 
-Vue.component("ToCreator", () =>
-  import("@/components/Navigator/ToCreationBtn.vue")
+app.component(
+  'ToCreator',
+  defineAsyncComponent(() => import('@/components/Navigator/ToCreationBtn.vue'))
 );
-Vue.component("MainNavigation", () =>
-  import("@/components/MainNavigation.vue")
+app.component(
+  'MainNavigation',
+  defineAsyncComponent(() => import('@/components/MainNavigation.vue'))
 );
-Vue.component("SidePanelLeft", () =>
-  import("@/components/Navigator/SidePanelLeft.vue")
+app.component(
+  'SidePanelLeft',
+  defineAsyncComponent(() => import('@/components/Navigator/SidePanelLeft.vue'))
 );
-Vue.component("SidePanelRight", () =>
-  import("@/components/Navigator/SidePanelRight.vue")
+app.component(
+  'SidePanelRight',
+  defineAsyncComponent(() => import('@/components/Navigator/SidePanelRight.vue'))
 );
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
+app.mount('#app');

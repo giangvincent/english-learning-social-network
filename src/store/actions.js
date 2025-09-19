@@ -1,7 +1,8 @@
 import helperFunc from "../helperFunc";
-import Vue from "vue";
+import { getToast } from '../plugins/toast';
 
-var t = new Date().getTime();
+const t = new Date().getTime();
+const toast = getToast();
 
 export default {
   LOAD_TAGS: function ({ state, commit }) {
@@ -93,7 +94,7 @@ export default {
           dispatch("UpdateNotificationConn", user);
           localStorage.setItem("thatsgood_info_browser_unique", browserUnique);
           localStorage.setItem("thatsgood_info_user", JSON.stringify(user));
-          Vue.$toast.success("Kích hoạt thông báo cho trình duyệt thành công.");
+          toast.success("Kích hoạt thông báo cho trình duyệt thành công.");
         } else {
           console.log(result.error);
         }

@@ -4,70 +4,70 @@
     <side-panel-left></side-panel-left>
     <side-panel-right></side-panel-right>
     <div class="py-24 md:py-16">
-      <main-feed :itemArray="currentFeed"></main-feed>
-      <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
-        <div slot="spinner">Loading...</div>
-        <div slot="no-more">No more message</div>
-        <div slot="no-results">No results message</div>
-      </infinite-loading>
+      <main-feed :itemArray="currentFeed" />
+      <InfiniteLoading ref="infiniteLoading" @infinite="infiniteHandler">
+        <template #spinner>Loading...</template>
+        <template #no-more>No more message</template>
+        <template #no-results>No results message</template>
+      </InfiniteLoading>
     </div>
     <to-creator></to-creator>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import MainFeed from "@/components/Feed/Main.vue";
-import { mapActions, mapMutations, mapState } from "vuex";
-import InfiniteLoading from "vue-infinite-loading";
+import MainFeed from '@/components/Feed/Main.vue';
+import { mapActions, mapMutations, mapState } from 'vuex';
+import InfiniteLoading from '@/components/common/InfiniteLoading.vue';
 
 export default {
-  name: "tag-feed",
+  name: 'tag-feed',
   components: {
     MainFeed,
     InfiniteLoading,
   },
-  data() {
-    return {
-      items: [],
-    };
-  },
-  computed: {
-    ...mapState(["currentFeed", "currentPage"]),
-  },
   watch: {
-    "$route.params.name": function (val, oldVal) {
+    '$route.params.name'() {
       this.SET_CURRENTFEED([]);
       this.SET_PAGE(1);
-      this.$refs.infiniteLoading.status = 1;
-      this.$refs.infiniteLoading.$emit(
-        "infinite",
-        this.$refs.infiniteLoading.stateChanger
-      );
+      this.$nextTick(() => {
+        this.$refs.infiniteLoading?.reset();
+      });
     },
+  },
+  computed: {
+    ...mapState(['currentFeed', 'currentPage']),
   },
   mounted() {
     this.SET_CURRENTFEED([]);
     this.SET_PAGE(1);
   },
   methods: {
-    ...mapActions(["LOAD_FEED_TAG"]),
-    ...mapMutations(["SET_PAGE", "SET_CURRENTFEED"]),
+    ...mapActions(['LOAD_FEED_TAG']),
+    ...mapMutations(['SET_PAGE', 'SET_CURRENTFEED']),
     infiniteHandler($state) {
-      var self = this;
       this.LOAD_FEED_TAG(this.$route.params.name)
         .then((content) => {
-          var feedData = self.currentFeed;
-          feedData.push(...content.data);
-          self.SET_CURRENTFEED(feedData);
-          self.SET_PAGE(self.currentPage + 1);
-          if (content.data.length >= 10) {
-            $state.loaded();
-          } else {
-            $state.complete();
+          const items = Array.isArray(content) ? content : [];
+          if (items.length > 0) {
+            const feedData = [...this.currentFeed, ...items];
+            this.SET_CURRENTFEED(feedData);
+            this.SET_PAGE(this.currentPage + 1);
           }
+          if (items.length >= 10) {
+            $state.loaded();
+            return;
+          }
+          if (items.length > 0) {
+            $state.loaded();
+          }
+          const showNoResults = this.currentFeed.length === 0;
+          $state.complete(showNoResults);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          $state.complete(this.currentFeed.length === 0);
+        });
     },
   },
 };
