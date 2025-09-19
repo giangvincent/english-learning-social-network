@@ -8,9 +8,7 @@
       <div class="w-full p-3 font-bold">
         <h1>{{ faq.title }}</h1>
       </div>
-      <div class="w-full px-3" v-html="faq.content">
-        <!-- End content text -->
-      </div>
+      <div class="w-full px-3" v-html="faq.content"></div>
     </div>
   </div>
 </template>

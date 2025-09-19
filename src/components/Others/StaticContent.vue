@@ -2,9 +2,7 @@
   <div
     class="mx-0 border-t-2 shadow-xl rounded-lg mb-6 tracking-wide w-full bg-white"
   >
-    <div class="w-full p-3" v-html="content">
-      <!-- End content text -->
-    </div>
+    <div class="w-full p-3" v-html="content"></div>
   </div>
 </template>
 
