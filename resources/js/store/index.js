@@ -1,31 +1,28 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import mutations from "./mutations";
-import actions from "./actions";
+import { createStore } from 'vuex';
+import mutations from './mutations';
+import actions from './actions';
 
-import creator from "./Creator";
-import user from "./User";
+import creator from './Creator';
+import user from './User';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     state: {
-        rootUrl: "",
-        apiUrl: "/api",
+        rootUrl: '',
+        apiUrl: '/api',
         popupEditor: false,
-        currentTab: "home",
+        currentTab: 'home',
         currentPage: 1,
         currentFeed: [],
         tags: [],
         categories: [],
         posts: [],
         showPanelRight: false,
-        showPanelLeft: false
+        showPanelLeft: false,
     },
-    mutations: mutations,
-    actions: actions,
+    mutations,
+    actions,
     modules: {
         creator,
-        user
-    }
+        user,
+    },
 });

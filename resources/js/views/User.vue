@@ -14,7 +14,7 @@
                         :style="{
                             'background-image': user.cover_image
                                 ? 'url(' + rootUrl + user.cover_image + ')'
-                                : 'url(/assets/images/default.jpg)'
+                                : 'url(' + defaultCover + ')'
                         }"
                     >
                         <label
@@ -43,7 +43,7 @@
                                 :src="
                                     user.avatar
                                         ? rootUrl + user.avatar
-                                        : '/assets/images/default_avatar.jpg'
+                                        : defaultAvatar
                                 "
                                 class="rounded-full border-solid border-white border-2 w-20 h-20 shadow"
                             />
@@ -202,7 +202,7 @@ export default {
         return {
             showModal: false,
             items: [],
-            cropperImg: "/assets/images/default.jpg",
+            cropperImg: '/assets/images/default.jpg',
             croperType: "avatar",
             aspectRatio: 1 / 1
         };

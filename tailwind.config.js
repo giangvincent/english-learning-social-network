@@ -1,6 +1,8 @@
 module.exports = {
-    purge: [],
-    target: "relaxed",
+    content: [
+        './resources/views/**/*.blade.php',
+        './resources/js/**/*.{js,vue}',
+    ],
     prefix: "",
     important: false,
     separator: ":",

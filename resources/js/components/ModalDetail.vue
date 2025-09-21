@@ -9,9 +9,9 @@
 
 <script>
 import simpleTopNav from "../components/Navigator/SimpleTopNav.vue";
-import Post from "./Post";
-import FlashCard from "./FlashCard";
-import Quiz from "./Quiz";
+import Post from "./Post.vue";
+import FlashCard from "./FlashCard.vue";
+import Quiz from "./Quiz.vue";
 
 export default {
     name: "detail content",

@@ -5,10 +5,10 @@
         <side-panel-right></side-panel-right>
         <div class="py-24 md:py-16">
             <main-feed :itemArray="currentFeed"></main-feed>
-            <infinite-loading @infinite="infiniteHandler">
-                <div slot="spinner">Loading...</div>
-                <div slot="no-more">No more message</div>
-                <div slot="no-results">No results message</div>
+            <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
+                <template #spinner>Loading...</template>
+                <template #no-more>No more message</template>
+                <template #no-results>No results message</template>
             </infinite-loading>
         </div>
 
@@ -19,7 +19,7 @@
 <script>
 // @ is an alias to /src
 import { mapState, mapMutations, mapActions } from "vuex";
-import InfiniteLoading from "vue-infinite-loading";
+import InfiniteLoading from '../components/Common/InfiniteLoading.vue';
 import MainFeed from "../components/Feed/Main.vue";
 
 export default {
@@ -41,11 +41,14 @@ export default {
         this.SET_CURRENTFEED([]);
         this.SET_PAGE(1);
         // this.LOAD_HOME();
+        this.$nextTick(() => {
+            this.$refs.infiniteLoading?.reset();
+        });
     },
     methods: {
         ...mapActions(["LOAD_HOME"]),
         ...mapMutations(["CHANGE_TAB", "SET_PAGE", "SET_CURRENTFEED"]),
-        infiniteHandler($state) {
+        infiniteHandler($state = { loaded: () => {}, complete: () => {} }) {
             var self = this;
             this.LOAD_HOME()
                 .then(content => {

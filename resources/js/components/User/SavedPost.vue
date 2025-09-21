@@ -1,10 +1,10 @@
 <template>
     <div>
         <main-feed :itemArray="baggedPosts"></main-feed>
-        <infinite-loading @infinite="infiniteHandler">
-            <div slot="spinner">Loading...</div>
-            <div slot="no-more">No more message</div>
-            <div slot="no-results">No results message</div>
+        <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
+            <template #spinner>Loading...</template>
+            <template #no-more>No more message</template>
+            <template #no-results>No results message</template>
         </infinite-loading>
     </div>
 </template>
@@ -12,7 +12,7 @@
 <script>
 import MainFeed from "../Feed/Main.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
-import InfiniteLoading from "vue-infinite-loading";
+import InfiniteLoading from '../Common/InfiniteLoading.vue';
 
 export default {
     name: "user-post-saved",
@@ -34,11 +34,14 @@ export default {
     mounted() {
         this.setBaggedPosts([]);
         this.SET_PAGE(1);
+        this.$nextTick(() => {
+            this.$refs.infiniteLoading?.reset();
+        });
     },
     methods: {
         ...mapActions(["GetBaggedPosts"]),
         ...mapMutations(["SET_PAGE", "setBaggedPosts"]),
-        infiniteHandler($state) {
+        infiniteHandler($state = { loaded: () => {}, complete: () => {} }) {
             var self = this;
             this.GetBaggedPosts()
                 .then(content => {

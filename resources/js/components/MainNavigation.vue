@@ -89,7 +89,7 @@
         >
           <div class="rounded-full flex overflow-hidden">
             <img
-              src="/assets/images/default_avatar.jpg"
+              :src="defaultAvatar"
               alt="profilepic"
               width="24"
               height="24"
@@ -137,8 +137,8 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
-import Logo from "./Logo";
-import DesktopNav from "./Navigator/DesktopTopNav";
+import Logo from "./Logo.vue";
+import DesktopNav from "./Navigator/DesktopTopNav.vue";
 export default {
   name: "main-navigatior",
   components: {
@@ -153,7 +153,8 @@ export default {
       userLogout: "/auth/logout",
       showNavbar: true,
       showUserMenu: false,
-      lastScrollPosition: 0
+      lastScrollPosition: 0,
+      defaultAvatar: '/assets/images/default_avatar.jpg',
     };
   },
   watch: {

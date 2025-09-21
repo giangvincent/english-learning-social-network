@@ -8,10 +8,10 @@
         </div>
 
         <div class="slide">
-            <img class="w-full" src="/assets/images/default.jpg" />
+            <img class="w-full" :src="defaultImage" />
         </div>
 
-        <template slot="prevButton">
+        <template #prevButton>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -26,7 +26,7 @@
                 />
             </svg>
         </template>
-        <template slot="nextButton">
+        <template #nextButton>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -49,8 +49,13 @@ import { VueAgile } from "vue-agile";
 
 export default {
     components: {
-        agile: VueAgile
-    }
+        agile: VueAgile,
+    },
+    data() {
+        return {
+            defaultImage: '/assets/images/default.jpg',
+        };
+    },
 };
 </script>
 

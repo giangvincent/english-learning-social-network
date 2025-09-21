@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import ContentEditor from "../Form/ContentEditor";
+import ContentEditor from "../Form/ContentEditor.vue";
 import ImagePreview from "../Form/ImagePreview.vue";
 export default {
     name: "article-content",

@@ -9,7 +9,7 @@
           :src="
             postData.author.avatar
               ? rootUrl + postData.author.avatar
-              : '/assets/images/default_avatar.jpg'
+              : defaultAvatar
           "
           alt="profilepic"
         />
@@ -43,7 +43,10 @@ export default {
   computed: {
     ...mapState({
       rootUrl: state => state.rootUrl
-    })
+    }),
+    defaultAvatar() {
+      return '/assets/images/default_avatar.jpg';
+    }
   }
 };
 </script>

@@ -23,7 +23,7 @@
 
 <script>
 import simpleTopNav from "../components/Navigator/SimpleTopNav.vue";
-import Post from "../components/Feed/Post";
+import Post from "../components/Feed/Post.vue";
 import FlashCard from "../components/Feed/FlashCard.vue";
 import Quiz from "../components/Feed/Quiz.vue";
 import Comment from "../components/Feed/BaseParts/CommentSection.vue";

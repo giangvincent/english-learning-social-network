@@ -135,16 +135,16 @@ import "quill/dist/quill.snow.css";
 import { mapActions, mapState } from "vuex";
 // import slideImages from "./SlideImages";
 
-import CatsAndTags from "./BaseParts/CatsAndTags";
-import Author from "./BaseParts/AuthorPart";
+import CatsAndTags from "./BaseParts/CatsAndTags.vue";
+import Author from "./BaseParts/AuthorPart.vue";
 export default {
   name: "Feed-flash-card",
   props: {
     pid: String
   },
   components: {
-    ProcessBar: () => import("./BaseParts/ProcessBar"),
-    interactionPack: () => import("./BaseParts/InteractionPack"),
+    ProcessBar: () => import("./BaseParts/ProcessBar.vue"),
+    interactionPack: () => import("./BaseParts/InteractionPack.vue"),
     CatsAndTags,
     Author
   },

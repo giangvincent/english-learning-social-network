@@ -66,10 +66,11 @@
 <script>
 import { mapState } from "vuex";
 // import slideImages from "./SlideImages";
-import interactionPack from "./BaseParts/InteractionPack";
-import ProcessBar from "./BaseParts/ProcessBar";
-import CatsAndTags from "./BaseParts/CatsAndTags";
-import Author from "./BaseParts/AuthorPart";
+import interactionPack from "./BaseParts/InteractionPack.vue";
+import ProcessBar from "./BaseParts/ProcessBar.vue";
+import CatsAndTags from "./BaseParts/CatsAndTags.vue";
+import Author from "./BaseParts/AuthorPart.vue";
+import ReadMore from '../Common/ReadMore.vue';
 
 export default {
   name: "image-item",

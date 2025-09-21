@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import Post from "./Post";
-import FlashCard from "./FlashCard";
-import Quiz from "./Quiz";
+import Post from "./Post.vue";
+import FlashCard from "./FlashCard.vue";
+import Quiz from "./Quiz.vue";
 export default {
   name: "feed-template",
   components: {
