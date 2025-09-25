@@ -8,6 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'pid',
+        'status',
+        'subject',
+        'content',
+        'answer_list',
+        'type',
+        'author',
+        'category',
+        'nums_bagged',
+        'nums_good',
+        'nums_bad',
+        'nums_share',
+        'nums_comment',
+    ];
+
+    protected $casts = [
+        'content' => 'string',
+        'nums_bagged' => 'integer',
+        'nums_good' => 'integer',
+        'nums_bad' => 'integer',
+        'nums_share' => 'integer',
+        'nums_comment' => 'integer',
+    ];
     public function categoryRelated()
     {
         return $this->belongsTo(Category::class, 'category');

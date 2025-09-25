@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasFactory, Notifiable, HasApiTokens, HasPushSubscriptions;
 
@@ -18,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'full_name', 'nick_name', 'avatar', 'birthday', 'phone', 'email', 'password',
+        'full_name', 'nick_name', 'avatar', 'birthday', 'phone', 'email', 'password', 'is_admin',
     ];
 
     /**
@@ -37,7 +40,21 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return (bool) $this->is_admin;
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->full_name
+            ?? $this->nick_name
+            ?? $this->email
+            ?? 'Administrator';
+    }
 
     public function posts()
     {

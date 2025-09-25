@@ -1,0 +1,1 @@
+import{_ as t,h as r,o as n,f as s,d as c,g as a}from"./main-B6FubRHL.js";const _={};function l(i,e){const o=c("router-link");return n(),r(o,{to:"/",class:"items-center hover:no-underline font-bold text-gray-800 text-xl uppercase"},{default:s(()=>[...e[0]||(e[0]=[a("ohitsgood",-1)])]),_:1})}const f=t(_,[["render",l]]);export{f as L};

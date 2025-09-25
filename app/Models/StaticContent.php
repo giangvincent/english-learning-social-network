@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class StaticContent extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'type',
+        'value',
+        'status',
+    ];
 }
