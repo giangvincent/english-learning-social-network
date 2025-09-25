@@ -1,9 +1,9 @@
-import { createToastInterface } from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 
 let toastInstance = null;
 
 export const installToast = (app, options = {}) => {
-  toastInstance = createToastInterface({
+  toastInstance = useToast({
     position: 'top-right',
     ...options,
   });
@@ -13,7 +13,7 @@ export const installToast = (app, options = {}) => {
 
 export const getToast = () => {
   if (!toastInstance) {
-    toastInstance = createToastInterface({
+    toastInstance = useToast({
       position: 'top-right',
     });
   }

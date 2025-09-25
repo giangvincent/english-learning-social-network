@@ -8,7 +8,7 @@ import '@/assets/css/tailwind.css';
 import '@/assets/css/main.css';
 import helperFunc from './helperFunc';
 
-import VueMasonry from 'vue-masonry-css';
+import MasonryPlugin from './plugins/masonry';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import webPush from './webPush.js';
@@ -18,14 +18,14 @@ const app = createApp(App);
 
 app.use(store);
 app.use(router);
-app.use(VueMasonry);
+app.use(MasonryPlugin);
 app.use(VueToast, {
   position: 'top-right',
 });
 
 const toast = installToast(app);
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   store.commit('URL_DEV');
 }
 

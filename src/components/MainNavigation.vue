@@ -79,8 +79,8 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
-import Logo from "./Logo";
-import DesktopNav from "./Navigator/DesktopTopNav";
+import Logo from "./Logo.vue";
+import DesktopNav from "./Navigator/DesktopTopNav.vue";
 export default {
   name: "main-navigatior",
   components: {

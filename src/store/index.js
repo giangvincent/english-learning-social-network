@@ -7,8 +7,8 @@ import user from './User';
 
 export default createStore({
   state: {
-    rootUrl: 'https://backend.thatsgood.info',
-    apiUrl: 'https://backend.thatsgood.info/api',
+    rootUrl: 'https://english-learning-social-network-backend.ddev.site',
+    apiUrl: 'https://english-learning-social-network-backend.ddev.site/api',
     popupEditor: false,
     currentTab: 'home',
     currentPage: 1,

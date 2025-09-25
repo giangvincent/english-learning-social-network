@@ -108,11 +108,11 @@
 <script>
 import { Howl, Howler } from "howler";
 import { mapActions, mapState } from "vuex";
-// import slideImages from "./SlideImages";
-import interactionPack from "./BaseParts/InteractionPack";
-import ProcessBar from "./BaseParts/ProcessBar";
-import CatsAndTags from "./BaseParts/CatsAndTags";
-import Author from "./BaseParts/AuthorPart";
+// import slideImages from "./SlideImages.vue";
+import interactionPack from "./BaseParts/InteractionPack.vue";
+import ProcessBar from "./BaseParts/ProcessBar.vue";
+import CatsAndTags from "./BaseParts/CatsAndTags.vue";
+import Author from "./BaseParts/AuthorPart.vue";
 
 export default {
   name: "image-item",

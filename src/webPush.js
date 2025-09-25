@@ -53,7 +53,7 @@ function initSW() {
 
   //register the service worker
   navigator.serviceWorker
-    .register("/sw.js")
+    .register(`${import.meta.env.BASE_URL}sw.js`)
     .then(() => {
       console.log("serviceWorker installed!");
       initPush();
