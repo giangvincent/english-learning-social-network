@@ -1,5 +1,14 @@
 <?php
 
+$apiVersion = trim(env('API_VERSION', 'v1'), '/');
+
+$paths = ['api/*', 'get-json/*'];
+
+if ($apiVersion !== '') {
+    $paths[] = $apiVersion . '/*';
+    $paths[] = $apiVersion . '/get-json/*';
+}
+
 return [
 
     /*
@@ -15,7 +24,7 @@ return [
     |
      */
 
-    'paths' => ['api/*', 'get-json/*'],
+    'paths' => array_values(array_unique($paths)),
 
     'allowed_methods' => ['*'],
 

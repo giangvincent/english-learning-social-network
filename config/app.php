@@ -56,6 +56,12 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'api_domain' => env('API_DOMAIN'),
+
+    'api_version' => env('API_VERSION', 'v1'),
+
+    'referrer_policy' => env('REFERRER_POLICY', 'strict-origin-when-cross-origin'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

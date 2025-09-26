@@ -31,10 +31,35 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace('App\Http\Controllers\API')
-                ->group(base_path('routes/api.php'));
+            $attributes = [
+                'middleware' => ['api'],
+                'namespace' => 'App\Http\Controllers\API',
+            ];
+
+            $apiDomain = config('app.api_domain');
+
+            if (!$apiDomain) {
+                $appUrl = config('app.url');
+                $host = $appUrl ? parse_url($appUrl, PHP_URL_HOST) : null;
+
+                if ($host) {
+                    $apiDomain = str_starts_with($host, 'api.') ? $host : 'api.' . $host;
+                }
+            }
+
+            if ($apiDomain) {
+                $attributes['domain'] = $apiDomain;
+            }
+
+            $apiVersion = trim((string) config('app.api_version', 'v1'), '/');
+
+            if ($apiVersion !== '') {
+                $attributes['prefix'] = $apiVersion;
+            }
+
+            Route::group($attributes, function () {
+                require base_path('routes/api.php');
+            });
         });
     }
 
