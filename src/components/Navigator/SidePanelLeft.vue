@@ -1,23 +1,23 @@
 <template>
   <div class="md:block">
     <div
-      class="bg-black bg-opacity-50 fixed z-40 md:z-30 top-0 bottom-0 left-0 right-0 "
+      class="fixed top-0 bottom-0 left-0 right-0 z-40 bg-black bg-opacity-50 md:z-30 "
       :class="{ hidden: !showPanelLeft }"
       @click="toggle_left_panel()"
     ></div>
     <!-- shade -->
 
     <section
-      class="bg-white transform md:transform-none ease-in-out transition-all duration-300 translate-x-0 fixed top-0 bottom-0 z-50 md:z-30 w-64 md:w-1/5 lg:w-1/6"
-      :class="{ '-translate-x-full': !showPanelLeft }"
+      class="fixed top-0 bottom-0 z-50 w-64 transition-all duration-300 ease-in-out transform bg-white md:transform-none md:z-30 md:w-1/5 lg:w-1/6"
+      :class="{ '-translate-x-full': !showPanelLeft, 'translate-x-0': showPanelLeft }"
     >
       <nav
-        class="md:bg-none shadow-2xl md:shadow-none md:pt-16 mb-20 overflow-y-scroll"
+        class="mb-20 overflow-y-scroll shadow-2xl md:bg-none md:shadow-none md:pt-16"
         :style="customStyle"
       >
-        <div class="py-4 md:py-0 px-1 xl:px-4 min min-h-full">
+        <div class="min-h-full px-1 py-4 md:py-0 xl:px-4 min">
           <div class="flec">
-            <label class="flex mb-4 items-center relative w-full">
+            <label class="relative flex items-center w-full mb-4">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -25,13 +25,13 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-4 h-4 absolute text-gray-500 ml-2"
+                class="absolute w-4 h-4 ml-2 text-gray-500"
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
               <input
-                class="py-2 pr-4 pl-8  w-full bg-gray-300 focus:bg-white focus:border-transparent form-input rounded shadow focus:shadow-none text-gray-900 w-56"
+                class="w-56 w-full py-2 pl-8 pr-4 text-gray-900 bg-gray-300 rounded shadow focus:bg-white focus:border-transparent form-input focus:shadow-none"
                 type="text"
                 placeholder="Tìm kiếm..."
                 ref="search"
@@ -42,7 +42,7 @@
           </div>
           <ul class="flex flex-col w-full">
             <li
-              class="flex font-medium text-sm text-gray-600 px-4 py-2 uppercase border-b-2"
+              class="flex px-4 py-2 text-sm font-medium text-gray-600 uppercase border-b-2"
             >
               Tags
             </li>

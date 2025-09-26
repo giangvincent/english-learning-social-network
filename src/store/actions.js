@@ -25,8 +25,8 @@ export default {
   },
   LOAD_HOME: function ({ state, commit }) {
     return new Promise((response, reject) => {
-      // fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
-      fetch("/content/feed/home-" + state.currentPage + ".json?t=" + t)
+      fetch(state.apiUrl + "/feed-home?page=" + state.currentPage)
+      // fetch("/content/feed/home-" + state.currentPage + ".json?t=" + t)
         .then(res => res.json())
         .then(res => {
           response(res);
